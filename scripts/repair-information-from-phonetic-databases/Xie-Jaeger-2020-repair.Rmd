@@ -1,0 +1,450 @@
+---
+title: "Repair test data for Experiment 1a and 1b (test tokens generated on Xie & Jaeger 2020 phonetic vowel database)"
+author: "A Persson & F Jaeger"
+date: "\today"
+output:
+  html_document:
+    toc: yes
+    toc_depth: '4'
+    df_print: paged
+  fontsize: 10pt    
+  pdf_document:
+    fig_caption: yes
+    fig_width: 7
+    keep_tex: yes
+    latex_engine: xelatex
+    number_sections: yes
+    toc: yes
+    toc_depth: 4
+header-includes:
+- \usepackage{booktabs}
+- \usepackage{siunitx}
+- \usepackage{tabto}
+- \usepackage{soul}
+- \usepackage{xcolor}
+- \usepackage{placeins}
+- \usepackage{lscape}
+- \newcommand{\blandscape}{\begin{landscape}}
+- \newcommand{\elandscape}{\end{landscape}}
+- \makeatletter\renewcommand{\fps@table}{!ht}\makeatother
+- \setstcolor{red}
+- \usepackage{sectsty}
+- \sectionfont{\color{blue}}
+- \subsectionfont{\color{blue}}
+- \subsubsectionfont{\color{darkgray}}
+geometry: margin=2cm
+---
+
+```{r set-options, echo=FALSE, cache=FALSE, warning=FALSE, message=FALSE}
+library(knitr)
+
+# Set knit defaults for code chunks
+opts_chunk$set(
+  dev = 'png', # default format of figures
+  comment="", 
+  echo=FALSE, warning=FALSE, message=FALSE,
+  cache=FALSE, 
+  size="footnotesize",
+  tidy.opts = list(width.cutoff = 200),
+  fig.width = 8, fig.height = 4.5, fig.align = "center")
+
+# some useful formatting functions for output of knitting
+def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+knitr::knit_hooks$set(chunk = function(x, options) {
+  x <- def.chunk.hook(x, options)
+  ifelse(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+})
+
+color_block = function(color) {
+  function(x, options) sprintf('\\color{%s}\\begin{verbatim}%s\\end{verbatim}\\color{black}',
+                               color, x)
+}
+knitr::knit_hooks$set(error = color_block('red'))
+knitr::knit_hooks$set(warning = color_block('orange'))
+```
+
+```{r libraries, include=FALSE}
+# instead of loading the psych library, I'm importing the geometric.mean function
+# (otherwise %+% overrides ggplot2's %+%)
+geometric.mean = psych::geometric.mean
+
+library(tidyverse)  # data wrangling and plotting
+library(plotly)     # for interactive HTML plots
+library(mvtnorm)    # multivariate Gaussian distributions
+library(magrittr)
+library(dplyr)
+library(linguisticsdown)  # for inserting IPA symbols
+library(modelr)
+```
+
+```{r constants, include=FALSE}
+theme_set(theme_bw())
+```
+
+```{r functions}
+source("../functions.R")
+source("../../output/papers/constants-functions.R")
+```
+
+# Overview
+This script repairs test data that is used in Experiment 1a and 1b. More specifically, it repairs vowel formant information on the test tokens that are generated on cue statistics from the Xie & Jaeger (2020) vowel database. It furthermore normalizes the test data into different normalization spaces.
+The script outputs repaired vowel statistics on the test data, csv-files that will be read in by experiment report rmd, one file for each experiment.
+
+With regard to the repairing of the test data, the following repairs are done:
+  * corrected height-backness values in the manually created test grid that is used for resynthesis.
+  * F3 values are added to the experiment tokens. For Experiment 1a, these F3 values are predicted from the tokens' F1 and F2 values. For Experiment 1b, the F3 values are the natural F3 values for talker E2 (the talker whose natural tokens are used in Experiment 1b).
+
+# Repairing vowel formant information in test data for Experiment 1a and 1b
+
+```{r load-data}
+# Load the test token data. One dataframe for each experiment
+d.test.tokens.1a <- read.csv('../../experiments/experiment-A/lists/NORM-A-test-forward.csv') %>%
+  # Rename variables to match the test data
+  rename(
+    "Item.Filename" = "filename") %>%
+  mutate(
+    REMOVE.Item = gsub("^(.*)\\.(wav)$", "\\1", Item.Filename),
+    Item.Height = as.numeric(sapply(strsplit(REMOVE.Item, "_"), function(x) x[2])),
+    Item.Backness = as.numeric(sapply(strsplit(REMOVE.Item, "_"), function(x) x[3]))) %>%
+  select(-REMOVE.Item)
+
+d.test.tokens.1b <- read.csv('../../experiments/experiment-A/lists/NORM-A-natural-E2-test-forward.csv')
+
+```
+
+## Correct height-backness values in test data
+We made a mistake in the labeling of the file names for Experiment 1b (natural stimuli), resulting in those file names containing incorrect height-backness values. When looking at visualizations of the natural stimuli in experiment report, we noticed that some of the vowels seemed to be off location. I first started to do manual correction of these values, and discovered that there were small differences on almost all vowels between the cue values in each vowel's file name from its actual height-backness values. The file used for manual correction had different F0_gm's than the one used to generate the original stimuli list with height-backness values in file names and the later on generated normalized cue values. This was because the first list had statistics run on all 10 vowels, including diphthongized /owed/ and /aid/, while the latter had filtered out these values, hence the difference in F0. F0 is used in the formula for converting F1 and F2 to height and backness, respectively.
+We therefore corrected all of these height and backness values while keeping the file name constant (that is, keeping the original file name, that is 'wrong' in terms of reflecting the token's actual height-backness values).
+
+```{r }
+# Read in the manually corrected list of height backness values for stimuli in experiment 1b; replace the original data frame *d.test.tokens.1b* with this one, since this has the variable Talker.Token - a manually added identifier for each token. This identifier is used further down in order to overwrite the height backness values from filenames.
+d.test.tokens.1b <-
+  read_csv("../repair-information-from-phonetic-databases/NORM-A-natural-E2-test-forward-hb-repaired.csv") %>%
+  mutate(
+    target_word = factor(
+          plyr::mapvalues(target_word, levels.response.natural, levels.response.vowel), levels = levels.response.vowel)) %>%
+  left_join(
+    read_csv("../../data/phonetic vowel statistics/English/Li_Xie_2020_L1_vowels_statistics_general.csv") %>%
+      rename(
+        "Talker.Token" = "Token") %>%
+      mutate(
+        target_word = factor(
+          plyr::mapvalues(Vowel, levels.vowel.Arpabet, levels.response.vowel), levels = levels.response.vowel)) %>%
+      filter(Talker == "E2") %>%
+     # Keep raw formant values in Hz from vowel_stats, and Duration. Also keep SR around for backtransforming the height backness values in experiment 1a into raw hertz
+      select(target_word, Talker.Token, height_gm, backness_gm, SR, F0_gm, F1_gm, F2_gm, F3_gm, Talker, Duration),
+      by = c("target_word", "Talker.Token")) %>%
+# Overwrite the manually corrected tokens with the automatically extracted statistics from vowel_statistics_general, based on the stats of the 8 vowels used in the experiment (instead of what had previously generated the filenames - stats from all 10 vowels, including /ey/ and /ow/, which had generated different F0_gm, hence different height and backness values)
+  mutate(
+    Item.Height = height_gm,
+    Item.Backness = backness_gm) %>%
+  rename(F3 = F3_gm) %>%
+  select(-c(Talker.Token, height_gm, backness_gm))
+
+#ggplotly()
+# Write a csv-file with experiment 1b tokens together with their automatically extracted F3 values to be double-checked by manual measurements, in order to check possible effects of F3 values on synthesized stimuli (please see Reflections section, Experiment report rmd, located in this repository at \url{scripts/experiment-reports/}). For several of the back vowels (especially odd, had, hut), the automatic extraction of F3 values in Praat might have generated false values (seem to have tracked formants in between the second and the third). Code kept here for reproducibility.
+#write.csv(
+#  d.test.tokens.1b %>%
+#    select(Item.Filename, F3),
+#  file = "../../scripts/repair-information-from-phonetic-databases/NORM-B-F3values_to_check.csv",
+#   row.names = FALSE, quote = FALSE)
+
+```
+
+## Add F3 values to the synthesized test data
+We also add F3 values to the synthesized experiment tokens. This will allow us to assess the differences in the F3 distributions on the natural and the synthesized stimuli. For the tokens in Experiment 1a, the F3 values are predicted from each token's F1 and F2 values. For Experiment 1b, the F3 values are the natural F3 values for talker E2 (the talker whose natural tokens are used in Experiment 1b).
+
+We adopted the following procedure: the manually created test grid for resynthesis is joined with a general F0 value and F3 values. The F3 values are either averaged across that same talker's vowels or predicted from the tokens' height and backness values. In @wadeEffectsAcousticVariability2007a, the F3-value was the averaged F3 for each vowel and each language condition; which we interpreted as the average vowel-specific F3 based on either native or non-native production data. We however decided to also build a model for estimating F3 based on height and backness, by running a linear regression with F3 as dependent variable and height, backness and the interaction between height and backness as linear predictors, in order to assess how much of the between-vowel variability is carried by F3.
+
+We ran linear regressions with F3 and log(F3) as dependent variable and height, backness and the height-backness interaction as linear predictors. We also back-transformed from height-backness space to F1 and F2, and used F1, F2 and the F1-F2 interaction as predictors. The models compared the fit for F3 and log(F3), respectively, from height * backness or F1 * F2, respectively. Please note that the F3 values used for fitting the models are the vowel-specific f3 values averaged across talker E2's vowel productions.
+
+```{r}
+# First generate the manual test samples with averaged F3 values
+# Female native talker E2
+d.E2 <- read_csv("../../data/phonetic vowel statistics/English/Li_Xie_2020_L1_vowels_statistics_general.csv") %>%
+  filter(Talker == "E2") %>%
+  group_by(Talker, Vowel) %>%
+  summarise(
+    across(ends_with("gm"),
+           .fns = list("mean" = mean, "var" = var)),
+    F1F2_cov = cov(F1_gm, F2_gm), 
+    F1F3_cov = cov(F1_gm, F3_gm),
+    F2F3_cov = cov(F2_gm, F3_gm),
+    heightbackness_cov = cov(height_gm, backness_gm)) %>%
+  group_by(Vowel) %>%
+  summarise(
+    # Added mean of F3 and synthtalker_F0
+    across(contains(c("height", "backness", "F3", "F0")), 
+           .fns = list("mean" = mean))) %>%
+  select(Vowel, F3_gm_mean_mean, F0_gm_mean_mean)
+d.E2$Vowel <- gsub("[0-9]+", "", d.E2$Vowel)
+
+# Read in the manually created grid for talker E2; join the two data frames
+vowel.grid.E2 <-
+  read_csv('../../data/phonetic vowel statistics/English/Li_Xie_2020_femaleL1_manual_testgrid_E2.csv') 
+vowel.grid.E2$Vowel <- gsub("[0-9]+", "", vowel.grid.E2$Vowel)
+
+vowel.grid.E2 %<>%
+  left_join(d.E2) %>%
+  rename(
+    "F3" = "F3_gm_mean_mean",
+    "synthtalker_F0" = "F0_gm_mean_mean") %>%
+  # Remove vowel label since the tokens are unlabelled
+  select(-Vowel)
+
+vowel.grid.E2.predF3 <-
+  vowel.grid.E2 %>%
+  mutate(
+    SR = F0_to_SR(synthtalker_F0),
+    F1 = height_to_F1(height, SR),
+    F2 = backness_to_F2(backness, height, SR))
+```
+```{r}
+set.seed(2087574)
+# Run linear regressions comparing fit for F3 and log(F3) from height * backness or F1 * F2
+m.vowel.grid.E2.predF3 <- lm(F3 ~ height * backness, data = vowel.grid.E2.predF3)
+summary(m.vowel.grid.E2.predF3)
+
+m.vowel.grid.E2.predF3.log <- lm(log(F3) ~ height * backness, data = vowel.grid.E2.predF3)
+summary(m.vowel.grid.E2.predF3.log)
+
+m.vowel.grid.E2.predF3.F12 <- lm(F3 ~ F1 * F2, data = vowel.grid.E2.predF3)
+summary(m.vowel.grid.E2.predF3.F12)
+
+m.vowel.grid.E2.predF3.F12.log <- lm(log(F3) ~ F1 * F2, data = vowel.grid.E2.predF3)
+summary(m.vowel.grid.E2.predF3.F12.log)
+```
+All models suggest significant correlations, with R-squared values (adjusted) ranging from 0.5938 to 0.6272. The model with best fit is the one with F3 as dependent variable and F1 * F2 as predictors. This model suggests significant correlations for F1 and F1 * F2. For F1, the correlation is negative, indicating that as F1 increase, F3 tend to decrease; for the F1 * F2 interaction, it is positive, indicating that as F1 * F2 increase, the mean F3 also tend to increase. The adjusted R-squared value is 0.6272, which indicates the proportion of variance in F3 that may be predicted from knowing F1, F2 and the F1:F2 interaction. The residual standard error is 227.4.
+
+Below are plots visualizing the three models. The first figure, Figure \@ref(fig:plotting-lm-actual-pred-F3-hb-E2) visualizes the model with height and backness as predictors for F3. The colours in the underlying heat map indicate the F3 values that this model predicts based on the height * backness values; brighter colours mean higher F3 values, darker colours lower F3 values. The points indicate the 'actual' F3 values of the tokens, using the same colour scale; the actual F3 values are the values assigned to the tokens based on their location in the posterior probability grid. The plot indicates that the predicted and actual values are aligned to a certain extent, with a slightly better fit for some of the back and front tokens.
+
+```{r plotting-lm-actual-pred-F3-hb-E2, fig.cap="Comparison of actual F3 values and predicted F3 values (from height * backness)", echo=FALSE, fig.width=8, fig.height=5}
+# Plot the data
+resolution = 50
+vowel.grid.E2.predF3 %>%
+  ggplot(
+    aes(
+      x = backness,
+      y = height)) +
+  # plot predictions of lm
+  geom_raster(
+    data =
+      crossing(
+        backness = seq_range(vowel.grid.E2.predF3$backness, n = resolution),
+        height = seq_range(vowel.grid.E2.predF3$height, n = resolution)) %>%
+      mutate(predicted_F3 = predict(m.vowel.grid.E2.predF3, newdata = .)),
+    aes(fill = predicted_F3)) +
+  # add actual data
+  geom_point(aes(color = F3)) +
+  scale_x_reverse(expand = c(0,0)) +
+  scale_y_reverse(expand = c(0,0)) +
+  # make sure color scales have same range
+  scale_color_viridis_c("F3 (predicted and actual)", limits = c(2000, 3600), aesthetics = c("color", "fill"))
+```
+Figure \@ref(fig:plotting-lm-actual-pred-F3-F1F2-E2) visualizes the model with F1 and F2 as predictors for F3. As in the previous plot, this plot also indicates that the predicted and actual values are fairly aligned, with a slightly better fit for some of the back and front tokens.
+
+```{r plotting-lm-actual-pred-F3-F1F2-E2, fig.cap="Comparison of actual F3 values and predicted F3 values (from F1 * F2)", echo=FALSE, fig.width=8, fig.height=5}
+vowel.grid.E2.predF3 %>%
+  ggplot(
+    aes(
+      x = F2,
+      y = F1)) +
+  # plot predictions of lm
+  geom_raster(
+    data =
+      crossing(
+        F2 = seq_range(vowel.grid.E2.predF3$F2, n = resolution),
+        F1 = seq_range(vowel.grid.E2.predF3$F1, n = resolution)) %>%
+      mutate(predicted_F3 = predict(m.vowel.grid.E2.predF3.F12, newdata = .)),
+    aes(fill = predicted_F3)) +
+  # add actual data
+  geom_point(aes(color = F3)) +
+  scale_x_reverse(expand = c(0,0)) +
+  scale_y_reverse(expand = c(0,0)) +
+  # make sure color scales have same range
+  scale_color_viridis_c("F3 (predicted and actual)", limits = c(2000, 3600), aesthetics = c("color", "fill"))
+```
+
+Figure \@ref(fig:plotting-lm-comparison-E2) visualizes the comparison of the models using height * backness and F1 * F2 as predictors for F3. The plot indicates what previous plots have suggested, namely that the models don't differ that much in their predictions of F3s; they differ primarily on the front vowels. The heat map indicates a rather large difference in the bottom left corner, in a location where no vowels actually exist (in height-backness space).
+
+```{r plotting-lm-comparison-E2, fig.cap="Comparison of models: difference in predicted F3 from height * backness and F1 * f2, respectively", echo=FALSE, fig.width=8, fig.height=5}
+# where do height/backness and f1/f2-based prediction of F3 differ?
+vowel.grid.E2.predF3 %>%
+  ggplot(
+    aes(
+      x = backness,
+      y = height)) +
+  # plot predictions of lm
+  geom_raster(
+    data =
+      crossing(
+        SR = F0_to_SR(vowel.grid.E2.predF3$synthtalker_F0),
+        backness = seq_range(vowel.grid.E2.predF3$backness, n = resolution),
+        height = seq_range(vowel.grid.E2.predF3$height, n = resolution)) %>%
+      mutate(
+        F1 = height_to_F1(height, SR),
+        F2 = backness_to_F2(backness, height, SR)) %>%
+      mutate(
+        diff_predicted_F3 = predict(m.vowel.grid.E2.predF3, newdata = .) - predict(m.vowel.grid.E2.predF3.F12, newdata = .)),
+    aes(fill = diff_predicted_F3)) +
+  scale_x_reverse(expand = c(0,0)) +
+  scale_y_reverse(expand = c(0,0)) +
+  scale_color_viridis_c("difference in predicted F3\n(height * backness - F1 * F2)", aesthetics = "fill", option = "A")
+
+```
+
+The next figure, Figure \@ref(fig:plotting-model-advantage-on-tokens-E2), demonstrates the advantage of respective model in predicting F3 on specific tokens. The lower the values (in burgundy), the better the fit of the height * backness model in predicting F3; the higher the values (in purple), the better the fit for the F1 * F2 model. The plot does not indicate many clear results, other than both models having a more obvious advantage on a couple of the front tokens.
+
+```{r plotting-model-advantage-on-tokens-E2, fig.cap="The manually created tokens from talker E2", echo=FALSE, fig.width=9, fig.height=5}
+# For which points is the height/backness and f1/f2-based prediction of F3 better?
+vowel.grid.E2.predF3 %>%
+  mutate(squared_residual_F3 = abs(residuals(m.vowel.grid.E2.predF3)) - abs(residuals(m.vowel.grid.E2.predF3.F12))) %>%
+  ggplot(
+    aes(
+      x = backness,
+      y = height,
+      color = squared_residual_F3)) +
+  geom_point() +
+  scale_x_reverse() +
+  scale_y_reverse() +
+  scale_color_gradient2("difference in absolute residual F3\n(negative values = better fit of height/backness)", aesthetics = c("color", "fill"))
+```
+
+Based on the results, we can conclude that the all models provide almost identical results, with a slight advantage for the model with F1 * F2 as predictors. We will use this model, as it proved the best fit, and therefore take the predicted F3 values from that model when resynthesizing the tokens. A csv file is generated with the height and backness values of these tokens. This file will be read in by the Praat script that generates the synthesized vowels (vowel_synthesizer_nosampling.Praat), located in this repository at \url{scripts/praat/}.
+
+```{r}
+# Get the predicted f3-values from f1f2-model but keeping the data in height-backness space
+vowel.grid.E2.predF3 %<>%
+  mutate(
+    F3 = predict(m.vowel.grid.E2.predF3.F12, newdata = vowel.grid.E2.predF3)) %>%
+  select(height, backness, F3, synthtalker_F0)
+
+# Add the predicted F3 values for the synthesized stimuli
+d.test.tokens.1a %<>%
+  left_join(
+  vowel.grid.E2.predF3 %>%
+  rename(
+    Item.Height = height,
+    Item.Backness = backness)) %>%
+  mutate(
+    Talker = "E2_synth",
+    Duration = 0.2492,
+    #Add SR for backtransforming into Hz
+    #SR = d.test.tokens.1b$SR[1],
+    # Add experiment variable
+    Experiment = "1a (synthesized)",
+    SR = F0_to_SR(synthtalker_F0),
+    F1 = height_to_F1(Item.Height, SR),
+    F2 = backness_to_F2(Item.Backness, Item.Height, SR)) %>%
+  # and to rename the cols with formants in hertz and the F0 for resynth talker
+    rename(F0 = synthtalker_F0)
+
+d.test.tokens.1b %<>%
+  mutate(
+    # Add experiment variable + in order for norm function to run, we need a fold-col.
+    Experiment = "1b (natural)") %>%
+  # rename the cols with formants in hertz
+  rename(F0 = F0_gm, F1 = F1_gm, F2 = F2_gm)
+
+# Write csv-files with the repaired vowel data, to be read in by experiment-report rmd.
+write_csv(
+  d.test.tokens.1a, 
+  file =  "../../data/phonetic vowel statistics/English/vowel-formants-Experiment-1a.csv")
+
+write_csv(
+  d.test.tokens.1b, 
+  file =  "../../data/phonetic vowel statistics/English/vowel-formants-Experiment-1b.csv")
+
+###Old code said this file was read in. the F3 values differs slightly. Can however not find any documentation indicating where this was generated and in any other way than the above procedure.
+# d.test.tokens.1a %>%
+#   left_join(
+#   read_csv('../../data/phonetic vowel statistics/English/Li_Xie_2020_femaleL1_manual_testgrid_E2_predF3.csv') %>%
+#   rename(
+#     Item.Height = height,
+#     Item.Backness = backness))
+
+```
+
+## Transform cues into different cue spaces using normalization functions
+We are transforming the test tokens' cue values into other normalization spaces.
+
+```{r}
+# apply_all_transformations_and_normalization <-
+#   function(data) {
+#     data %>%
+#       get_transformation() %>%
+#       get_normalization_functions(
+#         data = .,
+#         normalize_based_on_fold_types = "training")() %>%
+#       rename(F0_Hz = F0, F1_Hz = F1, F2_Hz = F2, F3_Hz = F3) %>%
+#       add_C_CuRE(
+#         data = .,
+#         cues = c("F0_Hz", "F1_Hz", "F2_Hz", "F3_Hz", "F0_Mel", "F1_Mel", "F2_Mel", "F3_Mel", "F0_ERB", "F1_ERB", "F2_ERB", "F3_ERB", "F0_Bark", "F1_Bark", "F2_Bark", "F3_Bark", "F0_semitones", "F1_semitones", "F2_semitones", "F3_semitones", "Duration"),
+#         normalize_based_on_fold_types = "training")() %>%
+#       # Add '_r' for 'raw' to columns with scale-transformed data in order for pivoting to work in next chunk
+#       rename_with(.fn = ~ paste(.x, "r", sep = "_"), .cols = ends_with(c("Hz", "Mel", "Bark", "ERB", "semitones")))
+#   }
+# 
+# d.test.tokens.1a %<>%
+#   mutate(
+#     #Add SR for backtransforming into Hz
+#     SR = d.test.tokens.1b$SR[1],
+#     # Add experiment variable
+#     Experiment = "1a (synthesized)") %>%
+#   add_Hz_from_height_backness() %>%
+# # in order for norm function to run, we need a Talker variable, F0 values and a fold-col.
+#   mutate(
+#     Talker = "E2_synth",
+#     fold_type = "training",
+#     Duration = 0.2492) #%>%
+#   # and to rename the cols with formants in hertz and the F0 for resynth talker
+#     #rename(F1 = Item.Cue_Hz_F1, F2 = Item.Cue_Hz_F2, F0 = synthtalker_F0)
+# 
+# # Transform token cues from Experiment 1a into different cue spaces using normalization functions.
+# d.test.tokens.1a %<>%
+#   #group_by(crossvalidation_group) %>%
+#   # Get transformations, apply normalizations (both classic formants one and C-CuRE)
+#   group_map(
+#     .f = ~ apply_all_transformations_and_normalization(data = .x),
+#     .keep = T
+#   ) %>%
+#   reduce(bind_rows) %>%
+#   ungroup() %>%
+#   select(-starts_with("formants"))
+```
+
+
+```{r}
+# Transform token cues from Experiment 1b into different cue spaces using normalization functions.
+# d.test.tokens.1b %<>%
+#   mutate(
+#     # Add experiment variable + in order for norm function to run, we need a fold-col.
+#     Experiment = "1b (natural)",
+#     fold_type = "training") %>%
+#   # rename the cols with formants in hertz
+#   rename(F0 = F0_gm, F1 = F1_gm, F2 = F2_gm)
+# 
+# # Normalize the test data
+# d.test.tokens.1b %<>%
+#   #group_by(crossvalidation_group) %>%
+#   # Get transformations, apply normalizations (both classic formants one and C-CuRE)
+#   group_map(
+#     .f = ~ apply_all_transformations_and_normalization(data = .x),
+#     .keep = T
+#   ) %>%
+#   reduce(bind_rows) %>%
+#   ungroup() %>%
+#   select(-starts_with("formants"))
+```
+```{r}
+# Write csv-files with the repaired vowel data, to be read in by experiment-report rmd.
+# write_csv(
+#   d.test.tokens.1a, 
+#   file =  "../../data/phonetic vowel statistics/English/vowel-formants-Experiment-1a.csv")
+# 
+# write_csv(
+#   d.test.tokens.1b, 
+#   file =  "../../data/phonetic vowel statistics/English/vowel-formants-Experiment-1b.csv")
+
+```
+

@@ -1,0 +1,1 @@
+This folder contains phonetic vowel statistics for the phonetic database used to train ideal observers and for the stimuli used in the two experiments (phonetic vowel statistics/), as well as raw data from the two experiments conducted (raw/).
