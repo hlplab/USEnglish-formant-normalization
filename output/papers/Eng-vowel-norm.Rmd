@@ -110,6 +110,11 @@ Earlier versions of this work were presented at 2023 ASA meeting, ExLing 2022, a
 # Author Contributions {-}
 AP designed the experiments and collected the data, with input from TFJ. TFJ programmed the experiments with input from AP. AP analyzed the experiments, with input from TFJ. AP and TFJ wrote the code to implement and fit the normalization models, with input from SB. AP developed the visualizations within input from SB and TFJ. AP wrote the first draft of the manuscript with edits by SB and TFJ.
 
+
+# Conflict of Interest {-}
+The authors declare that the research was conducted in the absence of any commercial or financial relationships that could be construed as a potential conflict of interest.
+
+
 ```{r, child="SI.Rmd", eval= if (INCLUDE_SI) TRUE else FALSE}
 ```
 
