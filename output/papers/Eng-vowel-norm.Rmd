@@ -116,7 +116,7 @@ AP designed the experiments and collected the data, with input from TFJ. TFJ pro
 The authors declare that the research was conducted in the absence of any commercial or financial relationships that could be construed as a potential conflict of interest.
 
 ## Ethics approval {-}
-<!--TO DO: fill in-->
+This study was reviewed and approved Research Subjects Review Board (RSRB) of the University of Rochester (STUDY00000417) under the OHSP and UR policies, and in accordance with Federal regulation 45 CFR 46 under the university’s Federal-wide Assurance (FWA00009386).
 
 ```{r, child="SI.Rmd", eval= if (INCLUDE_SI) TRUE else FALSE}
 ```
