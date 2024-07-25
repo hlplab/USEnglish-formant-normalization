@@ -121,6 +121,8 @@ This study was reviewed and approved Research Subjects Review Board (RSRB) of th
 ```{r, child="SI.Rmd", eval= if (INCLUDE_SI) TRUE else FALSE}
 ```
 
+\newpage{}
+
 # References {#sec:references}
 
 \begingroup

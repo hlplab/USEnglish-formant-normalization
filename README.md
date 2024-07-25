@@ -1,2 +1,3 @@
 # US English formant normalization
 This is the repository for the English formant normalization paper, evaluating normalization accounts against US English perception data.
+The repository contains folders for raw experiment data and vowel data (data), scripts and stimuli for the two experiments (experiments), scripts for generating the synthesized stimuli, analysing formant data and repairing/correcting automatically extracted formants (scripts). The folder output contains rmd files for the paper.
