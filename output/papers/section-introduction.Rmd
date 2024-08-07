@@ -96,26 +96,83 @@ This motivates the present work. We take a broad-coverage approach by comparing 
 
 \clearpage
 
-\begin{spacing}{0.5}
-\begin{sidewaystable}
-\caption{\label{tab:norm-accounts}Normalization accounts considered in the present study. Unless otherwise marked, formant variables ($F$s) in the right-handside of normalization formulas are in Hz.}
-\centering
-\fontsize{8}{10}\selectfont
-\begin{ruledtabular}
-\begin{tabular}[t]{>{\arraybackslash}p{0.1cm}>{\arraybackslash}p{0.2cm}>{\arraybackslash}p{0.5cm}|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{4cm}|>{\raggedright\arraybackslash}p{6.2cm}}
+\tabcolsep=.6pt
+
+\def\xrotatetable{\clearpage
+\nolinenumbers
+\setbox0=\vbox to\textwidth\bgroup\hsize=.5\textheight
+\leftskip=0pt 
+\let\footnotemark\tablefootnotemark
+\let\footnotetext\tablefootnotetext
+\parindent=0pt
+\vskip3pt}
+
+\def\endxrotatetable{\egroup
+\nolinenumbers
+\noindent\hskip-40pt\rotatebox{90}{\vbox{\unvbox0\vfill}}
+\clearpage}
+
+\begin{xrotatetable}
+\nofloattablecaption{\baselineskip=10pt\label{tab:norm-accounts}Normalization accounts considered in the present study. Unless otherwise marked, formant variables ($F$s) in the right-handside of normalization formulas are in Hz.}
+\vglue-12pt
+
+
+\fontsize{7}{9}\selectfont
+\def\arraystretch{.5}
+\noindent\hskip1in
+\begin{tabular}[t]{%
+  p{.9cm}
+  |>{\arraybackslash\hskip-36pt}r@{\hskip-36pt}p{1in}
+  |>{\raggedright\arraybackslash}p{3cm}
+  |>{\raggedright\arraybackslash}p{3cm}
+  |>{\raggedright\arraybackslash}p{4cm}
+  |>{\raggedright\arraybackslash}p{6.2cm}}
 \hline
-& & & Normalization procedure & Perceptual scale & Source & Formula\\
+\hline
+\multicolumn{3}{c|}{} &\vrule height9pt width0pt depth0pt
+Normalization\newline\hglue6pt procedure\vrule depth 6pt width0pt&
+\ \ Perceptual scale &\ \ Source &\ \ Formula\\
 \hline
 \hline
-& & \cellcolor[HTML]{100C08}{} & \cellcolor[HTML]{100C08}\textcolor{white}{n/a} & \cellcolor[HTML]{100C08}\textcolor{white}{Hz} & \cellcolor[HTML]{100C08}\textcolor{white}{n/a} & \cellcolor[HTML]{100C08}\textcolor{white}{n/a} \\
+\ \\
+\noalign{\vskip-6pt}
+& & % black 
+\cellcolor{white}{} 
+&
+\cellcolor[HTML]{100C08}\textcolor{white}{\ \bf n/a} &
+\cellcolor[HTML]{100C08} \textcolor{white}{\ \bf Hz} &
+\cellcolor[HTML]{100C08} \textcolor{white}{\ \bf n/a} &
+\cellcolor[HTML]{100C08} \textcolor{white}{\ \bf n/a} \\
 
 \hline
 
-& & \cellcolor[HTML]{C9C0BB}{} & \cellcolor[HTML]{C9C0BB}{---} & \cellcolor[HTML]{C9C0BB}{log} & \cellcolor[HTML]{C9C0BB}{} & \cellcolor[HTML]{C9C0BB}{$F_n^{log} = ln(F_n)$} \\
-& & \cellcolor[HTML]{C9C0BB}{} & \cellcolor[HTML]{C9C0BB}{---} & \cellcolor[HTML]{C9C0BB}{Bark} & \cellcolor[HTML]{C9C0BB}{Traunmüller (1990)} & \cellcolor[HTML]{C9C0BB}{$F_n^{Bark} = \frac{26.81 \times F_n}{1960 + F_n} - 0.53$} \\
-& & \cellcolor[HTML]{C9C0BB}{} & \cellcolor[HTML]{C9C0BB}{---} & \cellcolor[HTML]{C9C0BB}{ERB}  & \cellcolor[HTML]{C9C0BB}{Glasberg \& Moore (1990)} & \cellcolor[HTML]{C9C0BB}{$F_n^{ERB} = 21.4 \times \log_{10}(1 + F_n \times 0.00437)$} \\
-\multirow[c]{-2}{*}{\rotatebox{90}{trans-}} & & \cellcolor[HTML]{C9C0BB}{} & \cellcolor[HTML]{C9C0BB}{---} & \cellcolor[HTML]{C9C0BB}{Mel}  & \cellcolor[HTML]{C9C0BB}{Stevens \& Volkmann (1940)} & \cellcolor[HTML]{C9C0BB}{$F_n^{Mel} = 2595 \times \log_{10}(1 + \frac{F_n}{700})$} \\
-& \multirow[c]{-4}{*}{\rotatebox{90}{formation}} & \cellcolor[HTML]{C9C0BB}{} & \cellcolor[HTML]{C9C0BB}{---} & \cellcolor[HTML]{C9C0BB}{Semitones conversion} & \cellcolor[HTML]{C9C0BB}{Fant et al. (2002)} & \cellcolor[HTML]{C9C0BB}{$F_n^{ST} = 12 \times \frac{ln(\frac{F_n}{100})}{ln}$} \\
+& & \cellcolor[HTML]{C9C0BB}{} 
+& \cellcolor[HTML]{C9C0BB}{---} 
+& \cellcolor[HTML]{C9C0BB}{log} & 
+\cellcolor[HTML]{C9C0BB}{} & 
+\cellcolor[HTML]{C9C0BB}{$F_n^{log} = ln(F_n)$} \\
+& & \cellcolor[HTML]{C9C0BB}{} 
+& \cellcolor[HTML]{C9C0BB}{---} 
+& \cellcolor[HTML]{C9C0BB}{Bark} 
+& \cellcolor[HTML]{C9C0BB}{Traunmüller (1990)} 
+& \cellcolor[HTML]{C9C0BB}{$F_n^{Bark} = \frac{26.81 \times F_n}{1960 + F_n} - 0.53$} \\
+& & \cellcolor[HTML]{C9C0BB}{} 
+& \cellcolor[HTML]{C9C0BB}{---} 
+& \cellcolor[HTML]{C9C0BB}{ERB}  
+& \cellcolor[HTML]{C9C0BB}{Glasberg \& Moore (1990)} 
+& \cellcolor[HTML]{C9C0BB}{$F_n^{ERB} = 21.4 \times \log_{10}(1 + F_n
+\times 0.00437) $} \\
+\multirow[c]{-11}{*}{\hskip24pt\rotatebox{90}
+{\hskip-24pt\vbox{\bf \hbox{trans-}\hbox{formation}}}
+\hskip-30pt}
+& 
+& \cellcolor[HTML]{C9C0BB}{} & \cellcolor[HTML]{C9C0BB}{---} & \cellcolor[HTML]{C9C0BB}{Mel}  & \cellcolor[HTML]{C9C0BB}{Stevens \& Volkmann (1940)} & \cellcolor[HTML]{C9C0BB}{$F_n^{Mel} = 2595 \times \log_{10}(1 + \frac{F_n}{700})$} \\
+& \multirow[c]{-4}{*}{}
+& \cellcolor[HTML]{C9C0BB}{} 
+& \cellcolor[HTML]{C9C0BB}{---} 
+& \cellcolor[HTML]{C9C0BB}{Semitones conversion} 
+& \cellcolor[HTML]{C9C0BB}{Fant et al. (2002)} 
+& \cellcolor[HTML]{C9C0BB}{$F_n^{ST} = 12 \times \frac{ln(\frac{F_n}{100})}{ln}$} \\
 
 \hline
 
@@ -125,43 +182,90 @@ This motivates the present work. We take a broad-coverage approach by comparing 
 & & \cellcolor[HTML]{E6BE8A}{} & \cellcolor[HTML]{E6BE8A}{(Bark-distance model)} & \cellcolor[HTML]{E6BE8A}{} & \cellcolor[HTML]{E6BE8A}{} & \cellcolor[HTML]{E6BE8A}{$F2^{SyrdalGopal2} = F3^{Bark} - F2^{Bark}$} \\
 & & \cellcolor[HTML]{E6BE8A}{} & \cellcolor[HTML]{E6BE8A}{Miller} & \cellcolor[HTML]{E6BE8A}{log} & \cellcolor[HTML]{E6BE8A}{Miller (1989)} & \cellcolor[HTML]{E6BE8A}{$SR = k (\frac{GM f0}{k})^{1/3}$} \\
 & & \cellcolor[HTML]{E6BE8A}{} & \cellcolor[HTML]{E6BE8A}{(formant-ratio)} & \cellcolor[HTML]{E6BE8A}{} & \cellcolor[HTML]{E6BE8A}{} & \cellcolor[HTML]{E6BE8A}{$F1^{Miller} = log(\frac{F1}{SR})$} \\
-& & \cellcolor[HTML]{E6BE8A}{} & \cellcolor[HTML]{E6BE8A}{} & \cellcolor[HTML]{E6BE8A}{} & \cellcolor[HTML]{E6BE8A}{} & \cellcolor[HTML]{E6BE8A}{$F2^{Miller} = log(\frac{F2}{F1})$} \\
-{\multirow[c]{-7}{*}{\rotatebox{90}{intrinsic}}} & & \cellcolor[HTML]{E6BE8A}{} & \cellcolor[HTML]{E6BE8A}{} & \cellcolor[HTML]{E6BE8A}{} & \cellcolor[HTML]{E6BE8A}{} & \cellcolor[HTML]{E6BE8A}{$F3^{Miller} = log(\frac{F3}{F2})$} \\
+& & \cellcolor[HTML]{E6BE8A}{} & 
+\cellcolor[HTML]{E6BE8A}{} & 
+\cellcolor[HTML]{E6BE8A}{} & 
+\cellcolor[HTML]{E6BE8A}{} & 
+\cellcolor[HTML]{E6BE8A}{$F2^{Miller} = log(\frac{F2}{F1})$} \\
+\multirow[c]{-7}{*}{\vtop to
+0pt{\vss\vskip52pt\rotatebox{90}{\vbox{\vskip18pt\ \ \bf
+\hbox{intrinsic}}}\vskip26pt}}
+& &
+\cellcolor[HTML]{E6BE8A}{} &  \cellcolor[HTML]{E6BE8A}{} & 
+\cellcolor[HTML]{E6BE8A}{} & \cellcolor[HTML]{E6BE8A}{} & 
+\cellcolor[HTML]{E6BE8A}{$F3^{Miller} = log(\frac{F3}{F2})$} \\
 
 \hline
 
-& & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{Uniform scaling, Nearey} & \cellcolor[HTML]{ABCDEF}{log} & \cellcolor[HTML]{ABCDEF}{Nearey (1978)} & \cellcolor[HTML]{ABCDEF}{$F^{Nearey}_n = \ln(F_n) - mean(ln(F))$} \\
+& & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{Nearey's
+uniform\newline\hglue6pt scaling} & \cellcolor[HTML]{ABCDEF}{log} & \cellcolor[HTML]{ABCDEF}{Nearey (1978)} & \cellcolor[HTML]{ABCDEF}{$F^{Nearey}_n = \ln(F_n) - mean(ln(F))$} \\
 & & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{} \\
 & & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{} \\
-& & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{Uniform scaling, Nordström \& Lindblom} & \cellcolor[HTML]{ABCDEF}{Hz} & \cellcolor[HTML]{ABCDEF}{Nordström \& Lindblom (1975)} & \cellcolor[HTML]{ABCDEF}{$F^{Nordstr\textnormal{\"{o}}mLindblom}_n = \frac{F_n}{mean(\frac{F3[F1 > 600]}{2.5})}$} \\
-& & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{} \\
-& & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{Uniform scaling, Johnson} & \cellcolor[HTML]{ABCDEF}{Hz} & \cellcolor[HTML]{ABCDEF}{Johnson (2020)} & \cellcolor[HTML]{ABCDEF}{$F^{Johnson}_n = \frac{F_n}{mean(\frac{F1}{0.5}, \frac{F2}{1.5}, \frac{F3}{2.5})}$} \\
-
-& & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{Nearey's formantwise log-mean} & \cellcolor[HTML]{ABCDEF}{log} & \cellcolor[HTML]{ABCDEF}{Nearey (1978)} & \cellcolor[HTML]{ABCDEF}{$F^{Nearey}_n = \ln(F_n) - mean(ln(F_n))$} \\
-& & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{} \\
-
-& & \cellcolor[HTML]{ABCDEF}{{\multirow[c]{-10}{*}{\rotatebox{90}{centering}}}} & \cellcolor[HTML]{ABCDEF}{C-CuRE} & \cellcolor[HTML]{ABCDEF}{Hz} & \cellcolor[HTML]{ABCDEF}{McMurray \& Jongman (2011)} & \cellcolor[HTML]{ABCDEF}{$F^{C-CuRE}_n = F_n - mean(F_n)$} \\
+& & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{Nordström
+\&\newline\hglue6pt Lindblom} & \cellcolor[HTML]{ABCDEF}{Hz} & \cellcolor[HTML]{ABCDEF}{Nordström \& Lindblom (1975)} & \cellcolor[HTML]{ABCDEF}{$F^{Nordstr\textnormal{\"{o}}mLindblom}_n = \frac{F_n}{mean(\frac{F3[F1 > 600]}{2.5})}$} \\
+& & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{(vocal tract scaling)} & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{} \\
+& & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{Johnson} 
+& \cellcolor[HTML]{ABCDEF}{Hz} & \cellcolor[HTML]{ABCDEF}{Johnson(2020)}  
+& \cellcolor[HTML]{ABCDEF}{$F^{Johnson}_n = \frac{F_n}{mean(\frac{F1}{0.5}, \frac{F2}{1.5}, \frac{F3}{2.5})}$} \\
+& & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{(average
+formant\newline\hglue6pt spacing)} & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{} \\
+& & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{Nearey's
+formantwise\newline\hglue6pt log-mean} & \cellcolor[HTML]{ABCDEF}{log} & \cellcolor[HTML]{ABCDEF}{Nearey (1978)} & \cellcolor[HTML]{ABCDEF}{$F^{Nearey}_n = \ln(F_n) - mean(ln(F_n))$} \\
+& & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{} 
+& \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{} \\
+& & \cellcolor[HTML]{ABCDEF}{{\multirow[c]{-10}{*}{\rotatebox{90}{}}}}
+& \cellcolor[HTML]{ABCDEF}{C-CuRE} & \cellcolor[HTML]{ABCDEF}{Hz} & \cellcolor[HTML]{ABCDEF}{McMurray \& Jongman (2011)} & \cellcolor[HTML]{ABCDEF}{$F^{C-CuRE}_n = F_n - mean(F_n)$} \\
 & & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{---} & \cellcolor[HTML]{ABCDEF}{Bark} & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{} \\
 & & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{---} & \cellcolor[HTML]{ABCDEF}{ERB} & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{} \\
 & & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{---} & \cellcolor[HTML]{ABCDEF}{Mel} & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{} \\
 & & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{---} & \cellcolor[HTML]{ABCDEF}{Semitones conversion} & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{} \\
 
-
 \cline{3-6}
-
-& & \cellcolor[HTML]{DDADAF}{} & \cellcolor[HTML]{DDADAF}{Gerstman} & \cellcolor[HTML]{DDADAF}{Hz} & \cellcolor[HTML]{DDADAF}{Gerstman (1968)} & \cellcolor[HTML]{DDADAF}{$F_n^{Gerstman} = 999 \times \frac{F_n - F_n^{min}}{F_n^{max} - F_n^{min}}$} \\
-& & \cellcolor[HTML]{DDADAF}{} & \cellcolor[HTML]{DDADAF}{(range normalization)} & \cellcolor[HTML]{DDADAF}{} & \cellcolor[HTML]{DDADAF}{} & \cellcolor[HTML]{DDADAF}{} \\
-& & \cellcolor[HTML]{DDADAF}{} & \cellcolor[HTML]{DDADAF}{} & \cellcolor[HTML]{DDADAF}{} & \cellcolor[HTML]{DDADAF}{} & \cellcolor[HTML]{DDADAF}{} \\
-
-{\multirow[c]{-16}{*}{\rotatebox{90}{extrinsic}}} & & \cellcolor[HTML]{DDADAF}{} & \cellcolor[HTML]{DDADAF}{Lobanov} & \cellcolor[HTML]{DDADAF}{Hz} & \cellcolor[HTML]{DDADAF}{Lobanov (1971)} & \cellcolor[HTML]{DDADAF}{$F^{Lobanov}_n = \frac{F_n - mean(F_n)}{sd(F_n)}$} \\
-& & \cellcolor[HTML]{DDADAF}{} & \cellcolor[HTML]{DDADAF}{(z-score)} & \cellcolor[HTML]{DDADAF}{} & \cellcolor[HTML]{DDADAF}{} & \cellcolor[HTML]{DDADAF}{} \\
-& & \cellcolor[HTML]{DDADAF}{{\multirow[c]{-6}{*}{\rotatebox{90}{standardizing}}}} & \cellcolor[HTML]{DDADAF}{} & \cellcolor[HTML]{DDADAF}{} & \cellcolor[HTML]{DDADAF}{} & \cellcolor[HTML]{DDADAF}{} \\
-
+ 
+& & \cellcolor[HTML]{DDADAF}{} & \cellcolor[HTML]{DDADAF}{Gerstman} 
+& \cellcolor[HTML]{DDADAF}{Hz} 
+& \cellcolor[HTML]{DDADAF}{Gerstman (1968)} 
+& \cellcolor[HTML]{DDADAF}{$F_n^{Gerstman} = 999 \times \frac{F_n - F_n^{min}}{F_n^{max} - F_n^{min}}$} \\
+& & \cellcolor[HTML]{DDADAF}{} 
+& \cellcolor[HTML]{DDADAF}{(range normalization)} 
+& \cellcolor[HTML]{DDADAF}{} & \cellcolor[HTML]{DDADAF}{} 
+& \cellcolor[HTML]{DDADAF}{} \\
+& & \cellcolor[HTML]{DDADAF}{} 
+& \cellcolor[HTML]{DDADAF}{} 
+& \cellcolor[HTML]{DDADAF}{} 
+& \cellcolor[HTML]{DDADAF}{} 
+& \cellcolor[HTML]{DDADAF}{} \\
+ {\multirow[c]{-16}{*}{
+\noindent\hskip-6pt\vtop to
+0pt{\vss\vskip-32pt\hbox{\llap{\rotatebox{90}{\hskip30pt
+\bf
+extrinsic centering}\hskip-28pt
+}}\vskip 38pt}}}
+& &
+ \cellcolor[HTML]{DDADAF}{}
+& \cellcolor[HTML]{DDADAF}{Lobanov} 
+& \cellcolor[HTML]{DDADAF}{Hz} 
+& \cellcolor[HTML]{DDADAF}{Lobanov (1971)} 
+& \cellcolor[HTML]{DDADAF}{$F^{Lobanov}_n = \frac{F_n - mean(F_n)}{sd(F_n)}$} \\
+ & & \cellcolor[HTML]{DDADAF}{} & \cellcolor[HTML]{DDADAF}{(z-score)}
+ & \cellcolor[HTML]{DDADAF}{} & \cellcolor[HTML]{DDADAF}{} & 
+\cellcolor[HTML]{DDADAF}{} \\
+ & &
+ \cellcolor[HTML]{DDADAF}
+\multirow[c]{-14}{*}{\hskip24pt\rotatebox{90}
+{\hskip-24pt\vbox{\bf \hbox{extrinsic}\hbox{standardizing}}}
+\hskip-30pt}
+& \cellcolor[HTML]{DDADAF}{} 
+& \cellcolor[HTML]{DDADAF}{} 
+& \cellcolor[HTML]{DDADAF}{} 
+& \cellcolor[HTML]{DDADAF}{} 
+\\
+\hline
 \hline
 \end{tabular}
-\end{ruledtabular}
-\end{sidewaystable}
-\end{spacing}
+\end{xrotatetable}
+
+\linenumbers
 
 Next, we motivate and describe the two experiments we conducted. Then we compare the normalization accounts in Table \@ref(tab:norm-accounts) against listeners responses from these experiments. 
 
