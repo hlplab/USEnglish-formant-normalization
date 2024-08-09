@@ -40,12 +40,18 @@ We used the following R packages to create this document: `r papaja::cite_r("lat
 If opened in RStudio, the top of the R markdown document should alert you to any libraries you will need to download, if you have not already installed them. The full session information is provided at the end of this document.
 
 ## Interested in using R markdown do create APA formatted documents that integrate your code with your writing?
-A project template, including R markdown files that result in APA-formatted PDFs, is available at [https://github.com/hlplab/template-R-project](https://github.com/hlplab/template-R-project). Feedback welcome. We aim to help others avoid the mistakes and detours we made when first deciding to embrace literal coding to increase transparency in our projects.
+A project template, including R markdown files that result in APA-formatted PDFs, is available at [https://github.com/hlplab/template-R-project](https://github.com/hlplab/template-R-project). Feedback is welcome by the contact author for this paper or [fjaeger@ur.rochester.edu](mailto:fjaeger@ur.rochester.edu). We aim to help others avoid the detours we made when first deciding to embrace literal coding to increase transparency in our projects.
 
 # Additional information in Experiments 1a and 1b
 
-## Participant exclusion {#sec:SI-exclusions}
-We adopted the following exclusion criteria: participants would get excluded if they failed to pay attention to the instruction to wear over-the-ear-headphones, if they had unusually slow or fast RT-means compared to other participants, or if they clearly did not do the task (e.g., randomly clicking on different response options).
+## Exclusions {#sec:SI-exclusions}
+We first applied trial-level exclusion criteria to each participant, and then applied participant-level exclusion criteria.
+
+### Trial exclusions
+We excluded trials with RTs more than 3 standard deviations faster or slower than expected. This was determined by first z-scoring the log-transformed RTs *within each participant* (by subtracting the participants' mean from each observation and dividing through the participants standard deviation) and then z-scoring these z-scores *within each trial* across participants. This double-scaling approach was necessary as participants' RTs decreased substantially over the first few trials and then continued to decrease less rapidly until converging against a participant-specific minimum. This criterion did not remove just the first few trials but rather removed RTs that were unusually fast or slow *for that participant at that trial*. And, unlike more complicated methods (like developing a model of cross-trial decreases in RTs), the approach employed here does not make any assumptions about the shape of the speed up in RTs across trials. In total, N =`r d.test.raw %>% filter(Exclude_Trial.because_of_RT == T) %>% nrow()` trials were excluded. 
+
+### Participant exclusion 
+Participants were excluded if they (1) failed to pay attention to the instruction to wear over-the-ear-headphones, (2) had unusually slow or fast RT-means compared to other participants (more than 3 standard deviations faster or slower in their mean log-transformed RTs compared to other participants), (3) clearly did not do the task (e.g., randomly clicking on different response options). Finally, participants were excluded if (4) the trial-level exclusions removed too many trials (>XXX% of all trials). 
 
 ```{r message=FALSE}
 # Re-read in the natural and synthesized stimuli from experiment 1a and 1b.
@@ -63,7 +69,7 @@ d.test.raw %<>%
   add.ExclusionCriteria()
 ```
 
-N=`r d.test.raw %>% filter(Exclude_Participant.because_of_IgnoredInstructions == T) %>% distinct(ParticipantID) %>% length()` participant in Experiment 1a was excluded based on the first criteria, as s/he used external speakers instead of head set (based on response in post-experiment questionnaire). This participant was also more than 3 standard deviations faster in her/his mean log-RTs than other participants (second criteria), as were another participant in Experiment 1a. We decided to exclude participants who were more than 3 standard deviations faster or slower in their mean (log-transformed) RTs compared to other participants. We further excluded *all trials* with RTs more than 3 standard deviations faster or slower than expected. This was determined by first z-scoring the log-transformed RTs *within each participant* (by subtracting the participants' mean from each observation and dividing through the participants standard deviation) and then z-scoring these z-scores *within each trial* across participants. This double-scaling approach was necessary as participants' RTs decreased substantially over the first few trials and then continued to decrease less rapidly until converging against a participant-specific minimum. This criterion did not remove just the first few trials but rather removed RTs that were unusually fast or slow *for that participant at that trial*. And, unlike more complicated methods (like developing a model of cross-trial decreases in RTs), the approach employed here does not make any assumptions about the shape of the speed up in RTs across trials. In total, N=`r d.test.raw %>% filter(Exclude_Trial.because_of_RT == T) %>% nrow()` trials were excluded, however, no participant was excluded based on too high proportion of missing trials. Figure \@ref(fig:SI-exclusion-summary) summarizes participant exclusions due to reaction times and not wearing headphones.
+`r d.test.raw %>% filter(Exclude_Participant.because_of_IgnoredInstructions == T) %>% distinct(ParticipantID) %>% length()` participant in Experiment 1a was excluded based on the first criteria, as s/he used external speakers instead of head set (based on response in post-experiment questionnaire). This participant was also more than 3 standard deviations faster in her/his mean log-RTs than other participants (second criteria), as were another participant in Experiment 1a. We decided to exclude participants who were more than 3 standard deviations faster or slower in their mean (log-transformed) RTs compared to other participants. Figure \@ref(fig:SI-exclusion-summary) summarizes participant exclusions due to reaction times and not wearing headphones.
 
 (ref:SI-exclusion-summary) Participant exclusions in Experiment 1a and Experiment 1b. Two participants in Experiment 1a (participants 22 and 24) were excluded based on their log-transformed RTs and/or for not wearing headphones.
 
@@ -145,6 +151,7 @@ p.vowel_space %+%
   facet_wrap(~ Experiment + ParticipantID, ncol = 5)
 ```
 
+
 ## Distribution of stimuli F1-F3 in Experiments 1a and 1b
 Figure \@ref(fig:SI-plot-cues-3d) visualizes the stimuli in Experiments 1a and 1b in F1-F3 space. Some tokens in Experiment 1a clearly display a different distribution pattern along F3 (Figure \@ref(fig:SI-plot-cues-3d)), which might explain the shift in model fits for the F1-F3 models (see Section \@ref(sec:SI-F1F3)).
 
@@ -180,7 +187,27 @@ knitr::include_graphics(c("figures/p.3Dcues.1.png", "figures/p.3Dcues.2.png", "f
 ```
 
 ## Auxiliary analysis of participant responses in Experiments 1a and 1b {#sec:SI-aux-entropy}
-Participants in Experiment 1b showed overall less agreement in their responses to the stimuli than participants in Experiment 1a, as indicated by the higher response entropy in Experiment 1b. In order to assess the extent to which this was a result of the placement of the tokens in the F1-F3 space, we compared linear regression models that predicted response entropy from experiment, to models that employed residuals from a general additive model including response entropy and the tokens placement in the phonetic space (F1, F2) as response variable, and experiment as predictor. We further compared models based on the full data set to models that excluded all *hut* and *odd* responses from Experiment 1a in order to assess effects of lexical context.
+Participants in Experiment 1b showed overall less agreement in their responses to the stimuli than participants in Experiment 1a, as indicated by the higher response entropy in Experiment 1b. As stated in the main text, response entropies differed even for tokens that overlap in Hertz space. Figure \@ref(fig:SI-overlap-tokens) visualizes differences in categorization behavior for these tokens. For several of these tokens, the most frequent response was the same category across experiments, however, with substantially higher disagreement for tokens in Experiment 1b. In the bottom part of the acoustic space, participants in Experiment 1b seem to respond *had* disproportionally often.
+
+(ref:SI-overlap-tokens) Listeners' categorization responses in Experiments 1a and 1b, for comparable tokens in Hertz space. The vowel label indicates the most frequent response provided by participants on each test location. Size indicates how consistent responses were across participants, which larger symbols indicating more consistent responses (lower entropy).
+
+```{r SI-overlap-tokens, fig.width=base.width*3, fig.height=base.height*3+.5, out.width='80%', fig.cap="(ref:SI-overlap-tokens)"}
+p.vowel_space %+%
+  (d.test.overlappingTokens) +
+  geom_text(
+    aes(
+      size = Response.Entropy),
+    alpha = .5) +
+  scale_size_continuous("Response entropy (bits)", trans = 'reverse') +
+  guides(color = "none") +
+  theme(legend.position = "top") +
+  facet_wrap(~ Experiment) +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank())
+```
+
+In order to assess the extent to which differences in response entropy across the two experiments were caused by the placement of stimuli in the formant space, we conducted a series of regression analyses. <!-- TO DO: the following sentences are incomprehensible --> We used linear regression models that predicted response entropy from experiment, to models that employed residuals from a general additive model including response entropy and the tokens placement in the phonetic space (F1, F2) as response variable, and experiment as predictor. We further compared models based on the full data set to models that excluded all *hut* and *odd* responses from Experiment 1a in order to assess effects of lexical context.
 
 ```{r}
 # Comparisons  of response Entropy between experiments
@@ -221,35 +248,10 @@ m.exp.f1f3 <- lm(
   broom::tidy()
 ```
 
-When adding effects of lexical context to the model, the difference between experiments is reduced by `r round((m.exp$estimate[2] - m.exp.lexical$estimate[2]) / m.exp$estimate[2], digits = 3) * 100`%. Adding a nonlinear model with F1-F2 values of the tokens, the difference is reduced by an additional `r round((m.exp.lexical$estimate[2] - m.exp.f1f2$estimate[2]) / m.exp.lexical$estimate[2], digits = 3) * 100`%, while adding F3-values reduces the difference by `r round((m.exp.lexical$estimate[2] - m.exp.f1f3$estimate[2]) / m.exp.lexical$estimate[2], digits = 3) * 100`%. In sum, the result suggest that approximately two-thirds of the difference in response entropy between experiments can be attributed to the placement of stimuli in the formant space, while the remaining one-third is influenced by other factors, most likely the synthesized stimuli sounding highly unnatural.
+When adding effects of lexical context to the model,<!-- TO DO: which model??--> the difference in listeners' response entropy between experiments is reduced by `r round((m.exp$estimate[2] - m.exp.lexical$estimate[2]) / m.exp$estimate[2], digits = 3) * 100`%. Adding a nonlinear model with F1-F2 values of the tokens, the difference is reduced by an additional `r round((m.exp.lexical$estimate[2] - m.exp.f1f2$estimate[2]) / m.exp.lexical$estimate[2], digits = 3) * 100`%, while adding F3-values reduces the difference by `r round((m.exp.lexical$estimate[2] - m.exp.f1f3$estimate[2]) / m.exp.lexical$estimate[2], digits = 3) * 100`%. Taken together, these result suggest that up to approximately two-thirds of the difference in response entropy between experiments can be attributed to the placement of stimuli in the formant space, while the remaining one-third is influenced by other factors, such as the phonetically impoverished nature of the synthesized stimuli.
 
 ```{r}
-# remove models
-rm(m.exp, m.exp.lexical, m.exp.f1f2, m.exp.f1f3)
-```
-
-As stated in the main paper, response entropies differed even for tokens that overlap in Hertz space. Figure \@ref(fig:SI-overlap-tokens) visualizes differences in categorization behaviour for these tokens. For several of these tokens, the most frequent response was the same category across experiments, however, with substantially higher disagreement for tokens in Experiment 1b. In the bottom part of the acoustic space, participants in Experiment 1b seem to respond *had* disproportionally often.
-
-(ref:SI-overlap-tokens) Listeners' categorization responses in Experiments 1a and 1b, for comparable tokens in Hertz space. The vowel label indicates the most frequent response provided by participants on each test location. Size indicates how consistent responses were across participants, which larger symbols indicating more consistent responses (lower entropy).
-
-```{r SI-overlap-tokens, fig.width=base.width*3, fig.height=base.height*3+.5, out.width='80%', fig.cap="(ref:SI-overlap-tokens)"}
-p.vowel_space %+%
-  (d.test.overlappingTokens) +
-  geom_text(
-    aes(
-      size = Response.Entropy),
-    alpha = .5) +
-  scale_size_continuous("Response entropy (bits)", trans = 'reverse') +
-  guides(color = "none") +
-  theme(legend.position = "top") +
-  facet_wrap(~ Experiment) +
-  theme(
-    panel.grid.major = element_blank(),
-    panel.grid.minor = element_blank())
-```
-```{r}
-#Remove overlapping-tokens file
-rm(d.test.overlappingTokens)
+rm(m.exp, m.exp.lexical, m.exp.f1f2, m.exp.f1f3, d.test.overlappingTokens)
 ```
 
 # Additional information on the computational comparison of normalization accounts
