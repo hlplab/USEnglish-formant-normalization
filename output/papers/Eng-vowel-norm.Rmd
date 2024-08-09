@@ -104,7 +104,7 @@ knitr::opts_chunk$set(
 \begin{acknowledgments}
 Earlier versions of this work were presented at 2023 ASA meeting, ExLing 2022, at the Department of Computational Linguistics at the University of Zürich and at the Department of Swedish language and multilingualism at Stockholm University. We are grateful to OMITTED FOR REVIEW.
 \end{acknowledgments}
-<!--for feedback on this work. We thank Leslie Li and Xin Xie for sharing their database of L1-US English *hVd* productions. This work was partially funded by grants to AP from Kungliga Vetenskapsakademien, Kungliga Vitterhetsakademien, and the Department of Swedish Language and Multilingualism at Stockholm University, as well as grants to TFJ by the Helge Ax:son Johnson foundation, the Stockholm University Board of Human Science (Funding for Strategic Investments), and the Stockholm University Faculty of Humanities’ Research School (Kvalitetssäkrande medel grant). -->
+<!-- Maryann Tan, Chigusa Kurumada, and Xin Xie for feedback on this work. We thank Leslie Li and Xin Xie for sharing their database of L1-US English *hVd* productions, and the JASA copy editing staff for help with the Latex formatting. This work was partially funded by grants to AP from Kungliga Vetenskapsakademien, Kungliga Vitterhetsakademien, and the Department of Swedish Language and Multilingualism at Stockholm University, as well as grants to TFJ by the Helge Ax:son Johnson foundation, the Stockholm University Board of Human Science (Funding for Strategic Investments), and the Stockholm University Faculty of Humanities’ Research School (Kvalitetssäkrande medel grant). -->
 
 
 # Author Contributions {-}
