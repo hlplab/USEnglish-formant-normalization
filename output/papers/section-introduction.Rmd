@@ -5,11 +5,11 @@ Evidence for the presence of early normalization mechanisms comes from neuroimag
 
 While it is relatively uncontroversial *that* normalization contributes to robust speech perception, it is still unclear what types of computations this implicates. We address this question for the perception of vowels, which cross-linguistically relies on peaks in the distribution of spectral energy over acoustic frequencies (formants). Vowel perception has long been a focus in research on normalization [e.g., @bladon1984; @fant1975; @gerstman1968; @johnson2020; @joos1948; @lobanov1971; @miller1989; @nearey1978; @nordstrom-lindblom1975; @syrdal-gopal1986; @traunmuller1981; @watt-fabricius2002; @zahorian-jagharghi1991; for review, see @barreda2020], with some reviews citing over 100 competing proposals [@carpenter-govindarajan1993]. Importantly, these accounts differ in the types and complexity of computations they assume to take place during normalization. On the lower end of computational complexity, comparatively simple static transformations of the acoustic signal might suffice to achieve invariance in the mapping from cues to phonetic categories. For example, there is evidence that a transformation of acoustic frequencies (measured in Hz) into the psycho-acoustic Mel-space better describes how listeners perceive differences in the frequency of sine tones [e.g., @fastl-zwicker2007; @stevens-volkmann1940; for a critique, see @greenwood1997; @siegel1965]. <!-- TO DO: check what did those experiments show? --> It is thus possible that cross-talker variability in vowel pronunciations is effectively reduced when formants are represented in Mel, rather than Hz. Similar arguments have been made about other psycho-acoustic transformations [e.g., Bark, @traunmuller1990; ERB, @glasberg-moore1990; or semitones, @fant2002]. Most of these accounts share that they log-transform acoustic frequencies---in line with neurophysiological evidence that the auditory representations in the brain seem to follow a roughly logarithmic organization, so that auditory perception is (up to a point) more sensitive to differences between lower frequencies than to the same difference between higher frequencies [e.g., @merzenich1975; for review, see @saenz-langers2014]. If such static psycho-acoustic transformations are sufficient for formant normalization, this would offer a particularly parsimonious account of vowel perception as listeners would not have to infer talker-specific properties.
 
-The parsimony of psycho-acoustic transformations contrasts with the majority of accounts for vowel normalization, which introduce additional computations. This includes accounts that normalize formants relative to other information that is available at the same point in the acoustic signal [intrinsic normalization, e.g., @miller1989; @peterson1961; @syrdal-gopal1986]. For example, according to one proposal, listeners normalize vowel formants by the vowel's fundamental frequency or other formants estimated at the same point in time [@syrdal-gopal1986]. To the extent that the fundamental frequency is correlated with the talkers' vocal tract size [for review, see @vorperian-kent2007], this allows the removal of physiologically-conditioned cross-talker variability in formant realizations. While such intrinsic accounts arguably entail more computational complexity than static transformations, they do not require that listeners *maintain* talker-specific estimates over time. This distinguishes intrinsic from extrinsic accounts, which introduce additional computational complexity. 
+The parsimony of psycho-acoustic transformations contrasts with the majority of accounts for vowel normalization, which introduce additional computations. This includes accounts that normalize formants relative to other information that is available at the same point in the acoustic signal [intrinsic normalization, e.g., @miller1989; @peterson1961; @syrdal-gopal1986]. For example, according to one proposal, listeners normalize vowel formants by the vowel's fundamental frequency or other formants estimated at the same point in time [@syrdal-gopal1986]. To the extent that the fundamental frequency is correlated with the talkers' vocal tract size [for review, see @vorperian-kent2007], this allows the removal of physiologically-conditioned cross-talker variability in formant realizations. While such intrinsic accounts arguably entail more computational complexity than static transformations, they do not require that listeners *maintain* talker-specific estimates over time. This distinguishes intrinsic from extrinsic accounts, which introduce additional computational complexity.
 
 According to extrinsic accounts, normalization mechanisms infer and store estimates of talker-specific properties that then are used to normalize subsequent speech from that talker [@gerstman1968; @lobanov1971; @nearey1978; @nordstrom-lindblom1975; @watt-fabricius2002; for review, see also @weatherholtz-jaeger2016]. At the upper end of computational complexity, some accounts hold that listeners continuously infer and maintain both talker-specific means for each formant and talker-specific estimates of each formant's variability [@gerstman1968; @lobanov1971]. These estimates are then used to normalize formants, e.g., by centering and standardizing them [essentially z-scoring formants, @lobanov1971], removing cross-talker variability in the distribution of formant values. There are, however, more parsimonious extrinsic accounts that require inference and maintenance of fewer talker-specific properties. The most parsimonious of these is Nearey's *uniform scaling* account, which assumes that listeners infer and maintain a single talker-specific parameter. This parameter ($\Psi$) can be thought of as capturing the effects of the talkers' vocal tract length on the spectral scaling applied to the formant pattern produced by a talker [@nearey1978].^[Under uniform scaling accounts, listeners essentially 'slide' the center of their category representations (e.g, the 'template' of vowel categories for a given dialect) along a single line in formant space, with $\Psi$ determining the target of this sliding. Later extensions of this account maintain its memory parsimony but increased its inference complexity by allowing both intrinsic (the current F0) and extrinsic information (the talker's single mean of log-transformed formants) to influence the inference of $\Psi$ [@nearey-assmann2007]. We return to this extension in the general discussion.] Uniform scaling deserves particular mention here as it is arguably one of the most developed normalization accounts, and rooted in principled considerations about the physics of sound and the evolution of auditory systems [for review, see @barreda2020].
 
-In summary, hypotheses about the computations implied by formant normalization differ in the flexibility they afford as well as the inference and memory complexity they entail. Considerations about the complexity of inferences---essentially the number of parameters that listeners are assumed to estimate at any given moment in time---arguably gain in importance in light of the speed at which normalization seems to unfold. In the present study, we thus ask whether computationally simple accounts are sufficient to explain human vowel perception. 
+In summary, hypotheses about the computations implied by formant normalization differ in the flexibility they afford as well as the inference and memory complexity they entail. Considerations about the complexity of inferences---essentially the number of parameters that listeners are assumed to estimate at any given moment in time---arguably gain in importance in light of the speed at which normalization seems to unfold. In the present study, we thus ask whether computationally simple accounts are sufficient to explain human vowel perception.
 
 (ref:two-talkers) Illustration of how height, which is positively correlated with vocal tract size, affects vowels' F1 and F2, and how normalization can partially remove this effect. Shown here are realizations of all 8 monophthong vowels of US English by a short (cyan) and a tall native talker (red). **Panel A:** In the acoustic space, prior to any normalization (Hz). **Panel B:** After uniform scaling [@nearey1978]. **Panel C:** After Lobanov normalization [@lobanov1971]. The present study compares three of these accounts, along with `r length(levels.normalization) - 3` other normalization accounts.
 
@@ -88,9 +88,9 @@ d.XieJaeger.forplot %>%
   facet_wrap( ~ Normalization.Type, scales = "free", ncol = 3)
 ```
 
-While previous research has compared normalization accounts across languages, most of this work has evaluated proposals in terms of how well the normalized phonetic space supports the separability of vowel categories [@adank2004; @carpenter-govindarajan1993; @cole2010; @escudero-bion2007; @johnson-sjerps2021; @syrdal1985]. This approach is illustrated in Figure \@ref(fig:two-talkers). These studies have found that computationally more complex accounts---which also afford more flexibility---tend to achieve higher category separability and higher categorization accuracy [for review, see @persson-jaeger2023]. This includes Lobanov normalization, which continues to be highly influential in, for example, variationist and sociolinguistic research because of its effectiveness in removing cross-talker variability [for a critique, see @barreda2021]. It is, however, by no means clear that human speech perception employs the same computations that achieve the best category separability or accuracy [see also discussion in @barreda2021; @nearey-assmann2007]. 
+While previous research has compared normalization accounts across languages, most of this work has evaluated proposals in terms of how well the normalized phonetic space supports the separability of vowel categories [@adank2004; @carpenter-govindarajan1993; @cole2010; @escudero-bion2007; @johnson-sjerps2021; @syrdal1985]. This approach is illustrated in Figure \@ref(fig:two-talkers). These studies have found that computationally more complex accounts---which also afford more flexibility---tend to achieve higher category separability and higher categorization accuracy [for review, see @persson-jaeger2023]. This includes Lobanov normalization, which continues to be highly influential in, for example, variationist and sociolinguistic research because of its effectiveness in removing cross-talker variability [for a critique, see @barreda2021]. It is, however, by no means clear that human speech perception employs the same computations that achieve the best category separability or accuracy [see also discussion in @barreda2021; @nearey-assmann2007].
 
-A substantially smaller body of research has addressed this question by comparing normalization accounts against *listeners' perception* [@barreda-nearey2012; @barreda2021; @nearey1989; @richter2017; for a review, see @whalen2016]. Interestingly, these works seem to suggest that computationally simpler accounts might provide a better fit against human speech perception than the influential Lobanov model [@barreda2021; @richter2017]. For example, @barreda2021 compared the predictions of uniform scaling and Lobanov normalization against listeners' categorization responses in a forced-choice categorization task over parts of the US English vowel space. In his experiment, listeners' categorization responses were better predicted by uniform scaling than by Lobanov normalization. Findings like these suggest that comparatively simple corrections for vocal tract size---such as uniform scaling---might provide a better explanation of human perception than more computationally complex accounts [see also @johnson2020; @richter2017]. 
+A substantially smaller body of research has addressed this question by comparing normalization accounts against *listeners' perception* [@barreda-nearey2012; @barreda2021; @nearey1989; @richter2017; for a review, see @whalen2016]. Interestingly, these works seem to suggest that computationally simpler accounts might provide a better fit against human speech perception than the influential Lobanov model [@barreda2021; @richter2017]. For example, @barreda2021 compared the predictions of uniform scaling and Lobanov normalization against listeners' categorization responses in a forced-choice categorization task over parts of the US English vowel space. In his experiment, listeners' categorization responses were better predicted by uniform scaling than by Lobanov normalization. Findings like these suggest that comparatively simple corrections for vocal tract size---such as uniform scaling---might provide a better explanation of human perception than more computationally complex accounts [see also @johnson2020; @richter2017].
 
 This motivates the present work. We take a broad-coverage approach by comparing the `r length(levels.normalization)` normalization accounts in Table \@ref(tab:norm-accounts) against the perception of all 8 monophthongs of US English (`r linguisticsdown::cond_cmpl("[i]")` as in *heed*, `r linguisticsdown::cond_cmpl("[ɪ]")` in *hid*, `r linguisticsdown::cond_cmpl("[ɛ]")` in *head*, `r linguisticsdown::cond_cmpl("[æ]")` in *had*, `r linguisticsdown::cond_cmpl("[ʌ]")` in *hut*, `r linguisticsdown::cond_cmpl("[ʊ]")` in *hood*, `r linguisticsdown::cond_cmpl("[u]")` in *who'd*, `r linguisticsdown::cond_cmpl("[ɑ]")` in *odd*).^[We use Johnson's (2020) implementation of @nordstrom-lindblom1975. We group both @nordstrom-lindblom1975 and @johnson2020 with the centering accounts, as they are essentially variants of uniform scaling, differing in their estimation of $\Psi$. We also include both versions of Syrdal \& Gopal's Bark-distance model. The two versions differ only in their normalization of F2, and have not previously been compared against human perception.] We do so for the perception of both natural and synthesized speech. Our broad-coverage approach complements previous studies, which have typically compared a small number of accounts (up to 3) and focused on parts of the vowel inventory, and thus parts of the formant space [typically 2-4 vowels, @barreda-nearey2012; @barreda2021; @nearey1989; @richter2017]. <!-- Focusing on only parts of the formant space can increase statistical power to detect differences between accounts. It does, however, also risk that the choice of the formant space biases the comparison of accounts, thus limiting the generalizability of results. --> The accounts we consider include the most influential examples of psycho-acoustic transformations [@glasberg-moore1990; @fant2002; @stevens-volkmann1940; @traunmuller1981], intrinsic [@syrdal-gopal1986], extrinsic [@gerstman1968; @johnson2020; @lobanov1971; @mcmurray-jongman2011; @nearey1978; @nordstrom-lindblom1975], and hybrid accounts that contain intrinsic and extrinsic components [@miller1989]. This broad-coverage approach allows us to assess, for example, whether the preference for computationally simple accounts observed in @barreda2021 replicates on new data that span the entire vowel space. It also allows us to ask whether accounts even simpler than uniform scaling---such as psycho-acoustic transformations---provide an even better fit to human perception. <!-- Table \@ref(tab:norm-accounts) groups normalization accounts based on their computational complexity. We emphasize, however, that it is an empirical question whether this grouping predicts how well each account explains listeners' behavior. Accounts also differ, for example, in the psycho-acoustic space they assume to be relevant to human perception. The computational studies we present below suggest that both of these aspects are important in understanding human behavior. -->
 
@@ -101,7 +101,7 @@ This motivates the present work. We take a broad-coverage approach by comparing 
 \def\xrotatetable{\clearpage
 \nolinenumbers
 \setbox0=\vbox to\textwidth\bgroup\hsize=.5\textheight
-\leftskip=0pt 
+\leftskip=0pt
 \let\footnotemark\tablefootnotemark
 \let\footnotetext\tablefootnotetext
 \parindent=0pt
@@ -136,7 +136,7 @@ Normalization\newline\hglue6pt procedure\vrule depth 6pt width0pt&
 \hline
 \ \\
 \noalign{\vskip-6pt}
-& & % 
+& & %
 \cellcolor[HTML]{100C08} &
 \cellcolor[HTML]{100C08} \textcolor{white}{\ \bf No normalization} &
 \cellcolor[HTML]{100C08} \textcolor{white}{\ \bf Hz} &
@@ -145,32 +145,32 @@ Normalization\newline\hglue6pt procedure\vrule depth 6pt width0pt&
 
 \hline
 
-& & \cellcolor[HTML]{C9C0BB}{} 
-& \cellcolor[HTML]{C9C0BB}{---} 
-& \cellcolor[HTML]{C9C0BB}{log} & 
-\cellcolor[HTML]{C9C0BB}{} & 
+& & \cellcolor[HTML]{C9C0BB}{}
+& \cellcolor[HTML]{C9C0BB}{---}
+& \cellcolor[HTML]{C9C0BB}{log} &
+\cellcolor[HTML]{C9C0BB}{} &
 \cellcolor[HTML]{C9C0BB}{$F_n^{log} = ln(F_n)$} \\
-& & \cellcolor[HTML]{C9C0BB}{} 
-& \cellcolor[HTML]{C9C0BB}{---} 
-& \cellcolor[HTML]{C9C0BB}{Bark} 
-& \cellcolor[HTML]{C9C0BB}{Traunmüller (1990)} 
+& & \cellcolor[HTML]{C9C0BB}{}
+& \cellcolor[HTML]{C9C0BB}{---}
+& \cellcolor[HTML]{C9C0BB}{Bark}
+& \cellcolor[HTML]{C9C0BB}{Traunmüller (1990)}
 & \cellcolor[HTML]{C9C0BB}{$F_n^{Bark} = \frac{26.81 \times F_n}{1960 + F_n} - 0.53$} \\
-& & \cellcolor[HTML]{C9C0BB}{} 
-& \cellcolor[HTML]{C9C0BB}{---} 
+& & \cellcolor[HTML]{C9C0BB}{}
+& \cellcolor[HTML]{C9C0BB}{---}
 & \cellcolor[HTML]{C9C0BB}{ERB}  
-& \cellcolor[HTML]{C9C0BB}{Glasberg \& Moore (1990)} 
+& \cellcolor[HTML]{C9C0BB}{Glasberg \& Moore (1990)}
 & \cellcolor[HTML]{C9C0BB}{$F_n^{ERB} = 21.4 \times \log_{10}(1 + F_n
 \times 0.00437) $} \\
 \multirow[c]{-11}{*}{\hskip24pt\rotatebox{90}
 {\hskip-24pt\vbox{\bf \hbox{trans-}\hbox{formation}}}
 \hskip-30pt}
-& 
+&
 & \cellcolor[HTML]{C9C0BB}{} & \cellcolor[HTML]{C9C0BB}{---} & \cellcolor[HTML]{C9C0BB}{Mel}  & \cellcolor[HTML]{C9C0BB}{Stevens \& Volkmann (1940)} & \cellcolor[HTML]{C9C0BB}{$F_n^{Mel} = 2595 \times \log_{10}(1 + \frac{F_n}{700})$} \\
 & \multirow[c]{-4}{*}{}
-& \cellcolor[HTML]{C9C0BB}{} 
-& \cellcolor[HTML]{C9C0BB}{---} 
-& \cellcolor[HTML]{C9C0BB}{Semitones conversion} 
-& \cellcolor[HTML]{C9C0BB}{Fant et al. (2002)} 
+& \cellcolor[HTML]{C9C0BB}{}
+& \cellcolor[HTML]{C9C0BB}{---}
+& \cellcolor[HTML]{C9C0BB}{Semitones conversion}
+& \cellcolor[HTML]{C9C0BB}{Fant et al. (2002)}
 & \cellcolor[HTML]{C9C0BB}{$F_n^{ST} = 12 \times \frac{ln(\frac{F_n}{100})}{ln}$} \\
 
 \hline
@@ -181,17 +181,17 @@ Normalization\newline\hglue6pt procedure\vrule depth 6pt width0pt&
 & & \cellcolor[HTML]{E6BE8A}{} & \cellcolor[HTML]{E6BE8A}{(Bark-distance model)} & \cellcolor[HTML]{E6BE8A}{} & \cellcolor[HTML]{E6BE8A}{} & \cellcolor[HTML]{E6BE8A}{$F2^{SyrdalGopal2} = F3^{Bark} - F2^{Bark}$} \\
 & & \cellcolor[HTML]{E6BE8A}{} & \cellcolor[HTML]{E6BE8A}{Miller} & \cellcolor[HTML]{E6BE8A}{log} & \cellcolor[HTML]{E6BE8A}{Miller (1989)} & \cellcolor[HTML]{E6BE8A}{$SR = k (\frac{GM f0}{k})^{1/3}$} \\
 & & \cellcolor[HTML]{E6BE8A}{} & \cellcolor[HTML]{E6BE8A}{(formant-ratio)} & \cellcolor[HTML]{E6BE8A}{} & \cellcolor[HTML]{E6BE8A}{} & \cellcolor[HTML]{E6BE8A}{$F1^{Miller} = log(\frac{F1}{SR})$} \\
-& & \cellcolor[HTML]{E6BE8A}{} & 
-\cellcolor[HTML]{E6BE8A}{} & 
-\cellcolor[HTML]{E6BE8A}{} & 
-\cellcolor[HTML]{E6BE8A}{} & 
+& & \cellcolor[HTML]{E6BE8A}{} &
+\cellcolor[HTML]{E6BE8A}{} &
+\cellcolor[HTML]{E6BE8A}{} &
+\cellcolor[HTML]{E6BE8A}{} &
 \cellcolor[HTML]{E6BE8A}{$F2^{Miller} = log(\frac{F2}{F1})$} \\
 \multirow[c]{-7}{*}{\vtop to
 0pt{\vss\vskip52pt\rotatebox{90}{\vbox{\vskip18pt\ \ \bf
 \hbox{intrinsic}}}\vskip26pt}}
 & &
-\cellcolor[HTML]{E6BE8A}{} &  \cellcolor[HTML]{E6BE8A}{} & 
-\cellcolor[HTML]{E6BE8A}{} & \cellcolor[HTML]{E6BE8A}{} & 
+\cellcolor[HTML]{E6BE8A}{} &  \cellcolor[HTML]{E6BE8A}{} &
+\cellcolor[HTML]{E6BE8A}{} & \cellcolor[HTML]{E6BE8A}{} &
 \cellcolor[HTML]{E6BE8A}{$F3^{Miller} = log(\frac{F3}{F2})$} \\
 
 \hline
@@ -203,14 +203,14 @@ uniform\newline\hglue6pt scaling} & \cellcolor[HTML]{ABCDEF}{log} & \cellcolor[H
 & & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{Nordström
 \&\newline\hglue6pt Lindblom} & \cellcolor[HTML]{ABCDEF}{Hz} & \cellcolor[HTML]{ABCDEF}{Nordström \& Lindblom (1975)} & \cellcolor[HTML]{ABCDEF}{$F^{Nordstr\textnormal{\"{o}}mLindblom}_n = \frac{F_n}{mean(\frac{F3[F1 > 600]}{2.5})}$} \\
 & & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{(vocal tract scaling)} & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{} \\
-& & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{Johnson} 
+& & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{Johnson}
 & \cellcolor[HTML]{ABCDEF}{Hz} & \cellcolor[HTML]{ABCDEF}{Johnson(2020)}  
 & \cellcolor[HTML]{ABCDEF}{$F^{Johnson}_n = \frac{F_n}{mean(\frac{F1}{0.5}, \frac{F2}{1.5}, \frac{F3}{2.5})}$} \\
 & & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{(average
 formant\newline\hglue6pt spacing)} & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{} \\
 & & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{Nearey's
 formantwise\newline\hglue6pt log-mean} & \cellcolor[HTML]{ABCDEF}{log} & \cellcolor[HTML]{ABCDEF}{Nearey (1978)} & \cellcolor[HTML]{ABCDEF}{$F^{Nearey}_n = \ln(F_n) - mean(ln(F_n))$} \\
-& & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{} 
+& & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{}
 & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{} \\
 & & \cellcolor[HTML]{ABCDEF}{{\multirow[c]{-10}{*}{\rotatebox{90}{}}}}
 & \cellcolor[HTML]{ABCDEF}{C-CuRE} & \cellcolor[HTML]{ABCDEF}{Hz} & \cellcolor[HTML]{ABCDEF}{McMurray \& Jongman (2011)} & \cellcolor[HTML]{ABCDEF}{$F^{C-CuRE}_n = F_n - mean(F_n)$} \\
@@ -220,19 +220,19 @@ formantwise\newline\hglue6pt log-mean} & \cellcolor[HTML]{ABCDEF}{log} & \cellco
 & & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{---} & \cellcolor[HTML]{ABCDEF}{Semitones conversion} & \cellcolor[HTML]{ABCDEF}{} & \cellcolor[HTML]{ABCDEF}{} \\
 
 \cline{3-6}
- 
-& & \cellcolor[HTML]{DDADAF}{} & \cellcolor[HTML]{DDADAF}{Gerstman} 
-& \cellcolor[HTML]{DDADAF}{Hz} 
-& \cellcolor[HTML]{DDADAF}{Gerstman (1968)} 
+
+& & \cellcolor[HTML]{DDADAF}{} & \cellcolor[HTML]{DDADAF}{Gerstman}
+& \cellcolor[HTML]{DDADAF}{Hz}
+& \cellcolor[HTML]{DDADAF}{Gerstman (1968)}
 & \cellcolor[HTML]{DDADAF}{$F_n^{Gerstman} = 999 \times \frac{F_n - F_n^{min}}{F_n^{max} - F_n^{min}}$} \\
-& & \cellcolor[HTML]{DDADAF}{} 
-& \cellcolor[HTML]{DDADAF}{(range normalization)} 
-& \cellcolor[HTML]{DDADAF}{} & \cellcolor[HTML]{DDADAF}{} 
+& & \cellcolor[HTML]{DDADAF}{}
+& \cellcolor[HTML]{DDADAF}{(range normalization)}
+& \cellcolor[HTML]{DDADAF}{} & \cellcolor[HTML]{DDADAF}{}
 & \cellcolor[HTML]{DDADAF}{} \\
-& & \cellcolor[HTML]{DDADAF}{} 
-& \cellcolor[HTML]{DDADAF}{} 
-& \cellcolor[HTML]{DDADAF}{} 
-& \cellcolor[HTML]{DDADAF}{} 
+& & \cellcolor[HTML]{DDADAF}{}
+& \cellcolor[HTML]{DDADAF}{}
+& \cellcolor[HTML]{DDADAF}{}
+& \cellcolor[HTML]{DDADAF}{}
 & \cellcolor[HTML]{DDADAF}{} \\
  {\multirow[c]{-16}{*}{
 \noindent\hskip-6pt\vtop to
@@ -242,22 +242,22 @@ extrinsic centering}\hskip-28pt
 }}\vskip 38pt}}}
 & &
  \cellcolor[HTML]{DDADAF}{}
-& \cellcolor[HTML]{DDADAF}{Lobanov} 
-& \cellcolor[HTML]{DDADAF}{Hz} 
-& \cellcolor[HTML]{DDADAF}{Lobanov (1971)} 
+& \cellcolor[HTML]{DDADAF}{Lobanov}
+& \cellcolor[HTML]{DDADAF}{Hz}
+& \cellcolor[HTML]{DDADAF}{Lobanov (1971)}
 & \cellcolor[HTML]{DDADAF}{$F^{Lobanov}_n = \frac{F_n - mean(F_n)}{sd(F_n)}$} \\
  & & \cellcolor[HTML]{DDADAF}{} & \cellcolor[HTML]{DDADAF}{(z-score)}
- & \cellcolor[HTML]{DDADAF}{} & \cellcolor[HTML]{DDADAF}{} & 
+ & \cellcolor[HTML]{DDADAF}{} & \cellcolor[HTML]{DDADAF}{} &
 \cellcolor[HTML]{DDADAF}{} \\
  & &
  \cellcolor[HTML]{DDADAF}
 \multirow[c]{-14}{*}{\hskip24pt\rotatebox{90}
 {\hskip-24pt\vbox{\bf \hbox{extrinsic}\hbox{standardizing}}}
 \hskip-30pt}
-& \cellcolor[HTML]{DDADAF}{} 
-& \cellcolor[HTML]{DDADAF}{} 
-& \cellcolor[HTML]{DDADAF}{} 
-& \cellcolor[HTML]{DDADAF}{} 
+& \cellcolor[HTML]{DDADAF}{}
+& \cellcolor[HTML]{DDADAF}{}
+& \cellcolor[HTML]{DDADAF}{}
+& \cellcolor[HTML]{DDADAF}{}
 \\
 \hline
 \hline
@@ -266,8 +266,7 @@ extrinsic centering}\hskip-28pt
 
 \linenumbers
 
-Next, we motivate and describe the two experiments we conducted. Then we compare the normalization accounts in Table \@ref(tab:norm-accounts) against listeners responses from these experiments. 
+Next, we motivate and describe the two experiments we conducted. Then we compare the normalization accounts in Table \@ref(tab:norm-accounts) against listeners responses from these experiments.
 
 ## Open Science Statement
-All stimulus recordings, results, and the code for the experiment, data analysis, and computational modeling for this article can be downloaded from OSF at [https://osf.io/zemwn/](https://osf.io/zemwn/). The OSF repo also include extensive supplementary information (SI). Both the article and SI are written in R markdown, allowing readers to replicate our analyses with the click of a button, using freely available software [@R-base; @RStudio]. Readers can revisit the assumptions we committed to for the present project---for example, by substituting alternative normalization accounts or categorization models. Researchers can also substitute their own experiments on vowel normalization for our Experiments 1a and 1b, to see whether our findings generalize to novel data. We see this as an important contribution of the present work, as it should make it substantially easier to consider additional normalization accounts---including variants to the accounts we considered---and to assess the generalizability of the conclusions we reach based on the present data. 
-
+All stimulus recordings, results, and the code for the experiment, data analysis, and computational modeling for this article can be downloaded from OSF at [https://osf.io/zemwn/](https://osf.io/zemwn/). The OSF repo also include extensive supplementary information (SI). Both the article and SI are written in R markdown, allowing readers to replicate our analyses with the click of a button, using freely available software [@R-base; @RStudio]. Readers can revisit the assumptions we committed to for the present project---for example, by substituting alternative normalization accounts or categorization models. Researchers can also substitute their own experiments on vowel normalization for our Experiments 1a and 1b, to see whether our findings generalize to novel data. We see this as an important contribution of the present work, as it should make it substantially easier to consider additional normalization accounts---including variants to the accounts we considered---and to assess the generalizability of the conclusions we reach based on the present data.
