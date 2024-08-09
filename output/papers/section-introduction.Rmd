@@ -136,10 +136,9 @@ Normalization\newline\hglue6pt procedure\vrule depth 6pt width0pt&
 \hline
 \ \\
 \noalign{\vskip-6pt}
-& & % black 
-\cellcolor{white}{} 
-&
-\cellcolor[HTML]{100C08}\textcolor{white}{\ \bf n/a} &
+& & % 
+\cellcolor[HTML]{100C08} &
+\cellcolor[HTML]{100C08} \textcolor{white}{\ \bf No normalization} &
 \cellcolor[HTML]{100C08} \textcolor{white}{\ \bf Hz} &
 \cellcolor[HTML]{100C08} \textcolor{white}{\ \bf n/a} &
 \cellcolor[HTML]{100C08} \textcolor{white}{\ \bf n/a} \\
