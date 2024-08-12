@@ -47,12 +47,6 @@ A project template, including R markdown files that result in APA-formatted PDFs
 ## Exclusions {#sec:SI-exclusions}
 We first applied trial-level exclusion criteria to each participant, and then applied participant-level exclusion criteria.
 
-### Trial exclusions
-We excluded trials with RTs more than 3 standard deviations faster or slower than expected. This was determined by first z-scoring the log-transformed RTs *within each participant* (by subtracting the participants' mean from each observation and dividing through the participants standard deviation) and then z-scoring these z-scores *within each trial* across participants. This double-scaling approach was necessary as participants' RTs decreased substantially over the first few trials and then continued to decrease less rapidly until converging against a participant-specific minimum. This criterion did not remove just the first few trials but rather removed RTs that were unusually fast or slow *for that participant at that trial*. And, unlike more complicated methods (like developing a model of cross-trial decreases in RTs), the approach employed here does not make any assumptions about the shape of the speed up in RTs across trials. In total, N =`r d.test.raw %>% filter(Exclude_Trial.because_of_RT == T) %>% nrow()` trials were excluded. 
-
-### Participant exclusion 
-Participants were excluded if they (1) failed to pay attention to the instruction to wear over-the-ear-headphones, (2) had unusually slow or fast RT-means compared to other participants (more than 3 standard deviations faster or slower in their mean log-transformed RTs compared to other participants), (3) clearly did not do the task (e.g., randomly clicking on different response options). Finally, participants were excluded if (4) the trial-level exclusions removed too many trials (>XXX% of all trials). 
-
 ```{r message=FALSE}
 # Re-read in the natural and synthesized stimuli from experiment 1a and 1b.
 d.test.raw <-
@@ -69,56 +63,21 @@ d.test.raw %<>%
   add.ExclusionCriteria()
 ```
 
-`r d.test.raw %>% filter(Exclude_Participant.because_of_IgnoredInstructions == T) %>% distinct(ParticipantID) %>% length()` participant in Experiment 1a was excluded based on the first criteria, as s/he used external speakers instead of head set (based on response in post-experiment questionnaire). This participant was also more than 3 standard deviations faster in her/his mean log-RTs than other participants (second criteria), as were another participant in Experiment 1a. We decided to exclude participants who were more than 3 standard deviations faster or slower in their mean (log-transformed) RTs compared to other participants. Figure \@ref(fig:SI-exclusion-summary) summarizes participant exclusions due to reaction times and not wearing headphones.
+### Trial exclusions
+We excluded trials with RTs more than 3 standard deviations faster or slower than expected. This was determined by first z-scoring the log-transformed RTs *within each participant* (by subtracting the participants' mean from each observation and dividing through the participants standard deviation) and then z-scoring these z-scores *within each trial* across participants. This double-scaling approach was necessary as participants' RTs decreased substantially over the first few trials and then continued to decrease less rapidly until converging against a participant-specific minimum. This criterion did not remove just the first few trials but rather removed RTs that were unusually fast or slow *for that participant at that trial*. And, unlike more complicated methods (like developing a model of cross-trial decreases in RTs), the approach employed here does not make any assumptions about the shape of the speed up in RTs across trials. In total, N =`r d.test.raw %>% filter(Exclude_Trial.because_of_RT == T) %>% nrow()` trials were excluded (for Experiment 1a, N = `r d.test.raw %>% filter(Experiment == "Experiment 1a (natural)", Exclude_Trial.because_of_RT == T) %>% nrow()` trials, for Experiment 1b N = `r d.test.raw %>% filter(Experiment == "Experiment 1b (synthesized)", Exclude_Trial.because_of_RT == T) %>% nrow()`).
 
-(ref:SI-exclusion-summary) Participant exclusions in Experiment 1a and Experiment 1b. Two participants in Experiment 1a (participants 22 and 24) were excluded based on their log-transformed RTs and/or for not wearing headphones.
+### Participant exclusion 
+Participants were excluded if they (1) failed to pay attention to the instruction to wear over-the-ear-headphones, (2) had unusually slow or fast RT-means compared to other participants (more than 3 standard deviations faster or slower in their mean log-transformed RTs compared to other participants), (3) clearly did not do the task (e.g., randomly clicking on different response options). Finally, participants were excluded if (4) the trial-level exclusions removed too many trials (>20% of all trials).
 
-```{r SI-exclusion-summary, fig.width=base.width*4, fig.height=base.height*3, out.width='90%', fig.cap="(ref:SI-exclusion-summary)", warning=FALSE}
-d.test.raw %>%
-  group_by(Experiment, ParticipantID, Exclude_Participant.Reason, Assignment.Submit.DuringDayTime) %>%
-  summarise_at("Response.log_RT", .funs = list("mean" = mean, "sd" = sd), na.rm = T) %>%
-  ggplot(
-    aes(
-      x = mean,
-      y = sd)) +
-  geom_text(
-    aes(
-      label = ParticipantID),
-    alpha = .3) +
-  geom_point(
-    aes(
-      color = Exclude_Participant.Reason,
-      shape = Exclude_Participant.Reason,
-      alpha = Assignment.Submit.DuringDayTime)) +
-  geom_rug() +
-  scale_x_continuous("mean log-RT (in msec)") +
-  scale_y_continuous("SD of log-RT") +
-  scale_color_manual(
-    "Reason for exclusion",
-    breaks = c("none",
-               "Repeat participant", "No headphones", "Reaction time", "Too many missing trials"),
-    values = c("black", rep("red", 8))) +
-  scale_shape_manual(
-    "Reason for exclusion",
-    breaks = c("none",
-               "Repeat participant", "No headphones", "Reaction time", "Too many missing trials"),
-    values = c(16, 15, 17, 10, 3, 4, 8, 9, 13)) +
-  scale_alpha_manual(
-    "Completed during\ndaytime (EST)?",
-    breaks = c(T, F),
-    values = c(1, .5)) +
-  facet_grid(. ~ Experiment)
-```
+`r d.test.raw %>% filter(Exclude_Participant.because_of_IgnoredInstructions == T) %>% distinct(ParticipantID) %>% nrow()` participant in Experiment 1a was excluded based on the first criteria, as s/he used external speakers instead of head set (based on response in post-experiment questionnaire). One additional participant from Experiment 1a was excluded based on the second criteria, a s/he was more than 3 standard deviations faster or slower in the mean (log-transformed) RTs compared to other participants.
 
-The experiments did not contain independent catch trials. We therefore looked into participants' individual responses in order to identify participants that seem to have randomly answered, independent of the stimulus. Figure \@ref(fig:SI-exp1a-responses) suggests that participants 13, 15, 21, 22, and 24, did not perform the task. Their responses indicate that they did not pay attention to the stimuli but rather randomly selected responses irrespective of what vowel they heard. This includes *had* responses to stimuli located all over the vowel space (e.g., participants 15, 21, 22, 24), *heed* responses to stimuli located in the low back part of the space (e.g., 24), or *odd* responses to stimuli located in the high front part of the space (e.g., participants 13, 21). Participant 8 seem to have performed the task but clearly used the phonetic space in ways different from everyone else, as s/he seems to have completely inverted the *who'd*-*hood* categories. This behavior likely indicates the use of a different dialect pattern, and we therefore decided to exclude participant 8 as well. Participant 22 was also excluded based on unusual RT-patterns, and participant 24 based on not wearing over-the-ear headphones. <!--TO DO: consider NOT removing participant 8-->
+As the experiments did not contain independent catch trials, we visualized participants' individual responses in order to identify participants that seem to have randomly answered, independent of the stimulus (third criteria). Figure \@ref(fig:SI-exp1a-responses) suggests that N = `r d.test.raw %>% filter(Experiment == "Experiment 1a (natural)", Exclude_Participant.because_of_unusual_vowel_responses == T) %>% distinct(ParticipantID) %>% nrow()` participants in Experiment 1a did not perform the task. Their responses suggest that they randomly selected responses irrespective of what vowel they heard. This includes *had* responses to stimuli located all over the vowel space, *heed* responses to stimuli located in the low back part of the space, or *odd* responses to stimuli located in the high front part of the space. For Experiment 1b, Figure \@ref(fig:SI-exp1b-responses) indicates that N = `r d.test.raw %>% filter(Experiment == "Experiment 1b (synthesized)", Exclude_Participant.because_of_unusual_vowel_responses == T) %>% distinct(ParticipantID) %>% nrow()` participants displayed unusual response patterns, responding *who'd* or *hod* for tokens in the high front part of the space, and *heed* for tokens in the high center and back parts. Unusual vowel responses is not an objective criterion. There are many participants that gave unexpected responses on some occasions. However, if they did not display systematic randomness in selecting any kind of vowel for any kind of stimuli, they were not excluded.
 
-Figure \@ref(fig:SI-exp1b-responses) indicates that most participants in Experiment 1b made use of the phonetic space in similar ways to participants in Experiment 1a (and in line with where natural categories fall in the space). Participants 15 and 21 seem to be exceptions. Participant 15 often responded *who'd* for tokens in the high front part of the space, and *heed* for tokens in the high center and back parts, while participant 21 displays an overall more random response behavior, and often selected *heed* for high back tokens and *hod* for several front tokens.
+Finally, no participant was excluded based on the forth criteria (too many missing trials). In total, N = `r d.test.raw %>% filter(Experiment == "Experiment 1a (natural)", Exclude_Participant.Reason != "none") %>% distinct(ParticipantID) %>% nrow()` participants in Experiment 1a were excluded, and N = `r d.test.raw %>% filter(Experiment == "Experiment 1b (synthesized)", Exclude_Participant.Reason != "none") %>% distinct(ParticipantID) %>% nrow()` participants in 1b. This left us with N = `r d.test.raw %>% filter(Experiment == "Experiment 1a (natural)", Exclude_Participant.Reason == "none") %>% distinct(ParticipantID) %>% nrow()` participants for Experiment 1a, and N = `r d.test.raw %>% filter(Experiment == "Experiment 1a (natural)", Exclude_Participant.Reason == "none") %>% distinct(ParticipantID) %>% nrow()` participants for 1b.
 
-Unusual vowel responses is not an objective criterion. There are many participants that gave unexpected responses on some occasions, e.g., participants 10 and 12 in Experiment 1a, or participants 5 and 24 in Experiment 1b. However, we decided to not exclude them as they were not systematic in their response patterns. For instance, there were no indications of a definite dialect shift (as with participant 8 in Experiment 1a), or systematic randomness in selecting any kind of vowel for any kind of stimuli (as with participants 13, 15, 21, 22, 24, in Experiment 1a, and to some extent, participants 15 and 22 in Experiment 1b).
+(ref:SI-exp1a-responses) Visualizing participants with unusual response patterns in Experiment 1a. Color and vowel label indicate response provided by participants on each test location. Each vowel was repeated twice. Participants that displayed unusual response patterns and were therefore excluded, are highlighted.
 
-(ref:SI-exp1a-responses) Participants' categorization responses in Experiment 1a, shown in F1-F2 space. Color and vowel label indicate response provided by participants on each test location. Each vowel was repeated twice.
-
-(ref:SI-exp1b-responses) Participants' categorization responses in Experiment 1b, shown in F1-F2 space. Color and vowel label indicate response provided by participants on each test location. Each vowel was repeated twice.
+(ref:SI-exp1b-responses) Visualizing participants with unusual response patterns in Experiment 1b.  Color and vowel label indicate response provided by participants on each test location. Each vowel was repeated twice. Participants that displayed unusual response patterns and were therefore excluded, are highlighted.
 
 ```{r SI-exp1a-responses, fig.width=base.width*4.5, fig.height=base.height*5.5, fig.pos="!ht", fig.align='center', out.width='90%', fig.cap="(ref:SI-exp1a-responses)"}
 # Experiment 1a - By participant
@@ -130,8 +89,9 @@ p.vowel_space %+%
     y = F1,
     label = Response.Vowel,
     color = Response.Vowel,
-    alpha = .6) +
+    alpha = ifelse(ParticipantID %in% c(13,15,21), .7, .2)) +
   geom_text() +
+  scale_alpha_continuous(range = c(.1, .7)) +
   guides(color = "none", alpha = "none") +
   facet_wrap(~ Experiment + ParticipantID, ncol = 5)
 ```
@@ -145,19 +105,19 @@ p.vowel_space %+%
     y = F1,
     label = Response.Vowel,
     color = Response.Vowel,
-    alpha = .6) +
+    alpha = ifelse(ParticipantID %in% c(15,21), .7, .25)) +
   geom_text() +
+  scale_alpha_continuous(range = c(.1, .7)) +
   guides(color = "none", alpha = "none") +
   facet_wrap(~ Experiment + ParticipantID, ncol = 5)
 ```
 
-
 ## Distribution of stimuli F1-F3 in Experiments 1a and 1b
-Figure \@ref(fig:SI-plot-cues-3d) visualizes the stimuli in Experiments 1a and 1b in F1-F3 space. Some tokens in Experiment 1a clearly display a different distribution pattern along F3 (Figure \@ref(fig:SI-plot-cues-3d)), which might explain the shift in model fits for the F1-F3 models (see Section \@ref(sec:SI-F1F3)).
+The natural and synthesized stimuli used in Experiment 1a and 1b, respectively, differed in terms of their distribution in F1-F3 space (see Section \@ref(sec:stimuli)). For Experiment 1a, we used all natural productions from one of the talkers in the @xie-jaeger2020 database. This stimuli thus reflected the F1-F3 distributions for this specific talker (Figure \@ref(fig:SI-plot-cues-3d), red circles). For Experiment 1b, we synthesized tokens from one of the *had* recordings used in Experiment 1a (Figure \@ref(fig:SI-plot-cues-3d), blue squares). These synthesized tokens spanned a larger range of the F1-F2 space (Figure \@ref(fig:SI-plot-cues-3d)**A**). In addition, the F3 value for each synthesized token was predicted using a linear regression over the natural productions of the talker from Experiment 1a, predicting F3 from F1, F2 and their interaction. This difference in F3-distributions between experiment stimuli is clearly visible in Figure \@ref(fig:SI-plot-cues-3d)**B**. Figures \@ref(fig:SI-plot-cues-3d)**B** and \@ref(fig:SI-plot-cues-3d)**C** further suggest that the talker used in Experiment 1a displayed some variability in F3-distribution. For instance, some low back vowel productions seem to have unusually high F3 values, and the F3 values for the high front vowels are quite high. This F3-pattern might indicate that this talker has a somewhat unusual F3-distribution that could potentially explain the shift in model fits for the F1-F3 models (see Section \@ref(sec:SI-F1F3)).
 
-(ref:SI-plot-cues-3d) Stimuli of Experiments 1a (**red**) and 1b (**blue**) in F1-F3 space. Point size indicates response entropy: larger points represent higher listener agreement, and vice versa.
+(ref:SI-plot-cues-3d) Stimuli of Experiments 1a (**red circles**) and 1b (**blue squares**) in F1-F3 space.
 
-```{r SI-plot-cues-3d, fig.cap="(ref:SI-plot-cues-3d)", fig.show='hold', out.width='60%', fig.ncol=1, fig.align='center', warning=FALSE}
+```{r SI-plot-cues-3d, fig.cap="(ref:SI-plot-cues-3d)", fig.show='hold', out.width='60%', fig.ncol=1, fig.align='center', fig.subcap = c("A", "B", "C"), warning=FALSE}
 # Code kept for reproducibility
 # p.3d.cues <- d.test.by_item %>%
 #   plot_ly(
@@ -166,8 +126,9 @@ Figure \@ref(fig:SI-plot-cues-3d) visualizes the stimuli in Experiments 1a and 1
 #     z = ~ F1_Hz_r,
 #     color = ~ Experiment,
 #     colors = c("darkred", "darkblue"),
-#     size = ~ -Response.Entropy) %>%
-#   add_markers() %>%
+#     symbol = ~ Experiment,
+#     symbols = c("circle", "square")) %>%
+#   add_markers(marker = list(size = 6, opacity = .6)) %>%
 #   layout(
 #     autoresize = TRUE,
 #     showlegend = TRUE,
@@ -187,7 +148,7 @@ knitr::include_graphics(c("figures/p.3Dcues.1.png", "figures/p.3Dcues.2.png", "f
 ```
 
 ## Auxiliary analysis of participant responses in Experiments 1a and 1b {#sec:SI-aux-entropy}
-Participants in Experiment 1b showed overall less agreement in their responses to the stimuli than participants in Experiment 1a, as indicated by the higher response entropy in Experiment 1b. As stated in the main text, response entropies differed even for tokens that overlap in Hertz space. Figure \@ref(fig:SI-overlap-tokens) visualizes differences in categorization behavior for these tokens. For several of these tokens, the most frequent response was the same category across experiments, however, with substantially higher disagreement for tokens in Experiment 1b. In the bottom part of the acoustic space, participants in Experiment 1b seem to respond *had* disproportionally often.
+Participants in Experiment 1b showed overall less agreement in their responses to the stimuli than participants in Experiment 1a, as indicated by the higher response entropy in Experiment 1b. As stated in the main text, response entropies differed even for tokens that were acoustically similar and only differed in $\le 30$ Hz along F1 and F2. While the most frequent response was the same category across experiments for some of these tokens, participants still displayed substantially higher disagreement for the tokens in Experiment 1b (mean by-item response entropy for the tokens in Experiment 1a = `r d.test.overlappingTokens %>% filter(Experiment == "Experiment 1a (natural)") %>% summarise(mean(Response.Entropy)) %>% round(., 2)` bits, SE = `r d.test.overlappingTokens %>% filter(Experiment == "Experiment 1a (natural)") %>% summarise(se(Response.Entropy)) %>% round(., 2)`; and for the tokens in Experiment 1b = `r d.test.overlappingTokens %>% filter(Experiment == "Experiment 1b (synthesized)") %>% summarise(mean(Response.Entropy)) %>% round(., 2)` bits, SE = `r d.test.overlappingTokens %>% filter(Experiment == "Experiment 1b (synthesized)") %>% summarise(se(Response.Entropy)) %>% round(., 2)`). Figure \@ref(fig:SI-overlap-tokens) visualizes differences in categorization behavior for these `r nrow(d.test.overlappingTokens)` acoustically similar tokens.
 
 (ref:SI-overlap-tokens) Listeners' categorization responses in Experiments 1a and 1b, for comparable tokens in Hertz space. The vowel label indicates the most frequent response provided by participants on each test location. Size indicates how consistent responses were across participants, which larger symbols indicating more consistent responses (lower entropy).
 
@@ -207,7 +168,7 @@ p.vowel_space %+%
     panel.grid.minor = element_blank())
 ```
 
-In order to assess the extent to which differences in response entropy across the two experiments were caused by the placement of stimuli in the formant space, we conducted a series of regression analyses. <!-- TO DO: the following sentences are incomprehensible --> We used linear regression models that predicted response entropy from experiment, to models that employed residuals from a general additive model including response entropy and the tokens placement in the phonetic space (F1, F2) as response variable, and experiment as predictor. We further compared models based on the full data set to models that excluded all *hut* and *odd* responses from Experiment 1a in order to assess effects of lexical context.
+In order to assess the extent to which differences in response entropy across the two experiments were caused by the placement of stimuli in the formant space, we conducted a series of regression analyses. <!-- TO DO: the following sentences are incomprehensible --> We first fit two linear regression models: one that predicted response entropy from experiment for the full data set, and a second with the same model formula but fit to a subset of the data that excluded all *hut* and *odd* responses from Experiment 1a. This was done in order to assess effects of lexical context. We subsequently fit a general additive model including response entropy and the tokens placement in the phonetic space (F1, F2) as response variable, and experiment as predictor, in order to assess the effect of stimuli placement in F1-F2 space. A fourth general additive model that included F3 was also fit.
 
 ```{r}
 # Comparisons  of response Entropy between experiments
@@ -248,7 +209,7 @@ m.exp.f1f3 <- lm(
   broom::tidy()
 ```
 
-When adding effects of lexical context to the model,<!-- TO DO: which model??--> the difference in listeners' response entropy between experiments is reduced by `r round((m.exp$estimate[2] - m.exp.lexical$estimate[2]) / m.exp$estimate[2], digits = 3) * 100`%. Adding a nonlinear model with F1-F2 values of the tokens, the difference is reduced by an additional `r round((m.exp.lexical$estimate[2] - m.exp.f1f2$estimate[2]) / m.exp.lexical$estimate[2], digits = 3) * 100`%, while adding F3-values reduces the difference by `r round((m.exp.lexical$estimate[2] - m.exp.f1f3$estimate[2]) / m.exp.lexical$estimate[2], digits = 3) * 100`%. Taken together, these result suggest that up to approximately two-thirds of the difference in response entropy between experiments can be attributed to the placement of stimuli in the formant space, while the remaining one-third is influenced by other factors, such as the phonetically impoverished nature of the synthesized stimuli.
+When adding effects of lexical context to the linear model, the difference in listeners' response entropy between experiments was reduced by `r round((m.exp$estimate[2] - m.exp.lexical$estimate[2]) / m.exp$estimate[2], digits = 3) * 100`%. Comparing the estimates of the nonlinear model with F1-F2 values of the tokens to the estimates of the linear model with lexical effects, the difference in response entropies was reduced by an additional `r round((m.exp.lexical$estimate[2] - m.exp.f1f2$estimate[2]) / m.exp.lexical$estimate[2], digits = 3) * 100`%, while adding F3-values reduced the difference by `r round((m.exp.lexical$estimate[2] - m.exp.f1f3$estimate[2]) / m.exp.lexical$estimate[2], digits = 3) * 100`%. Taken together, these result suggest that up to approximately two-thirds of the difference in response entropy between experiments can be attributed to the placement of stimuli in the formant space, while the remaining one-third is influenced by other factors, such as the phonetical nature of the synthesized stimuli.
 
 ```{r}
 rm(m.exp, m.exp.lexical, m.exp.f1f2, m.exp.f1f3, d.test.overlappingTokens)
@@ -258,7 +219,7 @@ rm(m.exp, m.exp.lexical, m.exp.f1f2, m.exp.f1f3, d.test.overlappingTokens)
 
 ## Methods
 ### Vowel data used to train ideal observers [@xie-jaeger2020] {#sec:SI-xie-jaeger}
-The Xie and Jaeger database consists of `r d.XieJaeger %>% group_by(Talker, category) %>% distinct(Token) %>% nrow()` *hVd* word recordings from 17 (5 female) L1 talkers of a Northeastern dialect of US English (ages 18 to 35 years old). The talkers were recorded reading a list of 180 English monosyllabic words, a list of short sentences, and a list of ten *hVd* words---the eight US English monophthongs as well as *aid* and *owed*  [for further information, see @xie-jaeger2020]. For each talker, the database contains 9-10 recordings of each *hVd* word. An automatic aligner [Penn Phonetics Lab Forced Aligner; @yuan2008] was used to obtain estimates for word and segment boundaries.^[We thank Xin Xie and Leslie Li for providing us with the recordings and aligned Praat textgrids.]
+In this subsection, we provide additional information on the formant data from the @xie-jaeger2020 database that we used to train the ideal observers, as described in the main text. The database consists of `r d.XieJaeger %>% group_by(Talker, category) %>% distinct(Token) %>% nrow()` *hVd* word recordings from `r d.XieJaeger %>% distinct(Talker) %>% nrow()` (`r d.XieJaeger %>% filter(Gender == "female") %>% distinct(Talker) %>% nrow() + 1` female) L1 talkers of a Northeastern dialect of US English (ages 18 to 35 years old). The talkers were recorded reading a list of 180 English monosyllabic words, a list of short sentences, and a list of ten *hVd* words---the eight US English monophthongs as well as *aid* and *owed*  [for further information, see @xie-jaeger2020]. For each talker, the database contains 9-10 recordings of each *hVd* word. An automatic aligner [Penn Phonetics Lab Forced Aligner, @yuan2008] was used to obtain estimates for word and segment boundaries.^[We thank Xin Xie and Leslie Li for providing us with the recordings and aligned Praat textgrids.]
 
 The first author manually corrected the automatic alignments for all vowel segmentations. We then used the Burg algorithm in Praat [@boersma-weenink2022] to extract estimates of the first three formants (F1-F3) at three points of the vowel (35, 50, and 65 percent into the vowel). The following parameterization of the Burg algorithm was used:
 
@@ -270,8 +231,9 @@ The first author manually corrected the automatic alignments for all vowel segme
 
 In addition to F1-F3, we automatically extracted vowel duration and the fundamental frequency (F0) across the entire vowel.
 
-This formant data was used to train the ideal observers, as described in the main text.
-Figure \@ref(fig:SI-eng-vowels-all-cues) visualizes the vowel data from the @xie-jaeger2020 for all pairwise combinations of F0, F1, F2, F3 and vowel duration, in raw Hertz. Figure \@ref(fig:SI-eng-vowels-normalized) shows the distribution of F1 and F2 in the different normalization spaces used in the main study.
+Figure \@ref(fig:SI-eng-vowels-all-cues), adapted from @persson-jaeger2023, visualizes the vowel data from the @xie-jaeger2020 database for all pairwise combinations of F0, F1, F2, F3 and vowel duration, in raw Hz. Unsurprisingly, the densities along the diagonal suggest that F1 and F2 carry most information for vowel category identity, as indicated by higher between-category separation than the other cues. We also note that there seems to be one female talker with substantially higher F0 and higher formants than the other female talkers.
+
+Figure \@ref(fig:SI-eng-vowels-normalized), adapted from @persson-jaeger2023, shows the distribution of F1 and F2 in the different normalization spaces used in the main paper. We make a few observations. First, transforming the space into a perceptual scale (**grey**) does not seem to affect the vowel distributions much. Second, intrinsic normalization both increase category separability and more strikingly warps the space. Third, extrinsic centering and standardizing normalization seem to reduce category variability and increase separability, though it is not visually obvious which type of account achieves better separability.
 
 (ref:SI-eng-vowels-all-cues) The pairwise distributions of F0, F1, F2, F3, and duration for all `r d.XieJaeger %>% group_by(Talker, category) %>% distinct(Token) %>% nrow()` recordings of the eight monophthong *hVd* words in @xie-jaeger2020. Note that axis directions are not reversed. **Panels on diagonal:** marginal cue densities of all five cues. **Lower off-diagonal panels:** each point corresponds to a recording, averaged across the three measurement points within each vowel segment. Vowel labels indicate category means across talkers. Male talkers' vowels are boldfaced. **Upper off-diagonal panels:** Same data as in the lower off-diagonal panels but showing bivariate Gaussian 95% probability mass ellipses around category means.
 
@@ -326,7 +288,7 @@ d.XieJaeger.long %>%
   theme(legend.position = "top")
 ```
 
-(ref:SI-eng-vowels-normalized) The 8 monophthong vowels of US English from the @xie-jaeger2020 database when F1 and F2 are transformed into a perceptual scale (**grey**), intrinsically normalized (**yellow**), or extrinsically normalized through centering (**blue**) or standardizing (**purple**). Each point corresponds to one recording, averaged across the three measurement points within each vowel segment. Shape indicates gender.
+(ref:SI-eng-vowels-normalized) The 8 monophthong vowels of US English from the @xie-jaeger2020 database when F1 and F2 are transformed into a perceptual scale (**grey**), intrinsically normalized (**yellow**), or extrinsically normalized through centering (**blue**) or standardizing (**purple**). Each point corresponds to one recording, averaged across the three measurement points within each vowel segment. Shape indicates gender (female talkers represented by points, male talkers by triangles).
 
 ```{r SI-eng-vowels-normalized, fig.width=base.width * 3.5, fig.height=base.height * 4.5, out.width='100%', fig.align='center', fig.cap="(ref:SI-eng-vowels-normalized)"}
 p <-
@@ -381,7 +343,6 @@ p <-
       panel.grid.major = element_blank())
 p
 ```
-
 
 ### Normalization parameters $\theta$ {#sec:SI-norm-params}
 Figure \@ref(fig:SI-norm-params) relates the normalization parameters $\theta$ obtained for each experiment to those found for the five training sets of the @xie-jaeger2020 database. This serves two purposes. First, by comparing the $\theta$ of Experiment 1a, which was based on natural productions, to the $\theta$ obtained from @xie-jaeger2020, we can assess the extent to which the talker used for Experiment 1a is 'typical' relative to the other talkers of that database. Second, by comparing the range and variability of the $\theta$ across normalization accounts and experiments, we can assess the volatility of different types of parameters, and assess the difference between the beliefs the ideal observers have about the parameters and the parameters in the experiment stimuli.
