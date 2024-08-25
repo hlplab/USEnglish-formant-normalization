@@ -64,20 +64,22 @@ d.test.raw %<>%
 ```
 
 ### Trial exclusions
-We excluded trials with RTs more than 3 standard deviations faster or slower than expected. This was determined by first z-scoring the log-transformed RTs *within each participant* (by subtracting the participants' mean from each observation and dividing through the participants standard deviation) and then z-scoring these z-scores *within each trial* across participants. This double-scaling approach was necessary as participants' RTs decreased substantially over the first few trials and then continued to decrease less rapidly until converging against a participant-specific minimum. This criterion did not remove just the first few trials but rather removed RTs that were unusually fast or slow *for that participant at that trial*. And, unlike more complicated methods (like developing a model of cross-trial decreases in RTs), the approach employed here does not make any assumptions about the shape of the speed up in RTs across trials. In total, N =`r d.test.raw %>% filter(Exclude_Trial.because_of_RT == T) %>% nrow()` trials were excluded (for Experiment 1a, N = `r d.test.raw %>% filter(Experiment == "Experiment 1a (natural)", Exclude_Trial.because_of_RT == T) %>% nrow()` trials, for Experiment 1b, N = `r d.test.raw %>% filter(Experiment == "Experiment 1b (synthesized)", Exclude_Trial.because_of_RT == T) %>% nrow()`).
+We excluded trials with RTs more than 3 standard deviations faster or slower than expected. This was determined by first z-scoring the log-transformed RTs *within each participant* (by subtracting the participants' mean from each observation and dividing through the participants standard deviation) and then z-scoring these z-scores *within each trial* across participants. This double-scaling approach was necessary as participants' RTs decreased substantially over the first few trials and then continued to decrease less rapidly until converging against a participant-specific minimum. This criterion did not remove just the first few trials but rather removed RTs that were unusually fast or slow *for that participant at that trial*. And, unlike more complicated methods (like developing a model of cross-trial decreases in RTs), the approach employed here does not make any assumptions about the shape of the speed up in RTs across trials. In total, `r d.test.raw %>% filter(Experiment == "Experiment 1a (natural)", Exclude_Trial.because_of_RT == T) %>% nrow()` trials were excluded from Experiment 1a, and `r d.test.raw %>% filter(Experiment == "Experiment 1b (synthesized)", Exclude_Trial.because_of_RT == T) %>% nrow()` from Experiment 1b.
+
+<!-- TO DO: add percentages behind each number -->
 
 ### Participant exclusion 
 Participants were excluded if they (1) failed to pay attention to the instruction to wear over-the-ear-headphones, (2) had unusually slow or fast RT-means compared to other participants (more than 3 standard deviations faster or slower in their mean log-transformed RTs compared to other participants), (3) clearly did not do the task (e.g., randomly clicking on different response options). Finally, participants were excluded if (4) the trial-level exclusions removed too many trials (>20% of all trials).
 
-`r d.test.raw %>% filter(Exclude_Participant.because_of_IgnoredInstructions == T) %>% distinct(ParticipantID) %>% nrow()` participant in Experiment 1a was excluded based on the first criteria, as s/he used external speakers instead of head set (based on response in post-experiment questionnaire). One additional participant from Experiment 1a was excluded based on the second criteria, a s/he was more than 3 standard deviations faster or slower in the mean (log-transformed) RTs compared to other participants.
+For Experiment 1a, `r d.test.raw %>% filter(Exclude_Participant.because_of_IgnoredInstructions == T) %>% distinct(ParticipantID) %>% nrow()` participant was excluded based on the first criteria, as s/he used external speakers instead of head set (based on response in post-experiment questionnaire). One additional participant was excluded based on the second criterion. For Experiment 1b, no participants were excluded based on criteria 1 and 2. <!-- TO DO: correct?-->
 
-As the experiments did not contain independent catch trials, we visualized participants' individual responses in order to identify participants that seem to have answered randomly, independent of the stimulus (third criteria). Figure \@ref(fig:SI-exp1a-responses) suggests that `r d.test.raw %>% filter(Experiment == "Experiment 1a (natural)", Exclude_Participant.because_of_unusual_vowel_responses == T) %>% distinct(ParticipantID) %>% nrow()` participants in Experiment 1a did not perform the task, but rather randomly selected responses irrespective of what vowel they heard. This includes *had* responses to stimuli located across the entire vowel space, *heed* responses to stimuli located in the low back part of the space, or *odd* responses to stimuli located in the high front part of the space. For Experiment 1b, Figure \@ref(fig:SI-exp1b-responses) indicates that `r d.test.raw %>% filter(Experiment == "Experiment 1b (synthesized)", Exclude_Participant.because_of_unusual_vowel_responses == T) %>% distinct(ParticipantID) %>% nrow()` participants displayed unusual response patterns, responding *who'd* or *hod* for tokens in the high front part of the space, and *heed* for tokens in the high center and back parts. Unusual vowel responses is not an objective criterion. There are many participants that gave unexpected responses on some occasions. However, if they displayed evidence of randomness in vowel responses overall (selecting any vowel for any kind of stimuli, or over-using a particular vowel response), they were excluded.
+As the experiments did not contain catch trials, we visualized participants' individual responses in order to identify participants that answered randomly, independent of the stimulus (third criterion). For Experiment 1a, Figure \@ref(fig:SI-exp1a-responses) suggests that `r d.test.raw %>% filter(Experiment == "Experiment 1a (natural)", Exclude_Participant.because_of_unusual_vowel_responses == T) %>% distinct(ParticipantID) %>% nrow()` participants did not perform the task. This includes *had* responses to stimuli located across the entire vowel space, *heed* responses to stimuli located in the low back part of the space, or *odd* responses to stimuli located in the high front part of the space. For Experiment 1b, Figure \@ref(fig:SI-exp1b-responses) suggests that `r d.test.raw %>% filter(Experiment == "Experiment 1b (synthesized)", Exclude_Participant.because_of_unusual_vowel_responses == T) %>% distinct(ParticipantID) %>% nrow()` participants displayed unusual response patterns, responding *who'd* or *hod* for tokens in the high front part of the space, and *heed* for tokens in the high center and back parts. 
 
-Finally, no participant was excluded based on the forth criteria (too many missing trials). In total, `r d.test.raw %>% filter(Experiment == "Experiment 1a (natural)", Exclude_Participant.Reason != "none") %>% distinct(ParticipantID) %>% nrow()` participants in Experiment 1a were excluded (one of these were excluded based on multiple criteria), and `r d.test.raw %>% filter(Experiment == "Experiment 1b (synthesized)", Exclude_Participant.Reason != "none") %>% distinct(ParticipantID) %>% nrow()` participants in 1b. This left us with `r d.test.raw %>% filter(Experiment == "Experiment 1a (natural)", Exclude_Participant.Reason == "none") %>% distinct(ParticipantID) %>% nrow()` participants for Experiment 1a, and `r d.test.raw %>% filter(Experiment == "Experiment 1b (synthesized)", Exclude_Participant.Reason == "none") %>% distinct(ParticipantID) %>% nrow()` participants for 1b.
+Finally, no participant was excluded based on the forth criteria (too many missing trials). In total, `r d.test.raw %>% filter(Experiment == "Experiment 1a (natural)", Exclude_Participant.Reason != "none") %>% distinct(ParticipantID) %>% nrow()` participants were excluded from Experiment 1a (one of these were excluded based on multiple criteria), and `r d.test.raw %>% filter(Experiment == "Experiment 1b (synthesized)", Exclude_Participant.Reason != "none") %>% distinct(ParticipantID) %>% nrow()` participants were excluded from Experiment 1b. This left `r d.test.raw %>% filter(Experiment == "Experiment 1a (natural)", Exclude_Participant.Reason == "none") %>% distinct(ParticipantID) %>% nrow()` participants for Experiment 1a, and `r d.test.raw %>% filter(Experiment == "Experiment 1b (synthesized)", Exclude_Participant.Reason == "none") %>% distinct(ParticipantID) %>% nrow()` participants for Experiment 1b.
 
-(ref:SI-exp1a-responses) Illustrating participants' response patterns in Experiment 1a. Color and vowel label indicate response provided by participants on each test location. Each vowel was repeated twice. Participants that displayed unusual response patterns and were therefore excluded, are highlighted.
+(ref:SI-exp1a-responses) Participants' response patterns in Experiment 1a. Color and vowel label indicate response provided by participants on each test location. Each vowel was repeated twice. Participants that displayed unusual response patterns and were therefore excluded, are highlighted.
 
-(ref:SI-exp1b-responses) Illustrating participants' response patterns in Experiment 1b. Color and vowel label indicate response provided by participants on each test location. Each vowel was repeated twice. Participants that displayed unusual response patterns and were therefore excluded, are highlighted.
+(ref:SI-exp1b-responses) Participants' response patterns in Experiment 1b. Color and vowel label indicate response provided by participants on each test location. Each vowel was repeated twice. Participants that displayed unusual response patterns and were therefore excluded, are highlighted.
 
 ```{r SI-exp1a-responses, fig.width=base.width*4.5, fig.height=base.height*5.5, fig.pos="!ht", fig.align='center', out.width='90%', fig.cap="(ref:SI-exp1a-responses)", warning=FALSE}
 # Experiment 1a - By participant
@@ -117,13 +119,15 @@ p.vowel_space %+%
 ```
 
 ## Distribution of stimuli F1-F3 in Experiments 1a and 1b
-The natural and synthesized stimuli used in Experiment 1a and 1b differed in terms of their distributions in F1-F3 space (see Section \@ref(sec:stimuli)). For Experiment 1a, we used all natural productions from one of the talkers in the @xie-jaeger2020 database. This stimuli thus reflected the F1-F3 distributions for this specific talker (Figure \@ref(fig:SI-plot-cues-3d), red circles). For Experiment 1b, we synthesized tokens from one of the *had* recordings used in Experiment 1a (Figure \@ref(fig:SI-plot-cues-3d), blue squares). These synthesized tokens spanned a larger range of the F1-F2 space (Figure \@ref(fig:SI-plot-cues-3d)**(a)**). In addition, the F3 values in each synthesized token was set based on the F1-F2 values of the stimuli. Specifically, we used a linear regression based on the stimuli in 1a (predicting F3 from F1, F2 and their interaction) to predict F3 values for each F1-F2 combination in Experiment 1b. This difference in F3-distributions between experiment stimuli is clearly visible in Figure \@ref(fig:SI-plot-cues-3d)**(b)**. 
+The main text provides visualization of the stimuli's F1 and F2. Figure \@ref(fig:SI-plot-cues-3d) shows the same stimuli in the 3D space defined by F1-F3. In addition, the F3 values in each synthesized token was set based on the F1-F2 values of the stimuli. Specifically, we used a linear regression based on the stimuli in Experiment 1a (predicting F3 from F1, F2 and their interaction) to predict F3 values for each F1-F2 combination in Experiment 1b. This difference in F3-distributions between experiment stimuli is clearly visible in Figure \@ref(fig:SI-plot-cues-3d)**(b)**. 
 
-Figures \@ref(fig:SI-plot-cues-3d)**(b)** and \@ref(fig:SI-plot-cues-3d)**(c)** further suggest that the talker used in Experiment 1a seem to produce some of the low (and high) back vowels with higher F3 values than might be expected. If this talker's F3-distribution is indeed unexpected or unusual (in comparison to listeners' expectations or to other talkers in the database), this could potentially partly explain the decrease in model fit for some of the normalization models when fit to F1-F3 compared to F1-F2 (see Section \@ref(sec:SI-F1F3)).
+Figure \@ref(fig:SI-plot-cues-3d)**(b)** further suggests that the talker used in Experiment 1a seems to produce some of the low (and high) back vowels with higher F3 values than might be expected. If this talker's F3-distribution is indeed unexpected or unusual (in comparison to listeners' expectations or to other talkers in the database), this could potentially partly explain the decrease in model fit for some of the normalization models when fit to F1-F3 compared to F1-F2 (see Section \@ref(sec:SI-F1F3)).
 
-(ref:SI-plot-cues-3d) Stimuli of Experiments 1a (**red circles**) and 1b (**blue squares**) in F1-F3 space.
+(ref:SI-plot-cues-3d) Stimuli of Experiments 1a (**red circles**) and 1b (**blue squares**) in F1-F3 space. Shown are three different perspectives on the same data.
 
-```{r SI-plot-cues-3d, fig.cap="(ref:SI-plot-cues-3d)", fig.show='hold', out.width='60%', fig.ncol=1, fig.align='center', fig.subcap = c("", "", ""), warning=FALSE}
+<!-- TO DO: change the aspect ratio to be closer to 1:1:1? Also what is panel C adding? It's not clear to me, so I commented it out.-->
+
+```{r SI-plot-cues-3d, fig.cap="(ref:SI-plot-cues-3d)", fig.show='hold', out.width='60%', fig.ncol=1, fig.align='center', fig.subcap = c("Looking at F1 and F2 (F3 is depth). This perspective illustrates that the stimuli of Experiment 1b spanned a much larger part of the F1-F2 space.", "Looking at F2 and F3 (F1 is depth). This perspective illustrates differences in the distribution of F3 across the two experiments. In Experiment 1b, F3 was synthesized to follow a linear function of F1 and F2, fit based on the stimuli from Experiment 1a. This perspective also illustrates that some stimuli of Experiment 1a had much higher or lower F3 than expected based on their F1 and F2 (under the assumption of a linear relation)."), warning=FALSE}
 # Code kept for reproducibility
 # p.3d.cues <- d.test.by_item %>%
 #   plot_ly(
@@ -150,7 +154,7 @@ Figures \@ref(fig:SI-plot-cues-3d)**(b)** and \@ref(fig:SI-plot-cues-3d)**(c)** 
 #         autorange = "reversed")))
 
 # orca(p.3d.cues, file = "figures/p.3d.cues.png", width = 1200, height = 800, scale = 2)
-knitr::include_graphics(c("figures/p.3Dcues.1.png", "figures/p.3Dcues.2.png", "figures/p.3Dcues.3.png"))
+knitr::include_graphics(c("figures/p.3Dcues.1.png", "figures/p.3Dcues.2.png"))
 ```
 
 ## Auxiliary analysis of participant responses in Experiments 1a and 1b {#sec:SI-aux-entropy}
@@ -173,11 +177,6 @@ p.vowel_space %+%
     panel.grid.major = element_blank(),
     panel.grid.minor = element_blank())
 ```
-To investigate the extent to which these differences in response entropy could be explained by differences in stimuli characteristics, we fit a series of general additive models (GAM). First, we confirmed that the difference in response entropy between experiments across all tokens was indeed statistically significant, by fitting a GAM regressing response entropy against experiment (Experiment was treatment coded; $p < .0001$, deviance explained = 43.8%). We subsequently fit an additional model using the same formula, but fit to a subset of the data that excluded all *hut* and *odd* responses from Experiment 1a. This was done in order to assess whether differences in lexical context contributed to differences in entropy between experiments. This model confirmed that differences in entropy could not be attributed to differences in lexical context ($p < .0001$, deviance explained = 31.7%). The subsequent models were fit to this subset data.
-
-In order to determine the extent to which this difference between experiments can be explained by differences in formants, we fit additional GAMs. Specifically, we regressed response entropy against both experiment and a tensor smooth of F1, F2, and F3. The tensor smooth allows for non-linear effects of formants, including non-linear interactions between the formants. To be maximally conservative, we normalized formants using one of the accounts that our computational studies find to be the best fit against human responses (Nearey's uniform scaling). The GAM with both formants and experiment explained 78.7% of the deviance in response entropy. Experiment still was a significant predictor of response entropy, suggesting that the difference in response entropy between experiments is not solely due to differences in formants. Formants did, however, explain *some* of that difference: a GAM with just the tensor smooth of F1-F3 explained 70.8% of the deviance. Experiment thus explained `r round((78.7-70.8) / 70.8 * 100, digits = 1)`% *additional* deviance when it was added to this model---`r round(31.7-(78.7-70.8) / 70.8 * 100, digits = 1)`% less than the deviance explained if *only* experiment is included in the model.<!--Did I get this right? I'm a bit confused by this comparison?--> These informal comparisons suggest that up to about two thirds of the deviance that is explained by experiment is due to differences in formants between the experiments.
-
-Results using unnormalized formants confirmed these results (but, as expected if uniform scaling is indeed the type of normalization used by listeners, normalized formants explained about 4% more variance in response entropy).
 
 ```{r}
 # Comparisons  of response Entropy between experiments
@@ -192,34 +191,37 @@ d.for_regression <-
                             filter(Item.CorrectResponse %in% c("hut", "odd")) %>%
                             pull(ItemID))))
 
-#Code kept for reproducibility
-# bam(Response.Entropy ~ Experiment, 
-#     data = d.test.by_item) %>% 
-#   summary()
-# 
-# # with "hut" and "odd" removed
-# bam(Response.Entropy ~ Experiment, 
-#     data = d.for_regression) %>%
-#   summary()
-# 
-# # with nonlinear f1-f3
-# bam(Response.Entropy ~ t2(F1_Hz_r, F2_Hz_r, F3_Hz_r), 
-#     data = d.for_regression) %>%
-#   summary()
-# 
-# bam(Response.Entropy ~ t2(F1_Hz_r, F2_Hz_r, F3_Hz_r) + Experiment, 
-#     data = d.for_regression) %>%
-#   summary()
-# 
-# # with normalized formant data
-# bam(Response.Entropy ~ t2(F1_log_Nearey2, F2_log_Nearey2, F3_log_Nearey2), 
-#     data = d.for_regression) %>%
-#   summary()
-# 
-# bam(Response.Entropy ~ t2(F1_log_Nearey2, F2_log_Nearey2, F3_log_Nearey2) + Experiment, 
-#     data = d.for_regression) %>%
-#   summary()
+bam.all.exp <- 
+  bam(Response.Entropy ~ Experiment,
+    data = d.test.by_item) %>%
+  summary()
+
+# with "hut" and "odd" removed
+bam.subset.exp <- 
+  bam(Response.Entropy ~ Experiment,
+    data = d.for_regression) %>%
+  summary()
+
+# with nonlinear f1-f3
+bam.subset.formants <-
+  bam(Response.Entropy ~ t2(F1_log_Nearey2, F2_log_Nearey2, F3_log_Nearey2),
+    data = d.for_regression) %>%
+  summary()
+
+
+bam.subset.exp_formants <-
+  bam(Response.Entropy ~ t2(F1_log_Nearey2, F2_log_Nearey2, F3_log_Nearey2) + Experiment,
+    data = d.for_regression) %>%
+  summary()
 ```
+
+To investigate the extent to which these differences in response entropy could be explained by differences in stimuli characteristics, we fit a series of general additive models (GAM). First, we confirmed that the difference in response entropy between experiments across all tokens was indeed statistically significant, by regressing response entropy against experiment (treatment coded; $p < .0001$, deviance explained = 43.8%). Next, we fit the same model to a subset of the data that excluded all *hut* and *odd* responses from Experiment 1a. This was done in order to assess whether differences in lexical context contributed to differences in entropy between experiments. This model confirmed that differences in entropy could not be reduced to differences in lexical context, since experiment remained a significant predictor of response entropy ($p < .0001$, deviance explained = 31.7%). 
+
+In order to determine the extent to which this difference between experiments can be explained by differences in formants, we fit additional GAMs to the same subset. First, we regressed response entropy against both experiment and a tensor smooth of F1, F2, and F3. The tensor smooth allows for non-linear effects of, and interactions between, formants. To be maximally conservative, we normalized formants using one of the accounts that our computational studies find to be the best fit against human responses (Nearey's uniform scaling). The GAM with both formants and experiment explained 78.7% of the deviance in response entropy. Experiment still was a significant predictor of response entropy, suggesting that the difference in response entropy between experiments is not solely due to differences in formants. Formants did, however, explain a substantial amount of the difference in response entropy between experiments: a GAM with just the tensor smooth of F1-F3 explained 70.8% of the deviance. 
+
+Experiment thus explained at least `r round(78.7-70.8, digits = 1)`% of the deviance when it was added to this model---about `r round((78.7-70.8) / 31.7 * 100, digits = 1)`% of the deviance explained if *only* experiment is included in the model (31.7%). These informal comparisons suggest that up to about two thirds of the deviance that is explained by experiment is due to differences in formants between the experiments.
+<!-- TO DO: replace the above numbers with variables extracted from the fitted models. E.g., this should still all work if additional participants are added to the experiment. I also made some corrections. Please carefully check the change log, and ask if you have questions about my changes. -->
+Results using unnormalized formants confirmed these results (but, as expected if uniform scaling is approximates the normalization employed by listeners, uniformly scaled formants explained about 4% more variance in response entropy).
 
 ```{r}
 rm(d.test.overlappingTokens, d.for_regression)
