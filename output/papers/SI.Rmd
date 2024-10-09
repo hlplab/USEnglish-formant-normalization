@@ -44,10 +44,9 @@ A project template, including R markdown files that result in APA-formatted PDFs
 
 # Additional information in Experiments 1a and 1b
 
-## Exclusions {#sec:SI-exclusions}
-We first applied trial-level exclusion criteria to each participant, and then applied participant-level exclusion criteria.
+## Participant survey responses
 
-```{r message=FALSE}
+```{r}
 # Re-read in the natural and synthesized stimuli from experiment 1a and 1b.
 d.test.raw <-
   read_csv("../../data/Experiment-NORM-AB-before-processing.csv") %>%
@@ -58,15 +57,24 @@ d.test.raw <-
       labels = c("Experiment 1a (natural)", "Experiment 1b (synthesized)")),
     Response.Vowel = plyr::mapvalues(Response.Vowel, levels.response.vowel, levels.vowel.IPA))
 
+d.test.raw %>%
+  select(Experiment, ParticipantID, Answer.pronun, Answer.task_diff, Answer.task_timing, Answer.words) %>%
+  group_by(Experiment, ParticipantID) %>%
+  distinct() %>%
+  filter(str_detect(Answer.pronun, "robotic"))
+```
+
+## Exclusions {#sec:SI-exclusions}
+We first applied trial-level exclusion criteria to each participant, and then applied participant-level exclusion criteria.
+
+```{r message=FALSE}
 # Add exclusion criteria
 d.test.raw %<>%
   add.ExclusionCriteria()
 ```
 
 ### Trial exclusions
-We excluded trials with RTs more than 3 standard deviations faster or slower than expected. This was determined by first z-scoring the log-transformed RTs *within each participant* (by subtracting the participants' mean from each observation and dividing through the participants standard deviation) and then z-scoring these z-scores *within each trial* across participants. This double-scaling approach was necessary as participants' RTs decreased substantially over the first few trials and then continued to decrease less rapidly until converging against a participant-specific minimum. This criterion did not remove just the first few trials but rather removed RTs that were unusually fast or slow *for that participant at that trial*. And, unlike more complicated methods (like developing a model of cross-trial decreases in RTs), the approach employed here does not make any assumptions about the shape of the speed up in RTs across trials. In total, `r d.test.raw %>% filter(Experiment == "Experiment 1a (natural)", Exclude_Trial.because_of_RT == T) %>% nrow()` trials were excluded from Experiment 1a, and `r d.test.raw %>% filter(Experiment == "Experiment 1b (synthesized)", Exclude_Trial.because_of_RT == T) %>% nrow()` from Experiment 1b.
-
-<!-- TO DO: add percentages behind each number -->
+We excluded trials with RTs more than 3 standard deviations faster or slower than expected. This was determined by first z-scoring the log-transformed RTs *within each participant* (by subtracting the participants' mean from each observation and dividing through the participants standard deviation) and then z-scoring these z-scores *within each trial* across participants. This double-scaling approach was necessary as participants' RTs decreased substantially over the first few trials and then continued to decrease less rapidly until converging against a participant-specific minimum. This criterion did not remove just the first few trials but rather removed RTs that were unusually fast or slow *for that participant at that trial*. And, unlike more complicated methods (like developing a model of cross-trial decreases in RTs), the approach employed here does not make any assumptions about the shape of the speed up in RTs across trials. In total, `r d.test.raw %>% filter(Experiment == "Experiment 1a (natural)", Exclude_Trial.because_of_RT == T) %>% nrow()` (`r round(d.test.raw %>% filter(Experiment == "Experiment 1a (natural)", Exclude_Trial.because_of_RT == T) %>% nrow() / d.test.raw %>% filter(Experiment == "Experiment 1a (natural)", Exclude_Trial.because_of_RT != T) %>% nrow() * 100, digits = 1)`%) trials were excluded from Experiment 1a, and `r d.test.raw %>% filter(Experiment == "Experiment 1b (synthesized)", Exclude_Trial.because_of_RT == T) %>% nrow()` (`r round(d.test.raw %>% filter(Experiment == "Experiment 1b (synthesized)", Exclude_Trial.because_of_RT == T) %>% nrow() / d.test.raw %>% filter(Experiment == "Experiment 1b (synthesized)", Exclude_Trial.because_of_RT != T) %>% nrow() * 100, digits = 1)`%) from Experiment 1b.
 
 ### Participant exclusion 
 Participants were excluded if they (1) failed to pay attention to the instruction to wear over-the-ear-headphones, (2) had unusually slow or fast RT-means compared to other participants (more than 3 standard deviations faster or slower in their mean log-transformed RTs compared to other participants), (3) clearly did not do the task (e.g., randomly clicking on different response options). Finally, participants were excluded if (4) the trial-level exclusions removed too many trials (>20% of all trials).

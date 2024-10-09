@@ -671,7 +671,23 @@ p.result_overall +
     aes(
       y = ifelse(Experiment == "Experiment 1a (natural)", -2200, -9400)),
     label = "(*)",
-      size = 4)
+    size = 4) +
+  geom_text(
+    data = d.test.by_item %>%
+      group_by(Experiment) %>% 
+      summarise(log_likelihood_chance = sum(round(log_likelihood_chance), digits = 1),
+                log_likelihood_human = sum(round(log_likelihood_human), digits = 1)) %>%
+      # Add a col for aligning the printing of text
+      mutate(IO.NormalizationType = "Nearey's formantwise mean (log)"),
+    aes(
+      x = IO.NormalizationType,
+      y = ifelse(Experiment == "Experiment 1a (natural)", -2950, -12100),
+      label = paste("Chance likelihood: ", log_likelihood_chance, "\nBest-possible likelihood: ", log_likelihood_human)),
+    color = "black",
+    hjust = 0,
+    size = 3)
+  
+
 ```
 
 Figure \@ref(fig:plot-io-optimal) compares how well the different normalization accounts fit listeners' responses in Experiments 1a and 1b. All accounts performed well above chance guessing (chance log likelihood in Experiment 1a: `r round(d.test.by_item %>% filter(Experiment == "Experiment 1a (natural)") %>% summarise(log_likelihood_chance = sum(log_likelihood_chance)) %>% pull(log_likelihood_chance), digits = 0)`; Experiment 1b: `r format(round(d.test.by_item %>% filter(Experiment == "Experiment 1b (synthesized)") %>% summarise(log_likelihood_chance = sum(log_likelihood_chance)) %>% pull(log_likelihood_chance), digits = 0), scientific = FALSE)`) but also well below the highest possible performance (in Experiment 1a, log-likelihood = `r round(d.test.by_item %>% filter(Experiment == "Experiment 1a (natural)") %>% summarise(log_likelihood_human = sum(log_likelihood_human)) %>% pull(log_likelihood_human), digits = 0)`, in Experiment 1b: `r round(d.test.by_item %>% filter(Experiment == "Experiment 1b (synthesized)") %>% summarise(log_likelihood_human = sum(log_likelihood_human)) %>% pull(log_likelihood_human), digits = 0)`).
