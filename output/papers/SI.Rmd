@@ -61,7 +61,20 @@ d.test.raw %>%
   select(Experiment, ParticipantID, Answer.pronun, Answer.task_diff, Answer.task_timing, Answer.words) %>%
   group_by(Experiment, ParticipantID) %>%
   distinct() %>%
-  filter(str_detect(Answer.pronun, "robotic"))
+  mutate(
+    robotic = ifelse(str_detect(Answer.pronun, "robotic"), T, F),
+    more_similar = ifelse(str_detect(Answer.words, "more-similar"), T, F), 
+    not_sure = ifelse(str_detect(Answer.task_diff, "not-sure"), T, F)) %>%
+  select(Experiment, ParticipantID, robotic, more_similar, not_sure) %>%
+  pivot_longer(
+    cols = c(robotic, more_similar, not_sure),
+    names_to = "question",
+    values_to = "value") %>%
+  na.omit() %>%
+  ggplot(
+    aes(x = question, color = value, fill = value)) +
+  geom_histogram(stat = "count") +
+  facet_grid(~ Experiment)
 ```
 
 ## Exclusions {#sec:SI-exclusions}
