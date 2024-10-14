@@ -139,6 +139,17 @@ p.vowel_space %+%
             color = "red", fill = NA, size = 2)
 ```
 
+## Spectrograms of stimuli used in Experiments 1a and 1b
+In the main text, we plot spectrograms of one *heed*, one *hid*, one *odd* and one *hood* token from Experiment 1a, together with four synthesized tokens with similar formant values. Figure \@ref(fig:SI-spectrograms) display spectrograms of the remaining four categories from Experiment 1a (*head*, *had*, *hut* and *who'd*) together with four synthesized tokens from Experiment 1b.
+
+(ref:SI-spectrograms) **Top:** Spectrograms of four natural recordings from Experiment 1a. **Bottom:** Same for four synthesized tokens with similar formant values from Experiment 1b.
+
+```{r SI-spectrograms, fig.align='center', fig.show='hold', out.width='20%', fig.ncol = 4, fig.cap="(ref:SI-spectrograms)", fig.subcap = c("natural \\emph{head}", "natural \\emph{had}", "natural \\emph{hut}", "natural \\emph{who'd}", "resynthesized \\emph{head}", "resynthesized \\emph{had}", "resynthesized \\emph{hud}", "resynthesized \\emph{who'd}"), results='asis', echo=FALSE}
+knitr::include_graphics(c(
+  "figures/spectrogram_head_1a.png","figures/spectrogram_had_1a.png","figures/spectrogram_hut_1a.png", "figures/spectrogram_whod_1a.png",
+  "figures/spectrogram_head.png","figures/spectrogram_had.png","figures/spectrogram_hud.png", "figures/spectrogram_whod.png"))
+```
+
 ## Distribution of stimuli F1-F3 in Experiments 1a and 1b
 The main text provides visualization of the stimuli's F1 and F2. Figure \@ref(fig:SI-plot-cues-3d) shows the same stimuli in the 3D space defined by F1-F3. In addition, the F3 values in each synthesized token was set based on the F1-F2 values of the stimuli. Specifically, we used a linear regression based on the stimuli in Experiment 1a (predicting F3 from F1, F2 and their interaction) to predict F3 values for each F1-F2 combination in Experiment 1b. This difference in F3-distributions between experiment stimuli is clearly visible in Figure \@ref(fig:SI-plot-cues-3d)**(b)**. 
 
