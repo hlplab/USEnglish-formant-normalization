@@ -44,8 +44,6 @@ A project template, including R markdown files that result in APA-formatted PDFs
 
 # Additional information in Experiments 1a and 1b
 
-## Participant survey responses
-
 ```{r}
 # Re-read in the natural and synthesized stimuli from experiment 1a and 1b.
 d.test.raw <-
@@ -56,25 +54,6 @@ d.test.raw <-
       levels = c("1b (natural)", "1a (synthesized)"),
       labels = c("Experiment 1a (natural)", "Experiment 1b (synthesized)")),
     Response.Vowel = plyr::mapvalues(Response.Vowel, levels.response.vowel, levels.vowel.IPA))
-
-d.test.raw %>%
-  select(Experiment, ParticipantID, Answer.pronun, Answer.task_diff, Answer.task_timing, Answer.words) %>%
-  group_by(Experiment, ParticipantID) %>%
-  distinct() %>%
-  mutate(
-    robotic = ifelse(str_detect(Answer.pronun, "robotic"), T, F),
-    more_similar = ifelse(str_detect(Answer.words, "more-similar"), T, F), 
-    not_sure = ifelse(str_detect(Answer.task_diff, "not-sure"), T, F)) %>%
-  select(Experiment, ParticipantID, robotic, more_similar, not_sure) %>%
-  pivot_longer(
-    cols = c(robotic, more_similar, not_sure),
-    names_to = "question",
-    values_to = "value") %>%
-  na.omit() %>%
-  ggplot(
-    aes(x = question, color = value, fill = value)) +
-  geom_histogram(stat = "count") +
-  facet_grid(~ Experiment)
 ```
 
 ## Exclusions {#sec:SI-exclusions}
@@ -137,6 +116,54 @@ p.vowel_space %+%
   geom_rect(data = ~ subset(., ParticipantID %in% c(15,21)),
             xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf, 
             color = "red", fill = NA, size = 2)
+```
+
+## Participant survey responses
+
+```{r}
+d.survey <- d.test.raw %>%
+  excludeData() %>%
+  select(Experiment, ParticipantID, Answer.pronun, Answer.task_diff, Answer.task_timing, Answer.words) %>%
+  group_by(Experiment, ParticipantID) %>%
+  distinct() %>%
+  mutate(
+    robotic = ifelse(str_detect(Answer.pronun, "robotic"), T, F),
+    more_similar = ifelse(str_detect(Answer.words, "more-similar"), T, F), 
+    not_sure = ifelse(str_detect(Answer.task_diff, "not-sure"), T, F)) %>%
+  group_by(Experiment) %>%
+  mutate(
+    robotic_prop = sum(robotic == "TRUE", na.rm = T) / n(),
+    more_similar_prop = sum(more_similar == "TRUE", na.rm = T) / n(),
+    not_sure_prop = sum(not_sure == "TRUE", na.rm = T) / n())
+
+d.survey %>%
+  select(Experiment, ParticipantID, robotic, more_similar, not_sure) %>%
+  pivot_longer(
+    cols = c(robotic, more_similar, not_sure),
+    names_to = "question",
+    values_to = "value") %>%
+  na.omit() %>%
+  ggplot(
+    aes(x = question, color = value, fill = value)) +
+  geom_histogram(stat = "count") +
+  facet_grid(~ Experiment)
+
+d.survey %>%
+  select(Experiment, robotic_prop, more_similar_prop, not_sure_prop) %>%
+  rename(robotic = robotic_prop, `more similar`= more_similar_prop, unsure = not_sure_prop) %>%
+  pivot_longer(
+    cols = c(robotic, `more similar`, unsure),
+    names_to = "question",
+    values_to = "value") %>%
+  distinct() %>%
+  ggplot(
+    aes(x = question, y = value)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  geom_text(aes(label = round(value, 2)),
+            vjust = -0.5, size = 4, color = "black") +
+  scale_x_discrete("Survey question") +
+  scale_y_continuous("Response proportion", limits = c(0,1)) +
+  facet_grid(~ Experiment)
 ```
 
 ## Spectrograms of stimuli used in Experiments 1a and 1b
