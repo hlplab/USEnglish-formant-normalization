@@ -19,10 +19,7 @@ Similar concerns apply to dialectology, research on language change, second lang
 <!-- Unlike previous evaluations of normalization accounts, our evaluation is based on a model of speech perception that is trained to approximate listeners' prior expectations about the realization of US English vowels. Specifically, we used the recently developed ASP framework [@xie2023] to train Bayesian ideal observers on a phonetic database of US English vowel productions [@xie-jaeger2020]. This approach substantially reduced the degrees of freedom that were required to link model predictions to human behavior. Perhaps more importantly, it allowed us to put all accounts on equal footing for comparison: we used the same degrees of freedom ($\lambda$ and $\tau^{-1}$) for all normalization accounts when predicting listeners' responses from the normalized percepts. One of the goals of the present paper was to develop a unified and fully specified framework, a computational pipeline for an unbiased comparison of normalization accounts. We see this general pipeline as an important contribution.  -->
 
 ## Limitations and future directions
-The present work shares limitations with previous work. Perhaps the most obvious of these limitations is our focus on formants, and specifically estimates of the formants in the *center* of the vowel.<!--TO DO: edit-->
-- point est vs dynamics
-- focused in main analysis on f1f2, what happens if you have more cues, in SI - f1f3, whether inclusion of additional cues like visc, or additional dynamics, would change this
-- there are also accounts that give up that assumption that formants are the primary cues -- hillenbrand. richness of input - cues, temporal development, how that info could affect an evaluation of accounts. drive up accuracy but perhaps also relative ranking.
+The present work shares limitations with previous work. Perhaps the most obvious of these limitations is our focus on formants, and specifically estimates of the formants in the *center* of the vowel.<!--TO DO: edit--> Research on speech perception has long committed to the assumption of representing vowels as point estimates, but there is ample evidence that this a simplification of both the acoustic reality of vowel production, and of listeners' vowel perception [@assmann-katz2005, @hillenbrand-nearey1999; @nearey-assmann1986]. Our main analysis focused on point estimates of F1 and F2, with auxiliary analyses in the SI (\@ref(sec:SI-F1F3)) including F3 alongside F1 and F2. While the F1-F3 analysis overall replicated the main results, it remains unclear whether a richer representation of vowels that accounts for their temporal development, such as VISC, or additional formant dynamics, would alter the results. In addition, there are proposals that entirely give up the assumption that formants are the primary cues [e.g., whole-spectrum accounts; @hillenbrand2006]. While these proposals might provide a more informative representation of vowels, it is unlikely that they would remove the problem of cross-talker variability. Including the temporal development of formants would presumably increase the likelihood fit of models to listeners' responses, including for the unnormalized model. Whether it would alter the relative ordering of accounts is less clear.
 
 There are also a number of limitations that originate in commitments we made in order to be able to make quantitative predictions. While theories of speech perception often contain substantial vagueness, *quantitative tests* of those theories---as we have done here---require assumptions about *every* aspect of the model. Here, this included all the steps necessary to link properties of the stimuli to listeners' responses. For this purpose, we adopted the ASP framework [@xie2023], and visualized the graphical model that links stimuli ($x$) to responses ($r$) in Figure \@ref(fig:model-perceptual-decision-making). 
 
@@ -38,7 +35,48 @@ First, our approach assumes that the mixture of dialect template(s) used by talk
 
 Second, we made the simplifying assumption that listeners' category representation---or at least the representations listeners' drew on during the experiment---are talker-*independent* (we trained a single set of multivariate Gaussian categories, rather than, e.g., hierarchically organized set of multiple dialect templates). While this assumption is routinely made in research on normalization and beyond, it might well be wrong [see e.g., @xie2021]. 
 
-Finally, the evaluation of normalization accounts in the present work shares with all previous work [e.g., @apfelbaum-mcmurray2015; @cole2010; @mcmurray-jongman2011; @barreda2021; @nearey1989;  @richter2017] another simplifying assumption that is clearly wrong: the assumption that listeners *know* the talker-specific formant properties required for normalization. Specifically, we normalized the input for each ideal observer using the maximum likelihood estimates of the normalization parameters for the respective experiment. For example, for the evaluation of the ideal observer trained on Lobanov normalized formants against listeners' responses in Experiment 1a, we used the formant means and standard deviations of the stimuli used in Experiment 1a to normalize F1 and F2. While this follows previous work, it constitutes a problematic assumption for the evaluation of extrinsic normalization accounts. For these accounts, the approach adopted essentially assumes the ability to predict the future: even on the first trial of the experiment, the input to the ideal observers were formants that were normalized based on the maximum likelihood estimate of the normalization parameters given the acoustic properties of *all* stimuli. Listeners instead need to *incrementally infer* talker-specific properties from the speech input [@nearey-assmann2007; @xie2023]. The development and testing of incremental variants of formant normalization strikes us as an important avenue for future research.
+Finally, the evaluation of normalization accounts in the present work shares with all previous work [e.g., @apfelbaum-mcmurray2015; @cole2010; @mcmurray-jongman2011; @barreda2021; @nearey1989;  @richter2017] another simplifying assumption that is clearly wrong: the assumption that listeners *know* the talker-specific formant properties required for normalization. Specifically, we normalized the input for each ideal observer using the maximum likelihood estimates of the normalization parameters for the respective experiment. For example, for the evaluation of the ideal observer trained on Lobanov normalized formants against listeners' responses in Experiment 1a, we used the formant means and standard deviations of the stimuli used in Experiment 1a to normalize F1 and F2. While this follows previous work, it constitutes a problematic assumption for the evaluation of extrinsic normalization accounts. For these accounts, the approach adopted essentially assumes the ability to predict the future: even on the first trial of the experiment, the input to the ideal observers were formants that were normalized based on the maximum likelihood estimate of the normalization parameters given the acoustic properties of *all* stimuli. Listeners instead need to *incrementally infer* talker-specific properties from the speech input [@nearey-assmann2007; @xie2023]. <!--TO DO: check and edit-->Incremental normalization can be expected to affect the accuracy of listeners' recognition of the intended category. Figure \@ref(fig:trial-accuracies) shows listeners' incremental accuracy in recognizing the category intended by the talker in Experiment 1a. The non-parametric smoother in Figure \@ref(fig:trial-accuracies) suggests that the recognition accuracy of listeners improves over the course of the experiment from about 78% to 85%, with a larger portion of the improvements occurring during the first 25-30 trials. Similarly, we would expect normalization models to provide a better fit for later behavioral trials. However, given the speed at which normalization is assumed to take place, we would assume that better-fitting normalization accounts should be able to relatively early on arrive at a stable estimate of the normalization parameters. The development and testing of incremental variants of formant normalization strikes us as an important avenue for future research. 
+
+(ref:trial-accuracies) Listeners' categorization accuracy of recognizing the vowel intended by the talker in Experiment 1a at each trial, averaged across items and participants. Black line shows mean accuracy trial-by-trial. Blue line shows a non-parametric smooth fit predicting accuracy from trial order, with 95% CIs.
+
+```{r trial-accuracies, fig.width=base.width*3.5, fig.height=base.height*3.5, out.width='90%', fig.cap="(ref:trial-accuracies)", fig.pos="H", message=FALSE, warning=FALSE}
+# Calculate average accuracy by trials across participants
+p.trial.accuracy <- 
+  d.test %>%
+  filter(Experiment == "Experiment 1a (natural)") %>%
+  # For each item determine the response that was given most often
+  group_by(Experiment, ItemID, Response.Vowel, Trial) %>%
+  tally() %>%
+  group_by(Experiment, Trial) %>%
+  complete(ItemID, Response.Vowel, fill = list(n = 0)) %>%
+  group_by(Experiment, Trial, ItemID, Response.Vowel) %>%
+  summarise(
+    Response.N = sum(n)) %>%
+  # get proportion correct per item and trial
+  group_by(Experiment, Trial, ItemID) %>%
+  mutate(
+    Response.Proportion = Response.N / sum(Response.N)) %>%
+  ungroup() %>%
+  left_join(
+    d.test %>%
+      filter(Experiment == "Experiment 1a (natural)") %>%
+      distinct(Experiment, ItemID, Item.CorrectResponse.Vowel, Trial)) %>%
+  filter(Response.Vowel == Item.CorrectResponse.Vowel) %>%
+  # Get proportion correct per trial
+  group_by(Experiment, Trial) %>%
+  summarise(Response.Proportion.Trial = mean(Response.Proportion) * 100) %>%
+  ggplot(
+    aes(
+      x = Trial,
+      y = Response.Proportion.Trial)) +
+  geom_path() +
+  stat_smooth() +
+  scale_y_continuous("Average accuracy across participants", limits = c(20, 100), breaks = c(20, 40, 60, 80, 100)) + 
+  scale_x_continuous(breaks = c(1, 10, 100)) + 
+  coord_trans(x = "log10")
+
+p.trial.accuracy
+```
 
 ## Concluding remarks
 We set out to compare how well competing accounts of formant normalization explain listeners' perception of vowels. We developed a computational framework that makes it possible to compare a large number of different accounts against multiple data sets. The code we share on OSF makes it possible to 'plug in' different accounts of vowel normalization, different phonetic databases, and different perception experiments. This, we hope, will substantially reduce the effort necessary to conduct similar evaluations on other datasets, dialects, and languages. 

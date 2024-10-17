@@ -118,8 +118,6 @@ p.vowel_space %+%
             color = "red", fill = NA, size = 2)
 ```
 
-## Participant survey responses
-
 ```{r}
 d.survey <- d.test.raw %>%
   excludeData() %>%
@@ -134,40 +132,48 @@ d.survey <- d.test.raw %>%
   mutate(
     robotic_prop = sum(robotic == "TRUE", na.rm = T) / n(),
     more_similar_prop = sum(more_similar == "TRUE", na.rm = T) / n(),
-    not_sure_prop = sum(not_sure == "TRUE", na.rm = T) / n())
-
-d.survey %>%
-  select(Experiment, ParticipantID, robotic, more_similar, not_sure) %>%
-  pivot_longer(
-    cols = c(robotic, more_similar, not_sure),
-    names_to = "question",
-    values_to = "value") %>%
-  na.omit() %>%
-  ggplot(
-    aes(x = question, color = value, fill = value)) +
-  geom_histogram(stat = "count") +
-  facet_grid(~ Experiment)
-
-d.survey %>%
+    not_sure_prop = sum(not_sure == "TRUE", na.rm = T) / n()) %>%
   select(Experiment, robotic_prop, more_similar_prop, not_sure_prop) %>%
   rename(robotic = robotic_prop, `more similar`= more_similar_prop, unsure = not_sure_prop) %>%
   pivot_longer(
     cols = c(robotic, `more similar`, unsure),
     names_to = "question",
     values_to = "value") %>%
-  distinct() %>%
+  distinct()
+```
+
+## Participant survey responses {#sec:SI-survey}
+After completing the experiment, participants were asked to fill out a post-experiment survey. The survey contained questions about the type of audio equipment used, whether they experienced technical difficulties, alongside a series of questions on their perception of the talker and the stimuli used in the experiment. Participants' responses to three of these questions are summarized in Figure \@ref(fig:SI-survey). It is clear from Figure \@ref(fig:SI-survey) that participants experienced the natural and synthesized stimuli differently. Specifically, participants in Experiment 1b experienced more difficulties in distinguishing between words in the experiment -- a larger proportion of participants reported that the words sounded more similar to each other than is the case for a typical native speaker of US English (`r round((d.survey %>% filter(Experiment == "Experiment 1b (synthesized)", question == "more similar") %>% pull(value) - d.survey %>% filter(Experiment == "Experiment 1a (natural)", question == "more similar") %>% pull(value)) / d.survey %>% filter(Experiment == "Experiment 1a (natural)", question == "more similar") %>% pull(value) * 100, digits = 0)`% more inclined to report similarity, relative to participants in Experiment 1a). Participants in Experiment 1b also experienced the stimuli as robotic-sounding to a larger extent (`r round((d.survey %>% filter(Experiment == "Experiment 1b (synthesized)", question == "robotic") %>% pull(value) - d.survey %>% filter(Experiment == "Experiment 1a (natural)", question == "robotic") %>% pull(value)) / d.survey %>% filter(Experiment == "Experiment 1a (natural)", question == "robotic") %>% pull(value) * 100, digits = 0)`% more inclined to perceive the speech as robotic, relative to participants in Experiment 1a), and were overall more unsure about what word they actually heard (no participant in Experiment 1a reported that they overall had difficulties identifying what word they heard).
+
+(ref:SI-survey) Participants' responses to post-experiment survey questions in Experiments 1a and 1b. The figure displays response proportions, normalized by the number of participants in each experiment.
+
+```{r SI-survey, fig.width=base.width*4, fig.height=base.height*2.5, fig.pos="!ht", fig.align='center', out.width='90%', fig.cap="(ref:SI-survey)", warning=FALSE}
+# d.survey %>%
+#   select(Experiment, ParticipantID, robotic, more_similar, not_sure) %>%
+#   pivot_longer(
+#     cols = c(robotic, more_similar, not_sure),
+#     names_to = "question",
+#     values_to = "value") %>%
+#   na.omit() %>%
+#   ggplot(
+#     aes(x = question, color = value, fill = value)) +
+#   geom_histogram(stat = "count") +
+#   facet_grid(~ Experiment)
+
+d.survey %>%
+  mutate(value = value * 100) %>%
   ggplot(
     aes(x = question, y = value)) +
   geom_bar(stat = "identity", fill = "steelblue") +
-  geom_text(aes(label = round(value, 2)),
+  geom_text(aes(label = paste0(round(value, 0), "%")),
             vjust = -0.5, size = 4, color = "black") +
   scale_x_discrete("Survey question") +
-  scale_y_continuous("Response proportion", limits = c(0,1)) +
+  scale_y_continuous("Response proportion", limits = c(0,100)) +
   facet_grid(~ Experiment)
 ```
 
-## Spectrograms of stimuli used in Experiments 1a and 1b
-In the main text, we plot spectrograms of one *heed*, one *hid*, one *odd* and one *hood* token from Experiment 1a, together with four synthesized tokens with similar formant values. Figure \@ref(fig:SI-spectrograms) display spectrograms of the remaining four categories from Experiment 1a (*head*, *had*, *hut* and *who'd*) together with four synthesized tokens from Experiment 1b.
+## Spectrograms of stimuli used in Experiments 1a and 1b {#sec:SI-spectrograms}
+In the main text, we plot spectrograms of one *heed*, one *hid*, one *odd* and one *hood* token from Experiment 1a, together with four synthesized tokens with similar formant values. Figure \@ref(fig:SI-spectrograms) displays spectrograms of the remaining four categories from Experiment 1a (*head*, *had*, *hut* and *who'd*) together with four synthesized tokens from Experiment 1b.
 
 (ref:SI-spectrograms) **Top:** Spectrograms of four natural recordings from Experiment 1a. **Bottom:** Same for four synthesized tokens with similar formant values from Experiment 1b.
 
@@ -235,6 +241,44 @@ p.vowel_space %+%
   theme(
     panel.grid.major = element_blank(),
     panel.grid.minor = element_blank())
+
+# Do same test but for log. Instead of absolute distance, eye-ball tokens that are similar between experiments, and select a distance (.018)
+# p.overlapping.tokens.uniformscaling <- d.test.by_item %>%
+#   select(Experiment, ItemID, Item.CorrectResponse.Vowel, F1_log_Nearey2, F2_log_Nearey2) %>%
+#   ggplot(
+#     aes(
+#       x = F2_log_Nearey2,
+#       y = F1_log_Nearey2,
+#       shape = Experiment,
+#       color = Item.CorrectResponse.Vowel,
+#       label = ItemID)) +
+#   geom_point() +
+#   stat_ellipse(
+#     data = . %>%
+#         filter(Experiment == "Experiment 1a (natural)"),
+#       mapping = aes(
+#         colour = Item.CorrectResponse.Vowel),
+#       alpha = .4) +
+#   scale_x_reverse() +
+#   scale_y_reverse()
+# p.overlapping.tokens.uniformscaling
+# ggplotly()
+
+# p.vowel_space %+%
+#   (d.test.overlappingTokens.log) +
+#   geom_text(
+#     aes(
+#       x = F2_log_Nearey2,
+#       y = F1_log_Nearey2,
+#       size = Response.Entropy),
+#     alpha = .5) +
+#   scale_size_continuous("Response entropy (bits)", trans = 'reverse') +
+#   guides(color = "none") +
+#   theme(legend.position = "top") +
+#   facet_wrap(~ Experiment) +
+#   theme(
+#     panel.grid.major = element_blank(),
+#     panel.grid.minor = element_blank())
 ```
 
 ```{r}
@@ -1180,6 +1224,104 @@ Figure \@ref(fig:SI-model-ceiling-acoustic-space) suggests that normalization do
 In Experiment 1a, both Nearey's uniform scaling and Johnson clearly perform worse relative to the unnormalized model in the upper right part of the space, more specifically for the `r linguisticsdown::cond_cmpl("[u]")` category, which could indicate that models are overly categorical in a part of the space where humans are less categorical (*Panels B-C*; left). Possible reasons could be 1) the stimuli sounding more like a neighbouring category to many listeners, or 2) potential effects of orthography, making humans less inclined to select the `r linguisticsdown::cond_cmpl("[u]")` category. The potential effect of the infrequent non-word response option *who'd* could have been evaluated against the synthesized stimuli in Experiment 1b. If there was indeed an effect of orthography, we should have observed a better model fit and larger between-account differences in predictions in this part of the acoustic space. Unfortunately, we under-sampled that part, which is an important caveat for Experiment 1b. For the items closest to the area in question, participants however often responded *hood*, which might indicate that items in this part of the space for this talker overall sounded more like *hood* and not *who'd* for many listeners (c.f., discussion on listeners' dialect templates in Section \@ref(sec:experiment-results)).
 
 Comparing the two best-performing models across experiments (*Panel D*), no evident pattern of improvement in one model relative to the other seems to emerge. In Experiment 1a, Johnson provided the best fit to listeners' responses and appears to improve the fit relative to Nearey across almost the entire space. For Experiment 1b, Nearey overall improves the fit relative to Johnson, with the exception of some locations in the mid part of the phonetic space (including high, center and low vowels).
+
+### Comparing accounts in terms of accuracy in predicting listeners' responses {#sec:SI-accuracies}
+An alternative approach to maximum likelihood fitting is to compare the accuracies of accounts in predicting listeners' responses. Table XX reports the accuracies of the accounts across the five folds for each experiment. The accounts are sorted by highest accuracy.<!--TO DO: add here-->
+
+\begin{minipage}{0.45\textwidth}
+\centering
+\caption{Accuracy predicting listeners' responses in Experiment 1a (under Luce choice rule)}
+\begin{tabular}[t]{lr}
+\toprule
+Normalization account & accuracy\\
+\midrule
+SyrdalGopal (Bark) & 60.4%\\
+Nearey's formantwise mean (log) & 57.7%\\
+C-CuRE (ERB) & 57.7%\\
+C-CuRE (semitones) & 57.7%\\
+Uniform scaling, Johnson (Hz) & 57.6%\\
+\addlinespace
+C-CuRE (Bark) & 57.3%\\
+C-CuRE (Mel) & 57.2%\\
+C-CuRE (Hz) & 56.8%\\
+Miller (log) & 56.3%\\
+Uniform scaling, Nearey (log) & 56.3%\\
+\addlinespace
+Lobanov (Hz) & 55.1%\\
+Uniform scaling, Nordström \& Lindblom (Hz) & 54.7%\\
+SyrdalGopal2 (Bark) & 49.4%\\
+no normalization (Hz) & 48.5%\\
+transformed (Mel) & 48.0%\\
+\addlinespace
+transformed (Bark) & 47.8%\\
+transformed (ERB) & 47.0%\\
+transformed (log) & 45.5%\\
+transformed (semitones) & 45.5%\\
+Gerstman (Hz) & 43.0%\\
+\bottomrule
+\end{tabular}
+\end{minipage}
+\hfill
+\begin{minipage}{0.45\textwidth}
+\centering
+\caption{Accuracy predicting listeners' responses in Experiment 1b (under Luce choice rule)}
+\begin{tabular}[t]{lr}
+\toprule
+Normalization account & accuracy\\
+\midrule
+Uniform scaling, Nearey (log) & 28.1%\\
+Gerstman (Hz) & 27.1%\\
+Lobanov (Hz) & 27.0%\\
+Nearey's formantwise mean (log) & 26.5%\\
+C-CuRE (ERB) & 26.5%\\
+\addlinespace
+C-CuRE (semitones) & 26.5%\\
+C-CuRE (Bark) & 26.3%\\
+transformed (log) & 25.9%\\
+transformed (semitones) & 25.9%\\
+C-CuRE (Mel) & 25.1%\\
+\addlinespace
+transformed (ERB) & 24.7%\\
+transformed (Bark) & 23.9%\\
+SyrdalGopal2 (Bark) & 23.9%\\
+Miller (log) & 23.5%\\
+Uniform scaling, Nordström \& Lindblom (Hz) & 23.5%\\
+\addlinespace
+Uniform scaling, Johnson (Hz) & 22.5%\\
+transformed (Mel) & 22.2%\\
+SyrdalGopal (Bark) & 21.1%\\
+C-CuRE (Hz) & 20.3%\\
+no normalization (Hz) & 16.3%\\
+\bottomrule
+\end{tabular}
+\end{minipage}
+
+```{r}
+d.io.accuracy <- io %>% 
+  group_by(Experiment, IO.NormalizationType) %>% 
+  summarise(accuracy = mean(accuracy_Luce) * 100) %>%
+  mutate(across(where(is.numeric), ~ round(.x, 1))) %>%
+  mutate(accuracy = paste0(accuracy, "%")) %>%
+  group_by(Experiment) %>%
+  arrange(desc(accuracy)) %>%
+  ungroup() %>%
+  rename(`Normalization account` = IO.NormalizationType)
+
+# Code kept for reproducibility
+# kable(d.io.accuracy %>% filter(Experiment == "Experiment 1a (natural)") %>% select(-Experiment),
+#       format = "latex",
+#       booktabs = TRUE,
+#       caption = "Accuracy predicting listeners' responses in Experiment 1a (under Luce choice rule)")
+# 
+# kable(d.io.accuracy %>% filter(Experiment == "Experiment 1b (synthesized)") %>% select(-Experiment),
+#       format = "latex",
+#       booktabs = TRUE,
+#       caption = "Accuracy predicting listeners' responses in Experiment 1b (under Luce choice rule)")
+```
+
+```{r}
+rm(d.io.accuracy)
+```
 
 ## Results for F1-F2 (subset of Experiments 1a and 1b) {#sec:SI-overall-subset}
 To address two potential concerns with our stimuli, we decided to compare the `r length(levels.normalization)` normalization accounts against a subset of the data from Experiment 1a and 1b. For Experiment 1a, we excluded listeners' responses to the two *hVd* stimuli that differed in phonological context from all other words: *odd* and *hut*. For Experiment 1b, we excluded responses to stimuli that could be considered physiologically implausible under the assumption of a single talker (all stimuli below the diagonal dashed line in Figure \@ref(fig:human-performance)).
