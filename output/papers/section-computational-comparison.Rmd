@@ -625,7 +625,7 @@ ttests <-
   rename(IO.NormalizationType = y)
 ```
 
-(ref:plot-io-optimal) Comparison of normalization accounts against listeners' responses. Point ranges indicate mean and 95% bootstrapped CIs of the log-likelihood summarized over the five training sets (higher is better). Accounts that fit listeners' responses to an extent that is statistically indistinguishable from the best-fitting account are marked by (\*). Note that y-axis range differs across panels, and that it is *not* meaningful to compare the absolute log-likelihood values across the two experiments (just as it is not meaningful to compare the data likelihood of regressions that are fit on two different data sets).
+(ref:plot-io-optimal) Comparison of normalization accounts against listeners' responses. Point ranges indicate mean and 95% bootstrapped CIs of the log-likelihood summarized over the five training sets (higher is better). Accounts that fit listeners' responses to an extent that is statistically indistinguishable from the best-fitting account are marked by (\*). Note that y-axis range differs across panels, and that it is *not* meaningful to compare the absolute log-likelihood values across the two experiments (just as it is not meaningful to compare the data likelihood of regressions that are fit on two different data sets).  
 
 ```{r plot-io-optimal, fig.width=base.width*3.5, fig.height=base.height*3, fig.align='center', out.width='95%', fig.cap="(ref:plot-io-optimal)", fig.pos="!ht"}
 Experiment.labs <- c("Experiment 1a \n(natural)", "Experiment 1b \n(synthesized)")
