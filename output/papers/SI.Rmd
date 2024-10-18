@@ -118,7 +118,7 @@ p.vowel_space %+%
             color = "red", fill = NA, size = 2)
 ```
 
-```{r}
+```{r message=FALSE}
 d.survey <- d.test.raw %>%
   excludeData() %>%
   select(Experiment, ParticipantID, Answer.pronun, Answer.task_diff, Answer.task_timing, Answer.words) %>%
@@ -143,7 +143,7 @@ d.survey <- d.test.raw %>%
 ```
 
 ## Participant survey responses {#sec:SI-survey}
-After completing the experiment, participants were asked to fill out a post-experiment survey. The survey contained questions about the type of audio equipment used, whether they experienced technical difficulties, alongside a series of questions on their perception of the talker and the stimuli used in the experiment. Participants' responses to three of these questions are summarized in Figure \@ref(fig:SI-survey). It is clear from Figure \@ref(fig:SI-survey) that participants experienced the natural and synthesized stimuli differently. Specifically, participants in Experiment 1b experienced more difficulties in distinguishing between words in the experiment -- a larger proportion of participants reported that the words sounded more similar to each other than is the case for a typical native speaker of US English (`r round((d.survey %>% filter(Experiment == "Experiment 1b (synthesized)", question == "more similar") %>% pull(value) - d.survey %>% filter(Experiment == "Experiment 1a (natural)", question == "more similar") %>% pull(value)) / d.survey %>% filter(Experiment == "Experiment 1a (natural)", question == "more similar") %>% pull(value) * 100, digits = 0)`% more inclined to report similarity, relative to participants in Experiment 1a). Participants in Experiment 1b also experienced the stimuli as robotic-sounding to a larger extent (`r round((d.survey %>% filter(Experiment == "Experiment 1b (synthesized)", question == "robotic") %>% pull(value) - d.survey %>% filter(Experiment == "Experiment 1a (natural)", question == "robotic") %>% pull(value)) / d.survey %>% filter(Experiment == "Experiment 1a (natural)", question == "robotic") %>% pull(value) * 100, digits = 0)`% more inclined to perceive the speech as robotic, relative to participants in Experiment 1a), and were overall more unsure about what word they actually heard (no participant in Experiment 1a reported that they overall had difficulties identifying what word they heard).
+After completing the experiment, participants were asked to fill out a post-experiment survey. The survey contained questions about the type of audio equipment used, whether they experienced technical difficulties, alongside a series of questions on their perception of the talker and the stimuli used in the experiment. Participants' responses to three of these questions are summarized in Figure \@ref(fig:SI-survey). It is clear from Figure \@ref(fig:SI-survey) that participants experienced the natural and synthesized stimuli differently. Specifically, participants in Experiment 1b experienced more difficulties in distinguishing between words in the experiment -- a larger proportion of participants reported that the words sounded more similar to each other than is the case for a typical native speaker of US English (for Experiment 1b, `r round(d.survey %>% filter(Experiment == "Experiment 1b (synthesized)", question == "more similar") %>% pull(value) * 100, digits = 0)`% reported word similarity, relative to `r round(d.survey %>% filter(Experiment == "Experiment 1a (natural)", question == "more similar") %>% pull(value) * 100, digits = 0)` % of participants in Experiment 1a). Participants in Experiment 1b also experienced the stimuli as robotic-sounding to a larger extent (`r round(d.survey %>% filter(Experiment == "Experiment 1b (synthesized)", question == "robotic") %>% pull(value) * 100, digits = 0)`% of participants perceived the speech as robotic in Experiment 1b, relative to `r round(d.survey %>% filter(Experiment == "Experiment 1a (natural)", question == "robotic") %>% pull(value) * 100, digits = 0)`% of participants in Experiment 1a), and were overall more unsure about what word they actually heard (no participant in Experiment 1a reported that they overall had difficulties identifying what word they heard).
 
 (ref:SI-survey) Participants' responses to post-experiment survey questions in Experiments 1a and 1b. The figure displays response proportions, normalized by the number of participants in each experiment.
 
@@ -173,14 +173,13 @@ d.survey %>%
 ```
 
 ## Spectrograms of stimuli used in Experiments 1a and 1b {#sec:SI-spectrograms}
-In the main text, we plot spectrograms of one *heed*, one *hid*, one *odd* and one *hood* token from Experiment 1a, together with four synthesized tokens with similar formant values. Figure \@ref(fig:SI-spectrograms) displays spectrograms of the remaining four categories from Experiment 1a (*head*, *had*, *hut* and *who'd*) together with four synthesized tokens from Experiment 1b.
+In the main text, we plot spectrograms of one *heed*, one *hid*, one *odd* and one *hood* token from Experiment 1a, together with four synthesized tokens with similar formant values. Figure \@ref(fig:SI-spectrograms) displays spectrograms of all 8 categories from Experiment 1a together with 8 synthesized tokens from Experiment 1b.
 
-(ref:SI-spectrograms) **Top:** Spectrograms of four natural recordings from Experiment 1a. **Bottom:** Same for four synthesized tokens with similar formant values from Experiment 1b.
+(ref:SI-spectrograms) Spectrograms of eight natural recordings from Experiment 1a (**a--d**, **i--l**). Same for eight synthesized tokens with similar formant values from Experiment 1b (**e--h**; **m--p**).
 
-```{r SI-spectrograms, fig.align='center', fig.show='hold', out.width='20%', fig.ncol = 4, fig.cap="(ref:SI-spectrograms)", fig.subcap = c("natural \\emph{head}", "natural \\emph{had}", "natural \\emph{hut}", "natural \\emph{who'd}", "resynthesized \\emph{head}", "resynthesized \\emph{had}", "resynthesized \\emph{hud}", "resynthesized \\emph{who'd}"), results='asis', echo=FALSE}
+```{r SI-spectrograms, fig.align='center', fig.show='hold', out.width='20%', fig.ncol = 4, fig.cap="(ref:SI-spectrograms)", fig.subcap = c("natural \\emph{heed}", "natural \\emph{hid}", "natural \\emph{odd}", "natural \\emph{hood}", "resynthesized \\emph{heed}", "resynthesized \\emph{hid}", "resynthesized \\emph{hod}", "resynthesized \\emph{hood}", "natural \\emph{head}", "natural \\emph{had}", "natural \\emph{hut}", "natural \\emph{who'd}", "resynthesized \\emph{head}", "resynthesized \\emph{had}", "resynthesized \\emph{hud}", "resynthesized \\emph{who'd}"), results='asis', echo=FALSE}
 knitr::include_graphics(c(
-  "figures/spectrogram_head_1a.png","figures/spectrogram_had_1a.png","figures/spectrogram_hut_1a.png", "figures/spectrogram_whod_1a.png",
-  "figures/spectrogram_head.png","figures/spectrogram_had.png","figures/spectrogram_hud.png", "figures/spectrogram_whod.png"))
+  "figures/spectrogram_heed_1a.png","figures/spectrogram_hid_1a.png","figures/spectrogram_odd_1a.png", "figures/spectrogram_hood_1a.png", "figures/spectrogram_heed.png","figures/spectrogram_hid.png","figures/spectrogram_hod.png", "figures/spectrogram_hood.png", "figures/spectrogram_head_1a.png","figures/spectrogram_had_1a.png","figures/spectrogram_hut_1a.png", "figures/spectrogram_whod_1a.png","figures/spectrogram_head.png","figures/spectrogram_had.png","figures/spectrogram_hud.png", "figures/spectrogram_whod.png"))
 ```
 
 ## Distribution of stimuli F1-F3 in Experiments 1a and 1b
@@ -225,6 +224,29 @@ knitr::include_graphics(c("figures/p.3Dcues.1.png", "figures/p.3Dcues.2.png"))
 ## Auxiliary analysis of participant responses in Experiments 1a and 1b {#sec:SI-aux-entropy}
 Participants in Experiment 1b showed overall less agreement in their responses to the stimuli than participants in Experiment 1a, as indicated by the higher response entropy in Experiment 1b. As stated in the main text, response entropies differed even for tokens that were acoustically similar and only differed in $\le 30$ Hz along F1 and F2. Figure \@ref(fig:SI-overlap-tokens) visualizes differences in categorization behavior for these `r nrow(d.test.overlappingTokens)` acoustically similar tokens. For some of these tokens, participants selected the same category across experiments. However, even when selecting the same response option, participants still displayed higher disagreement for the tokens in Experiment 1b (mean by-item response entropy for the overlapping tokens in Experiment 1a = `r d.test.overlappingTokens %>% filter(Experiment == "Experiment 1a (natural)") %>% summarise(mean(Response.Entropy)) %>% round(., 2)` bits, SE = `r d.test.overlappingTokens %>% filter(Experiment == "Experiment 1a (natural)") %>% summarise(se(Response.Entropy)) %>% round(., 2)`; and for the overlapping tokens in Experiment 1b = `r d.test.overlappingTokens %>% filter(Experiment == "Experiment 1b (synthesized)") %>% summarise(mean(Response.Entropy)) %>% round(., 2)` bits, SE = `r d.test.overlappingTokens %>% filter(Experiment == "Experiment 1b (synthesized)") %>% summarise(se(Response.Entropy)) %>% round(., 2)`).
 
+```{r message=FALSE}
+# Distance selected by eye-balling figure in SI - section SI-aux-entropy
+d.test.overlappingTokens.log <- d.test.by_item.1a %>%
+    fuzzyjoin::distance_left_join(d.test.by_item.1b, by = c("F1_log_Nearey2", "F2_log_Nearey2"), max_dist = .018) %>%
+    filter(!is.na(Experiment.y)) %>%
+    rename_with(~ sub(".x$", ".1a", .x), ends_with(".x")) %>%
+    rename_with(~ sub(".y$", ".1b", .x), ends_with(".y")) %>%
+  select(starts_with(c("Experiment", "ItemID", "F", "Response.Entropy", "Response.Vowel_MostFrequent"))) %>%
+  select(-ends_with(c(".y", ".x")))
+
+d.test.overlappingTokens.log %<>%
+  select(ends_with("1a")) %>%
+  rename_with(~ sub(".1a$", "", .x)) %>%
+  distinct() %>%
+  rbind(
+    d.test.overlappingTokens.log %>%
+      select(ends_with("1b")) %>%
+      rename_with(~ sub(".1b$", "", .x)) %>%
+      distinct())
+```
+
+We ran the same comparison in Nearey's uniform scaling space, for tokens with a difference of $\le .018$ log along F1 and F2. This comparison, however, returned highly similar results, with substantial differences in entropies for auditorily similar tokens: mean by-item response entropy for Experiment 1a = `r d.test.overlappingTokens.log %>% filter(Experiment == "Experiment 1a (natural)") %>% summarise(mean(Response.Entropy)) %>% round(., 2)` bits, SE = `r d.test.overlappingTokens.log %>% filter(Experiment == "Experiment 1a (natural)") %>% summarise(se(Response.Entropy)) %>% round(., 2)`; Experiment 1b = `r d.test.overlappingTokens.log %>% filter(Experiment == "Experiment 1b (synthesized)") %>% summarise(mean(Response.Entropy)) %>% round(., 2)` bits, SE = `r d.test.overlappingTokens.log %>% filter(Experiment == "Experiment 1b (synthesized)") %>% summarise(se(Response.Entropy)) %>% round(., 2)`.
+
 (ref:SI-overlap-tokens) Listeners' categorization responses in Experiments 1a and 1b, for comparable tokens in Hertz space. The vowel label indicates the most frequent response provided by participants on each test location. Size indicates how consistent responses were across participants, which larger symbols indicating more consistent responses (lower entropy).
 
 ```{r SI-overlap-tokens, fig.width=base.width*3, fig.height=base.height*3+.5, out.width='80%', fig.cap="(ref:SI-overlap-tokens)"}
@@ -241,7 +263,8 @@ p.vowel_space %+%
   theme(
     panel.grid.major = element_blank(),
     panel.grid.minor = element_blank())
-
+```
+```{r message=FALSE}
 # Do same test but for log. Instead of absolute distance, eye-ball tokens that are similar between experiments, and select a distance (.018)
 # p.overlapping.tokens.uniformscaling <- d.test.by_item %>%
 #   select(Experiment, ItemID, Item.CorrectResponse.Vowel, F1_log_Nearey2, F2_log_Nearey2) %>%
@@ -324,6 +347,7 @@ In order to determine the extent to which this difference between experiments ca
 
 Experiment thus explained at least `r round(78.7-70.8, digits = 1)`% of the deviance when it was added to this model---about `r round((78.7-70.8) / 31.7 * 100, digits = 1)`% of the deviance explained if *only* experiment is included in the model (31.7%). These informal comparisons suggest that up to about two thirds of the deviance that is explained by experiment is due to differences in formants between the experiments.
 <!-- TO DO: replace the above numbers with variables extracted from the fitted models. E.g., this should still all work if additional participants are added to the experiment. I also made some corrections. Please carefully check the change log, and ask if you have questions about my changes. -->
+
 Results using unnormalized formants confirmed these results (but, as expected if uniform scaling is approximates the normalization employed by listeners, uniformly scaled formants explained about 4% more variance in response entropy).
 
 ```{r}
@@ -464,9 +488,11 @@ Figure \@ref(fig:SI-norm-params) relates the normalization parameters $\theta$ o
 
 Figure \@ref(fig:SI-norm-params) suggests that the talker used in Experiment 1a is overall aligned with the other talkers in the database, as indicated by the relative distance between the blue dots to the dotted line. How closely the estimates obtained from the talker in Experiment 1a match the estimates obtained from the other talkers depend on the $\theta$ assumed. For instance, for accounts assuming separate parameters for each formant, $\theta$s for F2 seem to be a closer match than $\theta$s for F1, with the exceptions of Gerstman's maxima and Lobanov's SD.
 
-Figure \@ref(fig:SI-norm-params) further indicates that the reliability by which the formant statistics can be established for the same amount of data, seems to depend on the space. For instance, parameters in Hertz space display more variability. Within a given scale, we also note that some parameters are more difficult to estimate than others, for instance, mean estimates display less variability than SD, and range values (minima and maxima). Unsurprisingly, range values and SD differ more between experiments than other estimates (recall that the stimuli in Experiment 1b sampled larger parts of the phonetic space, Section \@ref(sec:stimuli)). Finally, the differences in $\theta$s derived from the database and the experiment stimuli, appear to be larger for $\theta$s employed by standardizing accounts.
+Figure \@ref(fig:SI-norm-params) further indicates that the reliability by which the formant statistics can be established for the same amount of data, seems to depend on the parameter. For instance, mean estimates display less variability than SD, and range values (as indicated by the larger CIs). Unsurprisingly, range values and SD differ more between experiments than other estimates (recall that the stimuli in Experiment 1b sampled larger parts of the phonetic space, Section \@ref(sec:stimuli)).
 
-(ref:SI-norm-params) Comparing normalization parameters $\theta$ across the phonetic database used to estimate listeners' prior experience [@xie-jaeger2020] and Experiments 1a and 1b. Only accounts that assume talker-specific normalization parameters are shown. Dotted line indicates alignment between $\theta$ value in database and experiment stimuli.
+Finally, the differences in $\theta$s derived from the database and the experiment stimuli appear to be larger for $\theta$s employed by standardizing accounts, and especially for F2 (to some extent also for mean F2 in Hertz space; e.g., C-CuRE Hz). If the $\theta$s estimated from the experiment stimuli differ from the $\theta$s obtained from the database for the same account, it could mean that there is theoretically more room for that account to improve on that experiment. As indicated by the t-tests (Section \@ref(sec:SI-sign-test)), both Gerstman and Lobanov normalization obtain substantially higher t-values for Experiment 1b relative to 1a. In addition, if listeners need to incrementally infer $\theta$s from the stimuli and we assume that this inference process is slower for some parameters (e.g., SD take longer to reliably estimate), this would imply that differences in $\theta$ between training and test might bias against these accounts. However, we note that some of these account seem to perform better on Experiment 1b, which is not what we would expect if this incremental process is indeed slow.
+
+(ref:SI-norm-params) Comparing normalization parameters $\theta$ across the phonetic database used to estimate listeners' prior experience [@xie-jaeger2020] and Experiments 1a and 1b. Only accounts that assume talker-specific normalization parameters are shown, as these are estimated across the entire experiment stimuli. Dotted line indicates alignment between $\theta$ value in database and experiment stimuli.
 
 ```{r SI-norm-params, fig.width=base.width*2.5, fig.height=base.height*3, out.width='90%', fig.cap="(ref:SI-norm-params)", warning=FALSE}
 # Check the variability in the params across experiments and folds
@@ -1226,84 +1252,74 @@ In Experiment 1a, both Nearey's uniform scaling and Johnson clearly perform wors
 Comparing the two best-performing models across experiments (*Panel D*), no evident pattern of improvement in one model relative to the other seems to emerge. In Experiment 1a, Johnson provided the best fit to listeners' responses and appears to improve the fit relative to Nearey across almost the entire space. For Experiment 1b, Nearey overall improves the fit relative to Johnson, with the exception of some locations in the mid part of the phonetic space (including high, center and low vowels).
 
 ### Comparing accounts in terms of accuracy in predicting listeners' responses {#sec:SI-accuracies}
-An alternative approach to maximum likelihood fitting is to compare the accuracies of accounts in predicting listeners' responses. Table XX reports the accuracies of the accounts across the five folds for each experiment. The accounts are sorted by highest accuracy.<!--TO DO: add here-->
+An alternative approach to maximum likelihood fitting is to compare the accuracies of accounts in predicting listeners' responses. Tables \ref{tab:SI-accuracies-1a} and \ref{tab:SI-accuracies-1b} report the accuracies of the accounts across the five folds for each experiment. The account with the highest accuracy in each experiment is boldfaced.
 
-\begin{minipage}{0.45\textwidth}
-\centering
-\caption{Accuracy predicting listeners' responses in Experiment 1a (under Luce choice rule)}
-\begin{tabular}[t]{lr}
+\begin{table}
+\caption{\label{tab:SI-accuracies-1a}Accuracy predicting listeners' responses in Experiment 1a (under Luce choice rule)}
+\begin{tabular}[t]{ll}
 \toprule
 Normalization account & accuracy\\
 \midrule
-SyrdalGopal (Bark) & 60.4%\\
-Nearey's formantwise mean (log) & 57.7%\\
-C-CuRE (ERB) & 57.7%\\
-C-CuRE (semitones) & 57.7%\\
-Uniform scaling, Johnson (Hz) & 57.6%\\
-\addlinespace
-C-CuRE (Bark) & 57.3%\\
-C-CuRE (Mel) & 57.2%\\
-C-CuRE (Hz) & 56.8%\\
-Miller (log) & 56.3%\\
-Uniform scaling, Nearey (log) & 56.3%\\
-\addlinespace
-Lobanov (Hz) & 55.1%\\
-Uniform scaling, Nordström \& Lindblom (Hz) & 54.7%\\
-SyrdalGopal2 (Bark) & 49.4%\\
-no normalization (Hz) & 48.5%\\
-transformed (Mel) & 48.0%\\
-\addlinespace
-transformed (Bark) & 47.8%\\
-transformed (ERB) & 47.0%\\
-transformed (log) & 45.5%\\
-transformed (semitones) & 45.5%\\
-Gerstman (Hz) & 43.0%\\
+no normalization (Hz) & 48.5\%\\
+transformed (log) & 45.5\%\\
+transformed (Mel) & 48\%\\
+transformed (Bark) & 47.8\%\\
+transformed (ERB) & 47\%\\
+transformed (semitones) & 45.5\%\\
+\textbf{SyrdalGopal (Bark)} & \textbf{60.4\%}\\
+SyrdalGopal2 (Bark) & 49.4\%\\
+Miller (log) & 56.3\%\\
+Uniform scaling, Nearey (log) & 56.3\%\\
+Uniform scaling, Nordström \& Lindblom (Hz) & 54.7\%\\
+Uniform scaling, Johnson (Hz) & 57.6\%\\
+Nearey's formantwise mean (log) & 57.7\%\\
+C-CuRE (Hz) & 56.8\%\\
+C-CuRE (Mel) & 57.2\%\\
+C-CuRE (Bark) & 57.3\%\\
+C-CuRE (ERB) & 57.7\%\\
+C-CuRE (semitones) & 57.7\%\\
+Gerstman (Hz) & 43\%\\
+Lobanov (Hz) & 55.1\%\\
 \bottomrule
 \end{tabular}
-\end{minipage}
-\hfill
-\begin{minipage}{0.45\textwidth}
-\centering
-\caption{Accuracy predicting listeners' responses in Experiment 1b (under Luce choice rule)}
-\begin{tabular}[t]{lr}
+\end{table}
+
+\begin{table}
+\caption{\label{tab:SI-accuracies-1b}Accuracy predicting listeners' responses in Experiment 1b (under Luce choice rule)}
+\begin{tabular}[t]{ll}
 \toprule
 Normalization account & accuracy\\
 \midrule
-Uniform scaling, Nearey (log) & 28.1%\\
-Gerstman (Hz) & 27.1%\\
-Lobanov (Hz) & 27.0%\\
-Nearey's formantwise mean (log) & 26.5%\\
-C-CuRE (ERB) & 26.5%\\
-\addlinespace
-C-CuRE (semitones) & 26.5%\\
-C-CuRE (Bark) & 26.3%\\
-transformed (log) & 25.9%\\
-transformed (semitones) & 25.9%\\
-C-CuRE (Mel) & 25.1%\\
-\addlinespace
-transformed (ERB) & 24.7%\\
-transformed (Bark) & 23.9%\\
-SyrdalGopal2 (Bark) & 23.9%\\
-Miller (log) & 23.5%\\
-Uniform scaling, Nordström \& Lindblom (Hz) & 23.5%\\
-\addlinespace
-Uniform scaling, Johnson (Hz) & 22.5%\\
-transformed (Mel) & 22.2%\\
-SyrdalGopal (Bark) & 21.1%\\
-C-CuRE (Hz) & 20.3%\\
-no normalization (Hz) & 16.3%\\
+no normalization (Hz) & 16.3\%\\
+transformed (log) & 25.9\%\\
+transformed (Mel) & 22.2\%\\
+transformed (Bark) & 23.9\%\\
+transformed (ERB) & 24.7\%\\
+transformed (semitones) & 25.9\%\\
+SyrdalGopal (Bark) & 21.1\%\\
+SyrdalGopal2 (Bark) & 23.9\%\\
+Miller (log) & 23.5\%\\
+\textbf{Uniform scaling, Nearey (log)} & \textbf{28.1\%}\\
+Uniform scaling, Nordström \& Lindblom (Hz) & 23.5\%\\
+Uniform scaling, Johnson (Hz) & 22.5\%\\
+Nearey's formantwise mean (log) & 26.5\%\\
+C-CuRE (Hz) & 20.3\%\\
+C-CuRE (Mel) & 25.1\%\\
+C-CuRE (Bark) & 26.3\%\\
+C-CuRE (ERB) & 26.5\%\\
+C-CuRE (semitones) & 26.5\%\\
+Gerstman (Hz) & 27.1\%\\
+Lobanov (Hz) & 27\%\\
 \bottomrule
 \end{tabular}
-\end{minipage}
+\end{table}
 
-```{r}
+```{r message=FALSE}
 d.io.accuracy <- io %>% 
   group_by(Experiment, IO.NormalizationType) %>% 
   summarise(accuracy = mean(accuracy_Luce) * 100) %>%
   mutate(across(where(is.numeric), ~ round(.x, 1))) %>%
   mutate(accuracy = paste0(accuracy, "%")) %>%
-  group_by(Experiment) %>%
-  arrange(desc(accuracy)) %>%
   ungroup() %>%
   rename(`Normalization account` = IO.NormalizationType)
 
