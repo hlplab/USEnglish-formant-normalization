@@ -39,7 +39,7 @@ Finally, the evaluation of normalization accounts in the present work shares wit
 
 (ref:trial-accuracies) Listeners' categorization accuracy of recognizing the vowel intended by the talker in Experiment 1a at each trial, averaged across items and participants. Black line shows mean accuracy trial-by-trial. Blue line shows a non-parametric smooth fit predicting accuracy from trial order, with 95% CIs.
 
-```{r trial-accuracies, fig.width=base.width*2, fig.height=base.height*2, out.width='90%', fig.cap="(ref:trial-accuracies)", message=FALSE, warning=FALSE}
+```{r trial-accuracies, fig.width=base.width*2, fig.height=base.height*2, out.width='60%', fig.cap="(ref:trial-accuracies)", message=FALSE, warning=FALSE}
 # Calculate average accuracy by trials across participants
 p.trial.accuracy <- 
   d.test %>%
