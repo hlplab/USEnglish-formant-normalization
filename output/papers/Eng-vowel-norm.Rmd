@@ -131,6 +131,7 @@ This study was reviewed and approved Research Subjects Review Board (RSRB) of th
 
 <div id="refs" custom-style="Bibliography"></div>
 
+\nocite{balzano1982}
 \nocite{barreda-nearey2018}
 \nocite{goldinger1996}
 \nocite{hay2017}
@@ -138,9 +139,12 @@ This study was reviewed and approved Research Subjects Review Board (RSRB) of th
 \nocite{johnson1999}
 \nocite{kleinschmidt-jaeger2016}
 \nocite{mcgowan2015}
+\nocite{shankweiler1978}
 \nocite{shannon1948}
+\nocite{strange-jenkins2012}
 \nocite{sumner2011}
 \nocite{walker-hay2011}
-
+\nocite{zwicker1957}
+\nocite{zwicker-terhardt1980}
 
 \endgroup
