@@ -33,7 +33,7 @@ Like previous work, we further assumed that all listeners in our experiments use
 
 A related assumption was introduced by the use of a phonetic database to approximate listeners' vowel representations. This deviates from most previous evaluations of normalization accounts [@mcmurray-jongman2011; @barreda2021; but see @richter2017], and reflects our commitment to a strong assumption made by most theories of speech perception: that listeners' representations reflect the formant statistics previously experienced speech input. By using a phonetic database to estimate listeners' representations, we *substantially* reduced the degrees of freedom in the evaluation of normalization accounts, reducing the chance of over-fitting to the data from our experiments. Our approach does, however, also introduce two new assumptions. 
 
-First, our approach assumes that the mixture of dialect template(s) used by talkers in the database sufficiently closely approximates those of the listeners in our experiments. Some validation for this assumption comes from the additional analysis reported in the preceding paragraph: when we subset listeners to only those who used the majority dialect template, this improved the fit of all normalization accounts---as expected, if the category representations we trained on the phonetic database primarily reflect those listeners' representations (see SI, \@ref(sec:SI-dialect-subset)). <!-- TO DO: Anna, consider trying to quantify this. --> Future work could further address this assumption in a number of ways. On the one hand, dialect analyses like the ones we presented for our listeners (in Figure  \@ref(fig:human-confusion)B) could compare listeners' templates against the templates used by talkers in the database. Alternatively or additionally, researchers could see whether our results replicate if ideal observers are instead trained on other databases that have been hypothesized to reflect a 'typical' L1 listeners' experience with US English. Finally, it might be possible in future work to use larger databases of vowel recordings to train separate ideal observers for all major dialects of US English, and to try to *estimate* for each listener which mixture of dialects their responses are based on.
+First, our approach assumes that the mixture of dialect template(s) used by talkers in the database sufficiently closely approximates those of the listeners in our experiments. Some validation for this assumption comes from the additional analysis reported in the preceding paragraph: when we subset listeners to only those who used the majority dialect template, this improved the fit of all normalization accounts---as expected, if the category representations we trained on the phonetic database primarily reflect those listeners' representations (see SI, \@ref(sec:SI-dialect-subset)). <!-- TO DO: Anna, consider trying to quantify this. --> Future work could further address this assumption in a number of ways. On the one hand, dialect analyses like the ones we presented for our listeners (in Figure \@ref(fig:human-confusion)B) could compare listeners' templates against the templates used by talkers in the database. Alternatively or additionally, researchers could see whether our results replicate if ideal observers are instead trained on other databases that have been hypothesized to reflect a 'typical' L1 listeners' experience with US English. Finally, it might be possible in future work to use larger databases of vowel recordings to train separate ideal observers for all major dialects of US English, and to try to *estimate* for each listener which mixture of dialects their responses are based on.
 
 Second, we made the simplifying assumption that listeners' category representation---or at least the representations listeners' drew on during the experiment---are talker-*independent* (we trained a single set of multivariate Gaussian categories, rather than, e.g., hierarchically organized set of multiple dialect templates). While this assumption is routinely made in research on normalization and beyond, it might well be wrong [see e.g., @xie2021]. 
 
@@ -41,7 +41,7 @@ Finally, the evaluation of normalization accounts in the present work shares wit
 
 (ref:trial-accuracies) Listeners' categorization accuracy of recognizing the vowel intended by the talker in Experiment 1a at each trial, averaged across items and participants. Black line shows mean accuracy trial-by-trial. Blue line shows a non-parametric smooth fit predicting accuracy from trial order, with 95% CIs.
 
-```{r trial-accuracies, fig.width=base.width*3.5, fig.height=base.height*2, out.width='80%', fig.cap="(ref:trial-accuracies)", message=FALSE, warning=FALSE}
+```{r trial-accuracies,  fig.width=base.width*5, fig.height=base.height*3.5, out.width='90%', fig.cap="(ref:trial-accuracies)", message=FALSE, warning=FALSE}
 # Calculate average accuracy by trials across participants
 p.trial.accuracy <- 
   d.test %>%
@@ -77,7 +77,42 @@ p.trial.accuracy <-
   scale_x_continuous(breaks = c(1, 10, 100)) + 
   coord_trans(x = "log10")
 
-p.trial.accuracy
+# use the io to calculate the accuracy for each item each participant saw at each trial
+# get the normalized cues for each trial, apply the io to those stimuli to calculate the response of the io
+d.predicted.trial.acc <- io %>%
+  filter(IO.cues == "F1-F2", IO.cue_normalization == "Nearey2")
+
+p.predicted.trial.accuracy <- 
+  d.predicted.trial.acc %>%
+  select(Experiment, IO.cue_normalization, IO.crossvalidation_group, data_perception) %>%
+  unnest(data_perception) %>%
+  left_join(
+    d.predicted.trial.acc %>%
+      select(Experiment, IO.cue_normalization, IO.crossvalidation_group, log_likelihood_up_to_constant_by_item) %>%
+      unnest(log_likelihood_up_to_constant_by_item),
+    by = c("Experiment", "IO.cue_normalization", "IO.crossvalidation_group", "x")) %>%
+  filter(IO.crossvalidation_group == 1) %>%
+  group_by(Experiment, IO.cue_normalization, Trial) %>%
+  summarise(likelihood = mean(log_likelihood, na.rm = T)) %>%
+  ggplot(
+    aes(
+      x = Trial,
+      y = likelihood)) +
+  geom_line(
+    aes(
+      group = interaction(Experiment, IO.cue_normalization)),
+    alpha = .6) +
+  stat_smooth(method = "gam", formula = y ~ s(x)) +
+  scale_x_continuous(breaks = c(1, 10, 100)) +
+  scale_y_continuous("Predicted log likelihood across participants") + 
+  coord_trans(x = "log10") +
+  facet_wrap(~ Experiment, scales = "free") +
+  ggh4x::force_panelsizes(cols = base.width, rows = base.height)
+
+p.trial.accuracy + p.predicted.trial.accuracy + 
+  plot_annotation(tag_levels = list(c('A', 'B'))) +
+  plot_layout(guides = "collect") &
+  theme(plot.tag = element_text(face = "bold"))
 ```
 
 ## Concluding remarks
