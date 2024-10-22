@@ -22,10 +22,10 @@ d.test <-
   mutate(    
     Experiment = factor(
       Experiment,
-      levels = c("1b (natural)", "1a (synthesized)"),
+      levels = c("1a (natural)", "1b (synthesized)"),
       labels = c("Experiment 1a (natural)", "Experiment 1b (synthesized)")),
     Response.Vowel = plyr::mapvalues(Response.Vowel, levels.response.vowel, levels.vowel.IPA),
-    Item.CorrectResponse.Vowel = plyr::mapvalues(Item.CorrectResponse.Vowel, levels.response.vowel, levels.vowel.IPA))
+    Item.CorrectResponse.Vowel = plyr::mapvalues(Item.ExpectedResponse, levels.response.natural.exp, levels.vowel.IPA))
 ```
 
 ```{r exclude-data}
@@ -120,7 +120,7 @@ d.test.by_item.1a <- d.test.by_item %>% filter(Experiment == "Experiment 1a (nat
 d.test.by_item.1b <- d.test.by_item %>% filter(Experiment == "Experiment 1b (synthesized)")
 ```
 
-An optional post-experiment survey recorded participant demographics using NIH prescribed categories, including participant sex (`r d.Participant %>% group_by(Participant.Sex) %>% tally() %>% mutate(x = paste(Participant.Sex, n, sep = ": ", collapse = ", ")) %>% pull(x) %>% first()`), age (mean = `r round(mean(d.Participant$Participant.Age, na.rm = T), 1)` years; SD = `r round(sd(d.Participant$Participant.Age, na.rm = T), 1)`; 95% quantiles = `r paste(quantile(d.Participant$Participant.Age, c(.025, .975), na.rm = T), collapse = "-")` years), race (`r d.Participant %>% group_by(Participant.Race) %>% tally() %>% mutate(x = paste(Participant.Race, n, sep = ": ", collapse = ", ")) %>% pull(x) %>% first()`), and ethnicity (`r d.Participant %>% group_by(Participant.Ethnicity) %>% tally() %>% mutate(x = paste(Participant.Ethnicity, n, sep = ": ", collapse = ", ")) %>% pull(x) %>% first()`).^[All but `r 48 - nrow(d.Participant)` participant completed the survey.]
+An optional post-experiment survey recorded participant demographics using NIH prescribed categories, including participant sex (`r d.Participant %>% group_by(Participant.Sex) %>% tally() %>% mutate(x = paste(Participant.Sex, n, sep = ": ", collapse = ", ")) %>% pull(x) %>% first()`), age (mean = `r round(mean(d.Participant$Participant.Age, na.rm = T), 1)` years; SD = `r round(sd(d.Participant$Participant.Age, na.rm = T), 1)`; 95% quantiles = `r paste(quantile(d.Participant$Participant.Age, c(.025, .975), na.rm = T), collapse = "-")` years), race (`r d.Participant %>% group_by(Participant.Race) %>% tally() %>% mutate(x = paste(Participant.Race, n, sep = ": ", collapse = ", ")) %>% pull(x) %>% first()`), and ethnicity (`r d.Participant %>% group_by(Participant.Ethnicity) %>% tally() %>% mutate(x = paste(Participant.Ethnicity, n, sep = ": ", collapse = ", ")) %>% pull(x) %>% first()`).^[All but `r 66 - nrow(d.Participant)` participant completed the survey.]
 
 ```{r}
 rm(d.Participant)

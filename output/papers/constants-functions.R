@@ -19,6 +19,7 @@ levels.response <- c("heed", "hid", "head", "had", "hud", "hood", "whod", "hod")
 labels.response <- c("heed", "hid", "head", "had", "hud", "hood", "whod", "hod")
 levels.response.natural <- c("heed", "hid", "head", "had", "hut", "hood", "who'd", "odd")
 labels.response.natural <- c("heed", "hid", "head", "had", "hut", "hood", "who'd", "odd")
+levels.response.natural.exp <- c("heed", "hid", "head", "had", "hut", "hood", "whod", "odd")
 levels.cue.names <- c("Item.Cue_Hz_F1", "Item.Cue_Hz_F2", "Item.Cue_Hz_F3", "Item.Cue_Mel_F1", "Item.Cue_Mel_F2", "Item.Cue_Mel_F3")
 levels.formants <- c("F0", "F1", "F2", "F3")
 
@@ -1224,29 +1225,6 @@ formatData_NORM <- function(.data, experiment) {
   return(.data)
 }
 
-
-sortVars_NORM <- function(.data) {
-  .data %>% 
-    relocate(
-      Experiment,
-      starts_with("Experiment."),
-      List,
-      ParticipantID,
-      starts_with("Participant."), 
-      starts_with("Condition"), 
-      Phase, Trial,
-      ItemID,
-      starts_with("Item."),
-      Response,
-      starts_with("Response"),
-      starts_with("Duration"),
-      starts_with("Time"),
-      starts_with("Assignment"),
-      starts_with("Answer"),
-      everything())
-}
-
-
 prepVars_NORM <- function(.data) {
   contrasts(.data$Item.ImageOrder) <- cbind("f vs. b" = c(-.5, .5))
   contrasts(.data$Experiment) <- cbind("1a (synthesized) vs. 1b (natural)" = c(.5, -.5))
@@ -1254,52 +1232,6 @@ prepVars_NORM <- function(.data) {
   .data %<>% Gelman_scale_cues_NORM
   
   return(.data)
-}
-
-
-addExclusionSummary_NORM <- function(
-  d, 
-  exclude_based_on_catch_trials = T,
-  plot = T, 
-  return_data = T
-) {
-  d %<>%
-    mutate(
-      Exclude_Participant.Reason = factor(case_when(
-        Exclude_Participant.because_of_TechnicalDifficulty ~ "Technical difficulty",
-        Exclude_Participant.because_of_MultipleExperiments ~ "Repeat participant",
-        Exclude_Participant.because_of_IgnoredInstructions ~ "No headphones",
-        Exclude_Participant.because_of_RT ~ "Reaction time",
-        Exclude_Participant.because_of_missing_trials ~ "Too many missing trials",
-        T ~ "none"
-      )))
-  
-    p <- d %>%
-      group_by(Experiment, ParticipantID, Exclude_Participant.Reason, Assignment.Submit.DuringDayTime) %>%
-      mutate(Response.log_RT = log10(Response.RT)) %>%
-      summarise_at("Response.log_RT", .funs = list("mean" = mean, "sd" = sd), na.rm = T) %>%
-      ggplot(aes(x = mean, y = sd)) +
-      geom_point(aes(color = Exclude_Participant.Reason, shape = Exclude_Participant.Reason, alpha = Assignment.Submit.DuringDayTime)) +
-      geom_rug() +
-      scale_x_continuous("mean log-RT (in msec)") +
-      scale_y_continuous("SD of log-RT") +
-      scale_color_manual(
-        "Reason for exclusion",
-        breaks = c("none", 
-                   "Technical difficulty", "Repeat participant", "No headphones", "Reaction time", "Too many missing trials"),
-        values = c("black", rep("red", 8))) +
-      scale_shape_manual(
-        "Reason for exclusion",
-        breaks = c("none", 
-                   "Technical difficulty", "Repeat participant", "No headphones", "Reaction time", "Too many missing trials"),
-        values = c(16, 15, 17, 10, 3, 4, 8, 9, 13)) +
-      scale_alpha_manual(
-        "Completed during\ndaytime (EST)?",
-        breaks = c(T, F),
-        values = c(1, .3))
-    
-  if (plot) { plot(p) }
-  if (return_data) return(d) else return(p)
 }
 
 # Functions for participant exclusion criteria
@@ -1320,7 +1252,7 @@ add.ExclusionCriteria <- function(
       Exclude_Participant.because_of_MultipleExperiments = ifelse(Assignment.Submit.DateTime.UTC > min(Assignment.Submit.DateTime.UTC), T, F)) %>%
     ungroup() %>%
     mutate(
-      Exclude_Participant.because_of_IgnoredInstructions = ifelse(Answer.audio_type %in% c("in-ear", "over-ear"), FALSE, TRUE)) %>%
+      Exclude_Participant.because_of_IgnoredInstructions = ifelse(audio_type %in% c("in-ear", "over-ear"), FALSE, TRUE)) %>%
     # Check participants' log RT; participants who were more than 3 standard deviations faster or slower in their mean (log-transformed) RTs compared to other participants. Also check all trials with RTs more than 3 standard deviations faster or slower than expected
     group_by(Experiment, Trial) %>%
     mutate(
@@ -1335,7 +1267,7 @@ add.ExclusionCriteria <- function(
     #Exclude participants with unusual response patterns, after qualitative assessment of per participant response plots in SI
     mutate(
       Exclude_Participant.because_of_unusual_vowel_responses = case_when(
-        Experiment == "Experiment 1a (natural)" & ParticipantID %in% c(8,13,15,21) ~ TRUE,
+        Experiment == "Experiment 1a (natural)" & ParticipantID %in% c(13,15,21) ~ TRUE,
         Experiment == "Experiment 1b (synthesized)" & ParticipantID %in% c(15,21) ~ TRUE,
         TRUE ~ FALSE),
       Exclude_Participant.Reason = factor(case_when(

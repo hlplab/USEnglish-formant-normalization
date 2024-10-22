@@ -101,13 +101,13 @@ Next, we describe how we estimated the $\theta$s, $\mu_c$s and $\Sigma_c$s for e
 make_test_data_long <- . %>%
   select(
     -c(List, starts_with("Item."), starts_with("Duration."), "Duration"),
-    Item.InstanceInList) %>%
+    Item.InstanceInBlockOfList) %>%
   pivot_longer(
     starts_with("F", ignore.case = F)) %>%
   separate(name, c("cue", "cue_transform", "cue_normalization")) %>%
   pivot_wider(
     names_from = cue) %>%
-  select(Experiment, ParticipantID, Trial, ItemID, Item.InstanceInList,
+  select(Experiment, ParticipantID, Trial, ItemID, Item.InstanceInBlockOfList,
          cue_normalization, cue_transform,
          F0, F1, F2, F3, Duration_CCuRE, Response, Response.Vowel,
          starts_with("formants"), starts_with("overall_mean_for_CCuRE"))

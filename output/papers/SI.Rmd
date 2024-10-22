@@ -51,9 +51,10 @@ d.test.raw <-
   mutate(    
     Experiment = factor(
       Experiment,
-      levels = c("1b (natural)", "1a (synthesized)"),
+      levels = c("1a (natural)", "1b (synthesized)"),
       labels = c("Experiment 1a (natural)", "Experiment 1b (synthesized)")),
-    Response.Vowel = plyr::mapvalues(Response.Vowel, levels.response.vowel, levels.vowel.IPA))
+    Response.Vowel = plyr::mapvalues(Response.Vowel, levels.response.vowel, levels.vowel.IPA),
+    Item.CorrectResponse.Vowel = plyr::mapvalues(Item.ExpectedResponse, levels.response.natural.exp, levels.vowel.IPA))
 ```
 
 ## Exclusions {#sec:SI-exclusions}
@@ -94,7 +95,7 @@ p.vowel_space %+%
     alpha = .6) +
   geom_text() +
   guides(color = "none", alpha = "none") +
-  facet_wrap(~ Experiment + ParticipantID, ncol = 5) +
+  facet_wrap(~ Experiment + ParticipantID, ncol = 7) +
   geom_rect(data = ~ subset(., ParticipantID %in% c(13,15,21)),
             xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf, 
             color = "red", fill = NA, size = 2)
@@ -112,7 +113,7 @@ p.vowel_space %+%
     alpha = .6) +
   geom_text() +
   guides(color = "none", alpha = "none") +
-  facet_wrap(~ Experiment + ParticipantID, ncol = 5) +
+  facet_wrap(~ Experiment + ParticipantID, ncol = 7) +
   geom_rect(data = ~ subset(., ParticipantID %in% c(15,21)),
             xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf, 
             color = "red", fill = NA, size = 2)
@@ -121,13 +122,13 @@ p.vowel_space %+%
 ```{r message=FALSE}
 d.survey <- d.test.raw %>%
   excludeData() %>%
-  select(Experiment, ParticipantID, Answer.pronun, Answer.task_diff, Answer.task_timing, Answer.words) %>%
+  select(Experiment, ParticipantID, pronun, task_diff, task_timing, words) %>%
   group_by(Experiment, ParticipantID) %>%
   distinct() %>%
   mutate(
-    robotic = ifelse(str_detect(Answer.pronun, "robotic"), T, F),
-    more_similar = ifelse(str_detect(Answer.words, "more-similar"), T, F), 
-    not_sure = ifelse(str_detect(Answer.task_diff, "not-sure"), T, F)) %>%
+    robotic = ifelse(str_detect(pronun, "robotic"), T, F),
+    more_similar = ifelse(str_detect(words, "more-similar"), T, F), 
+    not_sure = ifelse(str_detect(task_diff, "not-sure"), T, F)) %>%
   group_by(Experiment) %>%
   mutate(
     robotic_prop = sum(robotic == "TRUE", na.rm = T) / n(),
