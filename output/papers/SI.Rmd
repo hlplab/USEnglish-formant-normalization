@@ -44,7 +44,7 @@ A project template, including R markdown files that result in APA-formatted PDFs
 
 # Additional information in Experiments 1a and 1b
 
-```{r}
+```{r message=FALSE}
 # Re-read in the natural and synthesized stimuli from experiment 1a and 1b.
 d.test.raw <-
   read_csv("../../data/Experiment-NORM-AB-before-processing.csv") %>%
@@ -95,7 +95,7 @@ p.vowel_space %+%
     alpha = .6) +
   geom_text() +
   guides(color = "none", alpha = "none") +
-  facet_wrap(~ Experiment + ParticipantID, ncol = 7) +
+  facet_wrap(~ Experiment + ParticipantID, ncol = 6) +
   geom_rect(data = ~ subset(., ParticipantID %in% c(13,15,21)),
             xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf, 
             color = "red", fill = NA, size = 2)
@@ -113,7 +113,7 @@ p.vowel_space %+%
     alpha = .6) +
   geom_text() +
   guides(color = "none", alpha = "none") +
-  facet_wrap(~ Experiment + ParticipantID, ncol = 7) +
+  facet_wrap(~ Experiment + ParticipantID, ncol = 6) +
   geom_rect(data = ~ subset(., ParticipantID %in% c(15,21)),
             xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf, 
             color = "red", fill = NA, size = 2)
@@ -314,8 +314,8 @@ d.for_regression <-
   d.test.by_item %>%
   filter(Experiment == "Experiment 1b (synthesized)" |
            !(ItemID %in% (d.test.1a %>%
-                            distinct(ItemID, Item.CorrectResponse) %>%
-                            filter(Item.CorrectResponse %in% c("hut", "odd")) %>%
+                            distinct(ItemID, Item.ExpectedResponse) %>%
+                            filter(Item.ExpectedResponse %in% c("hut", "odd")) %>%
                             pull(ItemID))))
 
 bam.all.exp <- 
@@ -342,11 +342,11 @@ bam.subset.exp_formants <-
   summary()
 ```
 
-To investigate the extent to which these differences in response entropy could be explained by differences in stimuli characteristics, we fit a series of general additive models (GAM). First, we confirmed that the difference in response entropy between experiments across all tokens was indeed statistically significant, by regressing response entropy against experiment (treatment coded; $p < .0001$, deviance explained = 43.8%). Next, we fit the same model to a subset of the data that excluded all *hut* and *odd* responses from Experiment 1a. This was done in order to assess whether differences in lexical context contributed to differences in entropy between experiments. This model confirmed that differences in entropy could not be reduced to differences in lexical context, since experiment remained a significant predictor of response entropy ($p < .0001$, deviance explained = 31.7%). 
+To investigate the extent to which these differences in response entropy could be explained by differences in stimuli characteristics, we fit a series of general additive models (GAM). First, we confirmed that the difference in response entropy between experiments across all tokens was indeed statistically significant, by regressing response entropy against experiment (treatment coded; $p < .0001$, deviance explained = 57.6%). Next, we fit the same model to a subset of the data that excluded all *hut* and *odd* responses from Experiment 1a. This was done in order to assess whether differences in lexical context contributed to differences in entropy between experiments. This model confirmed that differences in entropy could not be reduced to differences in lexical context, since experiment remained a significant predictor of response entropy ($p < .0001$, deviance explained = 48.5%). 
 
-In order to determine the extent to which this difference between experiments can be explained by differences in formants, we fit additional GAMs to the same subset. First, we regressed response entropy against both experiment and a tensor smooth of F1, F2, and F3. The tensor smooth allows for non-linear effects of, and interactions between, formants. To be maximally conservative, we normalized formants using one of the accounts that our computational studies find to be the best fit against human responses (Nearey's uniform scaling). The GAM with both formants and experiment explained 78.7% of the deviance in response entropy. Experiment still was a significant predictor of response entropy, suggesting that the difference in response entropy between experiments is not solely due to differences in formants. Formants did, however, explain a substantial amount of the difference in response entropy between experiments: a GAM with just the tensor smooth of F1-F3 explained 70.8% of the deviance. 
+In order to determine the extent to which this difference between experiments can be explained by differences in formants, we fit additional GAMs to the same subset. First, we regressed response entropy against both experiment and a tensor smooth of F1, F2, and F3. The tensor smooth allows for non-linear effects of, and interactions between, formants. To be maximally conservative, we normalized formants using one of the accounts that our computational studies find to be the best fit against human responses (Nearey's uniform scaling). The GAM with both formants and experiment explained 84.5% of the deviance in response entropy. Experiment still was a significant predictor of response entropy, suggesting that the difference in response entropy between experiments is not solely due to differences in formants. Formants did, however, explain a substantial amount of the difference in response entropy between experiments: a GAM with just the tensor smooth of F1-F3 explained 68.7% of the deviance. 
 
-Experiment thus explained at least `r round(78.7-70.8, digits = 1)`% of the deviance when it was added to this model---about `r round((78.7-70.8) / 31.7 * 100, digits = 1)`% of the deviance explained if *only* experiment is included in the model (31.7%). These informal comparisons suggest that up to about two thirds of the deviance that is explained by experiment is due to differences in formants between the experiments.
+Experiment thus explained at least `r round(84.5-68.7, digits = 1)`% of the deviance when it was added to this model---about `r round((84.5-68.7) / 48.5 * 100, digits = 1)`% of the deviance explained if *only* experiment is included in the model (48.5%). These informal comparisons suggest that up to almost four fifths of the deviance that is explained by experiment is due to differences in formants between the experiments.
 <!-- TO DO: replace the above numbers with variables extracted from the fitted models. E.g., this should still all work if additional participants are added to the experiment. I also made some corrections. Please carefully check the change log, and ask if you have questions about my changes. -->
 
 Results using unnormalized formants confirmed these results (but, as expected if uniform scaling is approximates the normalization employed by listeners, uniformly scaled formants explained about 4% more variance in response entropy).
@@ -695,28 +695,29 @@ ttests.against.rawHz <-
 \toprule
 Normalization account & Statistic & Estimate mean & Diff. in means & p\_value\\
 \midrule
-Uniform scaling, Johnson (Hz) & -15.085 & -2523.406 & 611.644 & 0.000\\
-Uniform scaling, Nearey (log) & -9.100 & -2523.406 & 551.676 & 0.000\\
-C-CuRE (Bark) & -13.229 & -2523.406 & 549.192 & 0.000\\
-C-CuRE (Mel) & -12.722 & -2523.406 & 546.779 & 0.000\\
-C-CuRE (ERB) & -11.847 & -2523.406 & 546.472 & 0.000\\
-Nearey's formantwise mean (log) & -10.428 & -2523.406 & 543.718 & 0.000\\
-C-CuRE (semitones) & -10.428 & -2523.406 & 543.718 & 0.000\\
-Uniform scaling, Nordström \& Lindblom (Hz) & -7.791 & -2523.406 & 517.075 & 0.001\\
-SyrdalGopal (Bark) & -9.381 & -2523.406 & 510.360 & 0.000\\
-C-CuRE (Hz) & -10.169 & -2523.406 & 498.443 & 0.000\\
-Miller (log) & -7.466 & -2523.406 & 464.305 & 0.001\\
-Lobanov (Hz) & -8.970 & -2523.406 & 461.405 & 0.000\\
-transformed (Bark) & -13.415 & -2523.406 & 228.190 & 0.000\\
-transformed (Mel) & -12.472 & -2523.406 & 214.317 & 0.000\\
-transformed (ERB) & -10.291 & -2523.406 & 192.156 & 0.000\\
-SyrdalGopal2 (Bark) & -3.673 & -2523.406 & 171.154 & 0.011\\
-Gerstman (Hz) & -2.104 & -2523.406 & 159.477 & 0.052\\
-transformed (log) & -2.617 & -2523.406 & 66.928 & 0.029\\
-transformed (semitones) & -2.617 & -2523.406 & 66.928 & 0.029\\
+Uniform scaling, Johnson (Hz) & -16.870 & -3620.93 & 1020.284 & 0.000\\
+SyrdalGopal (Bark) & -11.087 & -3620.93 & 949.264 & 0.000\\
+C-CuRE (Mel) & -14.652 & -3620.93 & 907.904 & 0.000\\
+C-CuRE (Bark) & -15.019 & -3620.93 & 906.590 & 0.000\\
+C-CuRE (ERB) & -13.711 & -3620.93 & 905.508 & 0.000\\
+Nearey's formantwise mean (log) & -12.217 & -3620.93 & 904.476 & 0.000\\
+C-CuRE (semitones) & -12.217 & -3620.93 & 904.476 & 0.000\\
+Uniform scaling, Nearey (log) & -9.354 & -3620.93 & 890.753 & 0.000\\
+C-CuRE (Hz) & -12.906 & -3620.93 & 869.304 & 0.000\\
+Uniform scaling, Nordström \& Lindblom (Hz) & -9.112 & -3620.93 & 841.884 & 0.000\\
+Miller (log) & -8.074 & -3620.93 & 800.627 & 0.001\\
+Lobanov (Hz) & -8.253 & -3620.93 & 756.465 & 0.001\\
+SyrdalGopal2 (Bark) & -3.427 & -3620.93 & 268.549 & 0.013\\
+transformed (Bark) & -9.315 & -3620.93 & 231.641 & 0.000\\
+transformed (Mel) & -8.245 & -3620.93 & 219.092 & 0.001\\
+transformed (ERB) & -5.953 & -3620.93 & 166.781 & 0.002\\
+Gerstman (Hz) & -0.355 & -3620.93 & 46.230 & 0.370\\
+transformed (log) & 0.688 & -3620.93 & -31.765 & 0.735\\
+transformed (semitones) & 0.688 & -3620.93 & -31.765 & 0.735\\
 \bottomrule
 \end{tabular}
 \end{table}
+
 
 \begin{table}
 \caption{\label{tab:SI-ttest-1b} {\em t}-tests predicting the model log likelihood as a function of normalization account for Experiment 1b (ordered in descending order by best-fitting models). Estimate mean represents the estimate of the reference account (no normalization), and Diff. in means indicates the increase in estimate mean for that account relative to the reference account.}
@@ -726,25 +727,25 @@ transformed (semitones) & -2.617 & -2523.406 & 66.928 & 0.029\\
 \toprule
 Normalization account & Statistic & Estimate mean & Diff. in means & p\_value\\
 \midrule
-Uniform scaling, Nearey (log) & -64.722 & -10372.71 & 2553.594 & 0.000\\
-Lobanov (Hz) & -82.707 & -10372.71 & 2521.647 & 0.000\\
-Gerstman (Hz) & -34.270 & -10372.71 & 2491.092 & 0.000\\
-C-CuRE (ERB) & -35.509 & -10372.71 & 2409.974 & 0.000\\
-C-CuRE (Bark) & -33.226 & -10372.71 & 2408.381 & 0.000\\
-Nearey's formantwise mean (log) & -35.495 & -10372.71 & 2305.669 & 0.000\\
-C-CuRE (semitones) & -35.495 & -10372.71 & 2305.669 & 0.000\\
-transformed (log) & -63.629 & -10372.71 & 2259.438 & 0.000\\
-transformed (semitones) & -63.629 & -10372.71 & 2259.438 & 0.000\\
-C-CuRE (Mel) & -28.933 & -10372.71 & 2221.903 & 0.000\\
-transformed (ERB) & -51.487 & -10372.71 & 2106.368 & 0.000\\
-transformed (Bark) & -46.651 & -10372.71 & 1942.912 & 0.000\\
-SyrdalGopal2 (Bark) & -29.866 & -10372.71 & 1816.140 & 0.000\\
-transformed (Mel) & -41.633 & -10372.71 & 1622.458 & 0.000\\
-Miller (log) & -26.334 & -10372.71 & 1244.978 & 0.000\\
-Uniform scaling, Johnson (Hz) & -8.574 & -10372.71 & 1069.757 & 0.001\\
-SyrdalGopal (Bark) & -20.657 & -10372.71 & 910.361 & 0.000\\
-Uniform scaling, Nordström \& Lindblom (Hz) & -11.293 & -10372.71 & 878.721 & 0.000\\
-C-CuRE (Hz) & -10.441 & -10372.71 & 817.140 & 0.000\\
+Uniform scaling, Nearey (log) & -41.250 & -14405.18 & 3684.082 & 0.000\\
+Lobanov (Hz) & -47.328 & -14405.18 & 3583.837 & 0.000\\
+Gerstman (Hz) & -42.344 & -14405.18 & 3515.437 & 0.000\\
+C-CuRE (Bark) & -30.829 & -14405.18 & 3489.366 & 0.000\\
+C-CuRE (ERB) & -31.757 & -14405.18 & 3481.959 & 0.000\\
+Nearey's formantwise mean (log) & -33.301 & -14405.18 & 3367.455 & 0.000\\
+C-CuRE (semitones) & -33.301 & -14405.18 & 3367.455 & 0.000\\
+C-CuRE (Mel) & -26.506 & -14405.18 & 3211.180 & 0.000\\
+transformed (log) & -37.128 & -14405.18 & 3111.364 & 0.000\\
+transformed (semitones) & -37.128 & -14405.18 & 3111.364 & 0.000\\
+transformed (ERB) & -33.480 & -14405.18 & 2943.964 & 0.000\\
+transformed (Bark) & -31.040 & -14405.18 & 2737.680 & 0.000\\
+SyrdalGopal2 (Bark) & -25.364 & -14405.18 & 2659.434 & 0.000\\
+transformed (Mel) & -27.293 & -14405.18 & 2290.697 & 0.000\\
+Miller (log) & -19.932 & -14405.18 & 1877.593 & 0.000\\
+Uniform scaling, Johnson (Hz) & -8.235 & -14405.18 & 1630.218 & 0.001\\
+SyrdalGopal (Bark) & -15.194 & -14405.18 & 1448.857 & 0.000\\
+Uniform scaling, Nordström \& Lindblom (Hz) & -20.021 & -14405.18 & 1331.748 & 0.000\\
+C-CuRE (Hz) & -13.117 & -14405.18 & 1110.344 & 0.000\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -873,26 +874,26 @@ rm(d.io.bestFit.params)
 \toprule
 Normalization account & mean log likelihood & noise ratio & lapse rate\\
 \midrule
-Uniform scaling, Johnson (Hz) & -2214.93 & mean=0.5 (SD=0.28) & mean=0.1 (SD=0.01)\\
-Uniform scaling, Nordström \& Lindblom (Hz) & -2219.16 & mean=0.77 (SD=0.39) & mean=0.07 (SD=0)\\
-C-CuRE (Bark) & -2261.27 & mean=0.28 (SD=0.26) & mean=0.12 (SD=0.02)\\
-C-CuRE (Mel) & -2261.61 & mean=0.29 (SD=0.27) & mean=0.12 (SD=0.02)\\
-C-CuRE (ERB) & -2262.53 & mean=0.16 (SD=0.23) & mean=0.13 (SD=0.02)\\
-C-CuRE (semitones) & -2264.28 & mean=0.1 (SD=0.17) & mean=0.13 (SD=0.01)\\
-Nearey's formantwise mean (log) & -2264.28 & mean=0.1 (SD=0.17) & mean=0.13 (SD=0.01)\\
-Uniform scaling, Nearey (log) & -2273.68 & mean=0.34 (SD=0.36) & mean=0.13 (SD=0.02)\\
-C-CuRE (Hz) & -2305.16 & mean=0.19 (SD=0.15) & mean=0.13 (SD=0.02)\\
-SyrdalGopal (Bark) & -2357.42 & mean=0.05 (SD=0.04) & mean=0.18 (SD=0.01)\\
-Miller (log) & -2374.96 & mean=0.15 (SD=0.06) & mean=0.12 (SD=0.01)\\
-Lobanov (Hz) & -2390.23 & mean=0.34 (SD=0.27) & mean=0.11 (SD=0.02)\\
-transformed (Bark) & -2569.87 & mean=0.83 (SD=0.2) & mean=0.05 (SD=0)\\
-transformed (Mel) & -2587.65 & mean=0.89 (SD=0.18) & mean=0.05 (SD=0)\\
-transformed (ERB) & -2598.16 & mean=0.81 (SD=0.24) & mean=0.05 (SD=0)\\
-Gerstman (Hz) & -2647.38 & mean=1.8 (SD=0.33) & mean=0.04 (SD=0)\\
-SyrdalGopal2 (Bark) & -2661.45 & mean=1.12 (SD=0.39) & mean=0.08 (SD=0.01)\\
-transformed (semitones) & -2682.60 & mean=0.7 (SD=0.34) & mean=0.06 (SD=0.01)\\
-transformed (log) & -2682.60 & mean=0.7 (SD=0.34) & mean=0.06 (SD=0.01)\\
-no normalization (Hz) & -2779.13 & mean=0.38 (SD=0.26) & mean=0.11 (SD=0.05)\\
+Uniform scaling, Johnson (Hz) & -3088.04 & mean=0.35 (SD=0.25) & mean=0.09 (SD=0.02)\\
+Uniform scaling, Nordström \& Lindblom (Hz) & -3126.38 & mean=0.56 (SD=0.27) & mean=0.07 (SD=0)\\
+Uniform scaling, Nearey (log) & -3166.26 & mean=0.28 (SD=0.29) & mean=0.11 (SD=0.01)\\
+C-CuRE (Mel) & -3170.82 & mean=0.15 (SD=0.18) & mean=0.11 (SD=0.02)\\
+C-CuRE (Bark) & -3174.67 & mean=0.16 (SD=0.19) & mean=0.1 (SD=0.02)\\
+C-CuRE (ERB) & -3184.47 & mean=0.1 (SD=0.18) & mean=0.11 (SD=0.02)\\
+Nearey's formantwise mean (log) & -3188.48 & mean=0.05 (SD=0.11) & mean=0.11 (SD=0.01)\\
+C-CuRE (semitones) & -3188.48 & mean=0.05 (SD=0.11) & mean=0.11 (SD=0.01)\\
+C-CuRE (Hz) & -3201.56 & mean=0.16 (SD=0.1) & mean=0.1 (SD=0.01)\\
+SyrdalGopal (Bark) & -3206.97 & mean=0.05 (SD=0.05) & mean=0.14 (SD=0.01)\\
+Miller (log) & -3298.08 & mean=0.1 (SD=0.04) & mean=0.1 (SD=0.01)\\
+Lobanov (Hz) & -3386.99 & mean=0.25 (SD=0.2) & mean=0.09 (SD=0.02)\\
+transformed (Bark) & -3792.13 & mean=0.67 (SD=0.22) & mean=0.05 (SD=0.01)\\
+transformed (Mel) & -3816.74 & mean=0.72 (SD=0.21) & mean=0.05 (SD=0.01)\\
+SyrdalGopal2 (Bark) & -3821.04 & mean=0.94 (SD=0.4) & mean=0.08 (SD=0.02)\\
+transformed (ERB) & -3836.86 & mean=0.65 (SD=0.25) & mean=0.05 (SD=0)\\
+transformed (semitones) & -3933.65 & mean=0.54 (SD=0.32) & mean=0.06 (SD=0.01)\\
+transformed (log) & -3933.65 & mean=0.54 (SD=0.32) & mean=0.06 (SD=0.01)\\
+Gerstman (Hz) & -3984.92 & mean=1.77 (SD=0.32) & mean=0.03 (SD=0)\\
+no normalization (Hz) & -3999.34 & mean=0.28 (SD=0.26) & mean=0.11 (SD=0.04)\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -906,26 +907,26 @@ no normalization (Hz) & -2779.13 & mean=0.38 (SD=0.26) & mean=0.11 (SD=0.05)\\
 \toprule
 Normalization account & mean log likelihood & noise ratio & lapse rate\\
 \midrule
-Gerstman (Hz) & -9474.08 & mean=4.39 (SD=1.24) & mean=0.06 (SD=0.03)\\
-Uniform scaling, Nearey (log) & -9551.73 & mean=4.99 (SD=0.87) & mean=0.08 (SD=0)\\
-C-CuRE (Bark) & -9595.30 & mean=4.53 (SD=0.9) & mean=0.03 (SD=0.02)\\
-C-CuRE (ERB) & -9601.26 & mean=4.52 (SD=0.93) & mean=0.04 (SD=0.02)\\
-Lobanov (Hz) & -9608.45 & mean=3.96 (SD=0.47) & mean=0.08 (SD=0.01)\\
-Nearey's formantwise mean (log) & -9702.20 & mean=4.2 (SD=1.08) & mean=0.06 (SD=0.03)\\
-C-CuRE (semitones) & -9702.20 & mean=4.2 (SD=1.08) & mean=0.06 (SD=0.03)\\
-C-CuRE (Mel) & -9772.00 & mean=5.02 (SD=0.71) & mean=0.03 (SD=0.01)\\
-transformed (semitones) & -9815.97 & mean=3.29 (SD=0.37) & mean=0.08 (SD=0.01)\\
-transformed (log) & -9815.97 & mean=3.29 (SD=0.37) & mean=0.08 (SD=0.01)\\
-transformed (ERB) & -9956.82 & mean=4.03 (SD=0.42) & mean=0.04 (SD=0.01)\\
-transformed (Bark) & -10123.34 & mean=4.18 (SD=0.42) & mean=0.04 (SD=0.01)\\
-SyrdalGopal2 (Bark) & -10231.19 & mean=5.02 (SD=1.14) & mean=0.04 (SD=0.01)\\
-transformed (Mel) & -10431.06 & mean=5.17 (SD=0.39) & mean=0.02 (SD=0.01)\\
-Uniform scaling, Johnson (Hz) & -10791.39 & mean=2.45 (SD=4.33) & mean=0.43 (SD=0.14)\\
-Miller (log) & -10848.88 & mean=4.34 (SD=1.54) & mean=0.18 (SD=0.02)\\
-Uniform scaling, Nordström \& Lindblom (Hz) & -11085.94 & mean=2.29 (SD=4.32) & mean=0.45 (SD=0.13)\\
-C-CuRE (Hz) & -11098.93 & mean=8 (SD=4.47) & mean=0.15 (SD=0.21)\\
-SyrdalGopal (Bark) & -11187.23 & mean=6.92 (SD=4.17) & mean=0.23 (SD=0.19)\\
-no normalization (Hz) & -12118.49 & mean=10 (SD=0) & mean=0.16 (SD=0.03)\\
+Gerstman (Hz) & -13209.05 & mean=4.24 (SD=1.12) & mean=0.06 (SD=0.03)\\
+Uniform scaling, Nearey (log) & -13230.59 & mean=4.64 (SD=0.81) & mean=0.08 (SD=0)\\
+C-CuRE (Bark) & -13305.55 & mean=4.14 (SD=0.6) & mean=0.03 (SD=0.01)\\
+C-CuRE (ERB) & -13309.61 & mean=4.24 (SD=0.88) & mean=0.03 (SD=0.02)\\
+Lobanov (Hz) & -13346.51 & mean=3.89 (SD=0.51) & mean=0.07 (SD=0.01)\\
+Nearey's formantwise mean (log) & -13448.34 & mean=3.6 (SD=0.44) & mean=0.07 (SD=0.01)\\
+C-CuRE (semitones) & -13448.34 & mean=3.6 (SD=0.44) & mean=0.07 (SD=0.01)\\
+C-CuRE (Mel) & -13556.38 & mean=4.73 (SD=0.68) & mean=0.02 (SD=0.01)\\
+transformed (log) & -13732.24 & mean=3.06 (SD=0.36) & mean=0.09 (SD=0.01)\\
+transformed (semitones) & -13732.24 & mean=3.06 (SD=0.36) & mean=0.09 (SD=0.01)\\
+transformed (ERB) & -13885.10 & mean=3.78 (SD=0.39) & mean=0.04 (SD=0.01)\\
+transformed (Bark) & -14097.37 & mean=3.91 (SD=0.38) & mean=0.04 (SD=0.01)\\
+SyrdalGopal2 (Bark) & -14187.49 & mean=4.68 (SD=1.06) & mean=0.04 (SD=0.01)\\
+transformed (Mel) & -14526.56 & mean=4.83 (SD=0.35) & mean=0.02 (SD=0.01)\\
+Uniform scaling, Johnson (Hz) & -14865.99 & mean=2.03 (SD=4.45) & mean=0.44 (SD=0.15)\\
+Miller (log) & -15020.16 & mean=3.76 (SD=1.31) & mean=0.18 (SD=0.02)\\
+Uniform scaling, Nordström \& Lindblom (Hz) & -15370.99 & mean=0.17 (SD=0.35) & mean=0.52 (SD=0.04)\\
+SyrdalGopal (Bark) & -15431.47 & mean=8.1 (SD=1.74) & mean=0.13 (SD=0.03)\\
+C-CuRE (Hz) & -15607.09 & mean=8 (SD=4.47) & mean=0.14 (SD=0.22)\\
+no normalization (Hz) & -16691.09 & mean=8 (SD=4.46) & mean=0.23 (SD=0.23)\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -1274,29 +1275,30 @@ An alternative approach to maximum likelihood fitting is to compare the accuraci
 \toprule
 Normalization account & accuracy\\
 \midrule
-no normalization (Hz) & 48.5\%\\
-transformed (log) & 45.5\%\\
-transformed (Mel) & 48\%\\
-transformed (Bark) & 47.8\%\\
-transformed (ERB) & 47\%\\
-transformed (semitones) & 45.5\%\\
-\textbf{SyrdalGopal (Bark)} & \textbf{60.4\%}\\
-SyrdalGopal2 (Bark) & 49.4\%\\
-Miller (log) & 56.3\%\\
-Uniform scaling, Nearey (log) & 56.3\%\\
-Uniform scaling, Nordström \& Lindblom (Hz) & 54.7\%\\
-Uniform scaling, Johnson (Hz) & 57.6\%\\
-Nearey's formantwise mean (log) & 57.7\%\\
-C-CuRE (Hz) & 56.8\%\\
-C-CuRE (Mel) & 57.2\%\\
-C-CuRE (Bark) & 57.3\%\\
-C-CuRE (ERB) & 57.7\%\\
-C-CuRE (semitones) & 57.7\%\\
-Gerstman (Hz) & 43\%\\
-Lobanov (Hz) & 55.1\%\\
+no normalization (Hz) & 52.3\%\\
+transformed (log) & 49.3\%\\
+transformed (Mel) & 51\%\\
+transformed (Bark) & 50.6\%\\
+transformed (ERB) & 49.7\%\\
+transformed (semitones) & 49.3\%\\
+\textbf{SyrdalGopal (Bark)} & \textbf{65.1\%}\\
+SyrdalGopal2 (Bark) & 52.9\%\\
+Miller (log) & 60.2\%\\
+Uniform scaling, Nearey (log) & 59.7\%\\
+Uniform scaling, Nordström \& Lindblom (Hz) & 58.9\%\\
+Uniform scaling, Johnson (Hz) & 61.8\%\\
+Nearey's formantwise mean (log) & 61.5\%\\
+C-CuRE (Hz) & 60.8\%\\
+C-CuRE (Mel) & 61.5\%\\
+C-CuRE (Bark) & 61.3\%\\
+C-CuRE (ERB) & 61.5\%\\
+C-CuRE (semitones) & 61.5\%\\
+Gerstman (Hz) & 43.6\%\\
+Lobanov (Hz) & 58.5\%\\
 \bottomrule
 \end{tabular}
 \end{table}
+
 
 \begin{table}
 \caption{\label{tab:SI-accuracies-1b}Accuracy predicting listeners' responses in Experiment 1b (under Luce choice rule)}
@@ -1304,26 +1306,26 @@ Lobanov (Hz) & 55.1\%\\
 \toprule
 Normalization account & accuracy\\
 \midrule
-no normalization (Hz) & 16.3\%\\
-transformed (log) & 25.9\%\\
-transformed (Mel) & 22.2\%\\
-transformed (Bark) & 23.9\%\\
-transformed (ERB) & 24.7\%\\
-transformed (semitones) & 25.9\%\\
-SyrdalGopal (Bark) & 21.1\%\\
-SyrdalGopal2 (Bark) & 23.9\%\\
-Miller (log) & 23.5\%\\
-\textbf{Uniform scaling, Nearey (log)} & \textbf{28.1\%}\\
-Uniform scaling, Nordström \& Lindblom (Hz) & 23.5\%\\
-Uniform scaling, Johnson (Hz) & 22.5\%\\
-Nearey's formantwise mean (log) & 26.5\%\\
-C-CuRE (Hz) & 20.3\%\\
-C-CuRE (Mel) & 25.1\%\\
-C-CuRE (Bark) & 26.3\%\\
-C-CuRE (ERB) & 26.5\%\\
-C-CuRE (semitones) & 26.5\%\\
-Gerstman (Hz) & 27.1\%\\
-Lobanov (Hz) & 27\%\\
+no normalization (Hz) & 16.9\%\\
+transformed (log) & 26.5\%\\
+transformed (Mel) & 23\%\\
+transformed (Bark) & 24.8\%\\
+transformed (ERB) & 25.4\%\\
+transformed (semitones) & 26.5\%\\
+SyrdalGopal (Bark) & 21.6\%\\
+SyrdalGopal2 (Bark) & 24.8\%\\
+Miller (log) & 24.7\%\\
+\textbf{Uniform scaling, Nearey (log)} & \textbf{29.2\%}\\
+Uniform scaling, Nordström \& Lindblom (Hz) & 25\%\\
+Uniform scaling, Johnson (Hz) & 23.7\%\\
+Nearey's formantwise mean (log) & 27.7\%\\
+C-CuRE (Hz) & 20.7\%\\
+C-CuRE (Mel) & 26\%\\
+C-CuRE (Bark) & 27.3\%\\
+C-CuRE (ERB) & 27.4\%\\
+C-CuRE (semitones) & 27.7\%\\
+Gerstman (Hz) & 27.8\%\\
+Lobanov (Hz) & 27.7\%\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -1361,7 +1363,7 @@ To address two potential concerns with our stimuli, we decided to compare the `r
 d.test.subset <-
   d.test %>%
   filter(F2_Hz_r < 4250 + (-4.7/2 * F1_Hz_r),
-         !Item.CorrectResponse %in% c("hut", "odd"))
+         !Item.ExpectedResponse %in% c("hut", "odd"))
 
 d.test.long.subset <-
   d.test.subset %>%
@@ -1477,13 +1479,13 @@ p.result_overall %+%
       filter(IO.cues == "F1-F2", IO.NormalizationType %in% labels.normalization[10:11]),
     aes(
       x = ifelse(Experiment == "Experiment 1a (natural)", labels.normalization[11], labels.normalization[10]),
-      y = ifelse(Experiment == "Experiment 1a (natural)", -1730, -8200),
+      y = ifelse(Experiment == "Experiment 1a (natural)", -2410, -11500),
       label = "*",
       size = 4)) +
   geom_text(
     data = ttests.SI.subset,
     aes(
-      y = ifelse(Experiment == "Experiment 1a (natural)", -1730, -8200)),
+      y = ifelse(Experiment == "Experiment 1a (natural)", -2410, -11500)),
     label = "(*)",
     size = 4)
 ```
@@ -1632,13 +1634,13 @@ p.result_overall %+%
       tibble(Experiment = "Experiment 1a (natural)", IO.NormalizationType = "SyrdalGopal (Bark)"),
       tibble(Experiment = "Experiment 1b (synthesized)", IO.NormalizationType = "Uniform scaling, Nearey (log)")),
     aes(
-      y = ifelse(Experiment == "Experiment 1a (natural)", -580, -5500),
+      y = ifelse(Experiment == "Experiment 1a (natural)", -1200, -9100),
       label = "*",
       size = 4)) +
   geom_text(
     data = ttests.SI.dialect.subset,
     aes(
-      y = ifelse(Experiment == "Experiment 1a (natural)", -580, -5500)),
+      y = ifelse(Experiment == "Experiment 1a (natural)", -1200, -9100)),
     label = "(*)",
       size = 4)
 ```
@@ -1741,13 +1743,13 @@ p.results.overall.SI +
       filter(IO.NormalizationType %in% c("Uniform scaling, Nearey (log)", "Uniform scaling, Johnson (Hz)")),
     aes(
       x = ifelse(Experiment == "Experiment 1a (natural)", labels.normalization[12], "Uniform scaling, Nearey (log)"),
-      y = ifelse(Experiment == "Experiment 1a (natural)", -2200, -9400),
+      y = ifelse(Experiment == "Experiment 1a (natural)", -3100, -13000),
       label = "*",
       size = 4)) +
   geom_text(
     data = ttests.SI,
     aes(
-      y = ifelse(Experiment == "Experiment 1a (natural)", -2200, -9400)),
+      y = ifelse(Experiment == "Experiment 1a (natural)", -3100, -13000)),
     label = "(*)",
       size = 4) +
   guides(size = "none") +
@@ -1876,7 +1878,7 @@ p.grid <-
   scale_x_discrete("Lapse rate") +
   scale_y_discrete("Noise ratio") +
   scale_color_manual(values = c("red", "black")) +
-  scale_fill_viridis_b("Log likelihood", breaks = c(-12000, -10000, -8000, -6000, -4000, -3000, -2500, -2000, -1000, 0)) +
+  scale_fill_viridis_b("Log likelihood", breaks = c(-12000, -10000, -7000, -5000, -4000, -3500, -3000, -2500, -2000, -1500, -1000, 0)) +
   facet_wrap(~IO.NormalizationType, labeller = label_wrap_gen(multi_line=FALSE), ncol = 4) +
   guides(color = "none") +
   theme(
@@ -1902,7 +1904,7 @@ p.grid %+%
       IO.NormalizationType = factor(IO.NormalizationType, levels.normalization, labels.normalization),
       IO.lambda = factor(IO.lambda, levels = c(0, .02, .06, .18, .36, .72)),
       IO.noise_multiplier = factor(IO.noise_multiplier, levels = c(0, 1.5, 3, 6, 12.5, 25)))) +
-  scale_fill_viridis_b("Log likelihood", breaks = c(-13000, -12000, -11000, -10000, -9000, -8000, -7000, -5000, -2500, -1250, 0))
+  scale_fill_viridis_b("Log likelihood", breaks = c(-18000, -17000, -16000, -15000, -14000, -13000, -10000, -8000, -4000, -2000, 0))
 ```
 
 (ref:SI-io-grid-plot-likelihoods-F1F3-1a) Predicted likelihoods of ideal observers trained on F1-F3 for human vowel responses in Experiment 1a, under different normalization accounts, different $\lambda$s and different $\tau^{-1}$s. Likelihood is aggregated across vowels. Crosses are placed at the combination of parameters for which the maximum likelihood for an account was found. The red cross indicates the maximum likelihood achieved for a single training set and account across the entire grid search.
@@ -1929,7 +1931,7 @@ p.grid %+%
       IO.NormalizationType = factor(IO.NormalizationType, levels.normalization, labels.normalization),
       IO.lambda = factor(IO.lambda, levels = c(0, .02, .06, .18, .36, .72)),
       IO.noise_multiplier = factor(IO.noise_multiplier, levels = c(0, 1.5, 3, 6, 12.5, 25)))) +
-  scale_fill_viridis_b("Log likelihood", breaks = c(-13000, -12000, -11000, -10000, -9000, -8000, -7000, -5000, -2500, -1250, 0))
+  scale_fill_viridis_b("Log likelihood", breaks = c(-18000, -17000, -16000, -15000, -14000, -13000, -10000, -8000, -4000, -2000, 0))
 ```
 
 The grid searches confirmed the pattern described in the main text, as did additional grid searches beyond the values shown here. For all normalization accounts, all combinations of cues, and both experiments, the goodness of fit of the ideal observers initially improved with increasing $\lambda$ and increasing $\tau^{-1}$s, and then decreased once $\lambda$s or $\tau^{-1}$s reached the best-fitting values (which depended on the combination of normalization account, cues, and experiment). The grid search further indicated that Nearey's uniform scaling, together with the other uniform scaling accounts and some of the C-CuRE accounts (Experiment 1a) and the standardizing accounts (Experiment 1b), improved faster and performed consistently well for a good range of parameters, even for high $\tau^{-1}$. Many of the other models were less consistent and only performed well for a smaller range of estimates.
