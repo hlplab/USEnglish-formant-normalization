@@ -359,7 +359,7 @@ rm(d.test.overlappingTokens, d.for_regression)
 
 ## Methods
 ### Vowel data used to train ideal observers [@xie-jaeger2020] {#sec:SI-xie-jaeger}
-In this subsection, we provide additional information on the formant data from the @xie-jaeger2020 database that we used to train the ideal observers, as described in the main text. The database consists of `r d.XieJaeger %>% group_by(Talker, category) %>% distinct(Token) %>% nrow()` *hVd* word recordings from `r d.XieJaeger %>% distinct(Talker) %>% nrow()` (`r d.XieJaeger %>% filter(Gender == "female") %>% distinct(Talker) %>% nrow() + 1` female) L1 talkers of a Northeastern dialect of US English (ages 18 to 35 years old). The talkers were recorded reading a list of 180 English monosyllabic words, a list of short sentences, and a list of ten *hVd* words---the eight US English monophthongs as well as *aid* and *owed*  [for further information, see @xie-jaeger2020]. For each talker, the database contains 9-10 recordings of each *hVd* word. An automatic aligner [Penn Phonetics Lab Forced Aligner, @yuan2008] was used to obtain estimates for word and segment boundaries.^[We thank Xin Xie and Leslie Li for providing us with the recordings and aligned Praat textgrids.]
+In this subsection, we provide additional information on the formant data from the @xie-jaeger2020 database that we used to train the ideal observers, as described in the main text. The database consists of `r d.XieJaeger %>% group_by(Talker, category) %>% distinct(Token) %>% nrow()` *hVd* word recordings from `r d.XieJaeger %>% distinct(Talker) %>% nrow()` (`r d.XieJaeger %>% filter(Gender == "female") %>% distinct(Talker) %>% nrow() + 1` female) L1 talkers of a Northeastern dialect of US English (ages 18 to 35 years old). The talkers were recorded reading a list of 180 English monosyllabic words, a list of short sentences, and a list of ten *hVd* words---the eight US English monophthongs as well as *aid* and *owed*  [for further information, see @xie-jaeger2020]. For each talker, the database contains 9-10 recordings of each *hVd* word. An automatic aligner [Penn Phonetics Lab Forced Aligner, @yuan2008] was used to obtain estimates for word and segment boundaries.
 
 The first author manually corrected the automatic alignments for all vowel segmentations. We then used the Burg algorithm in Praat [@boersma-weenink2022] to extract estimates of the first three formants (F1-F3) at three time points of the vowel (35, 50, and 65 percent into the vowel). The following parameterization of the Burg algorithm was used:
 
@@ -1950,12 +1950,4 @@ The grid searches for models trained on F1-F3 largely replicate the results for 
 #   filter(log_likelihood == max(log_likelihood))
 ```
 
-\newpage
-
-# Session information
-
-```{r results='asis', echo=FALSE}
-cat('\\footnotesize\n')
-sessionInfo()
-```
 
