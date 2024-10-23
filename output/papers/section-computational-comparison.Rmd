@@ -854,7 +854,9 @@ if (RESET_MODELS || !file.exists("../../figures/p.prediction-landscapes-study1.p
 
   ggsave(p, file = "../../figures/p.prediction-landscapes-study1.png", width = base.width*4, height = base.height*5.5)
 
-} else { knitr::include_graphics("../../figures/p.prediction-landscapes-study1.png") }
+} 
+
+knitr::include_graphics("../../figures/p.prediction-landscapes-study1.png")
 ```
 
 ```{r study1-best-fit-parameters, message=FALSE}
