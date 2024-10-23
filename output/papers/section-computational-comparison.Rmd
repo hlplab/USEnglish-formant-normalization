@@ -704,7 +704,7 @@ That accounts operating over log-transformed formants fit human behavior better 
 ### Visualizing the consequences of different normalization mechanisms {#sec:visualizing-consequences}
 Before we turn to the general discussion, we briefly visualize how different normalization mechanisms affect vowel categorization. This sheds light on *why* the accounts differ in how well they fit listeners' responses. Figure \@ref(fig:prediction-landscapes-optim-io) visualizes the categorization functions predicted by four different normalization accounts, using the best-fitting $\lambda$ and $\tau^{-1}$ values for each account (i.e., the values that lead to the fit shown in Figure \@ref(fig:plot-io-optimal)). Figure \@ref(fig:prediction-landscapes-optim-io) highlights three points. First, a comparison across rows of Figure \@ref(fig:prediction-landscapes-optim-io) shows how much the choice of normalization can affect how the acoustic space gets carved up into vowel categories: a comparison of the first (no normalization), third (Johnson), and fourth row (Lobanov) shows that even normalization accounts operating over the same space can yield very different categorization behavior.
 
-(ref:prediction-landscapes-optim-io) Predicted categorization functions over the F1-F2 space under four different normalization accounts. For each account, we show the predicted posterior probabilities of all eight vowels obtained by averaging over the maximum likelihood parameterizations (of $\lambda$ and $\tau^{-1}$) for the five training sets (shown at top of each panel). **Top:** absence of normalization shown for reference. **2nd row:** the best-fitting account for Experiment 1a. **3rd row:** the best-fitting account for Experiment 1b (and second best for Experiment 1a). **Bottom:** the second best-fitting account in Experiment 1b. Contours indicate the highest posterior probability of any vowel. Points indicate location of test stimuli. The increasing opacity of points indicates a worse fit by the account (see text for detail).
+(ref:prediction-landscapes-optim-io) Predicted categorization functions over the F1-F2 space under four different normalization accounts. For each account, we show the predicted posterior probabilities of all eight vowels obtained by averaging over the maximum likelihood parameterizations (of $\lambda$ and $\tau^{-1}$) for the five training sets (shown at top of each panel). **Top:** absence of normalization shown for reference. **2nd row:** the best-fitting account for Experiment 1a. **3rd row:** the best-fitting account for Experiment 1b (and second best for Experiment 1a). **Bottom:** the second best-fitting account in Experiment 1b. Contours indicate the highest posterior probability of any vowel. Points indicate location of test stimuli. The increasing brightness of points indicates a better match between the account's prediction and listeners' responses (higher log-likelihood; see text for detail).
 
 ```{r}
 make_categorization_F1F2_landscape_plot <- function(
@@ -767,7 +767,7 @@ make_categorization_F1F2_landscape_plot <- function(
       skip = 1,
       inherit.aes = FALSE) +
     # Add experiment tokens to plot
-    new_scale("alpha") +
+    new_scale("fill") +
     geom_point(
       data =
         io %>%
@@ -799,7 +799,8 @@ make_categorization_F1F2_landscape_plot <- function(
       aes(
         x = F2,
         y = F1,
-        alpha = log_likelihood),
+        fill = log_likelihood),
+      pch = 21,
       color = "black",
       inherit.aes = FALSE,
       show.legend = F) +
@@ -821,7 +822,7 @@ make_categorization_F1F2_landscape_plot <- function(
       color = "lightgray", hjust = 0, vjust = 1,
       parse = TRUE,
       inherit.aes = F) +
-    scale_alpha(breaks = seq(-500, 0, by = 50)) +
+    scale_fill_gradient(breaks = seq(-500, 0, by = 50), high = "#FFFDFF", low = "#000000") +
     scale_x_reverse("F2", expand = c(0,0), position = "top") +
     scale_y_reverse("F1", expand = c(0,0), position = "right") +
     facet_grid(~ Experiment)
