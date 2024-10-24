@@ -290,7 +290,7 @@ make_posterior_grid_from_io <- function(
     geom_raster(data = . %>% filter(IO.Vowel == levels(factor(m.io.landscape$IO.Vowel))[6])) +
     geom_raster(data = . %>% filter(IO.Vowel == levels(factor(m.io.landscape$IO.Vowel))[7])) +
     geom_raster(data = . %>% filter(IO.Vowel == levels(factor(m.io.landscape$IO.Vowel))[8])) +
-    guides(alpha = "none", color = guide_legend(nrow = 1)) +
+    guides(alpha = "none", fill = guide_legend(nrow = 1)) +
     theme(
       legend.position = "bottom",
       legend.title=element_blank(),
