@@ -100,7 +100,7 @@ p.predicted.trial.likelihood <-
 
 p.trial.accuracy + p.predicted.trial.likelihood + 
   plot_annotation(tag_levels = list(c('A', 'B'))) +
-  plot_layout(guides = "collect", widths = c(.95,2)) &
+  plot_layout(guides = "collect", widths = c(.94,2)) &
   theme(plot.tag = element_text(face = "bold", size = 11, hjust = 0, vjust = 0),
         plot.tag.position = c(0.02, 0.8))
 ```
