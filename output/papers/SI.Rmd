@@ -1272,7 +1272,6 @@ An alternative approach to maximum likelihood fitting is to compare the accuraci
 \begin{table}
 \caption{\label{tab:SI-accuracies-1a}Accuracy predicting listeners' responses in Experiment 1a (under Luce choice rule)}
 \begin{tabular}[t]{ll}
-\small
 \toprule
 Normalization account & accuracy\\
 \midrule
@@ -1304,7 +1303,6 @@ Lobanov (Hz) & 58.5\%\\
 \begin{table}
 \caption{\label{tab:SI-accuracies-1b}Accuracy predicting listeners' responses in Experiment 1b (under Luce choice rule)}
 \begin{tabular}[t]{ll}
-\small
 \toprule
 Normalization account & accuracy\\
 \midrule
