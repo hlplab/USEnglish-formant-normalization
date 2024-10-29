@@ -146,9 +146,9 @@ d.survey <- d.test.raw %>%
 ## Participant survey responses {#sec:SI-survey}
 After completing the experiment, participants were asked to fill out a post-experiment survey. The survey contained questions about the type of audio equipment used, whether they experienced technical difficulties, alongside a series of questions on their perception of the talker and the stimuli used in the experiment. Participants' responses to three of these questions are summarized in Figure \@ref(fig:SI-survey). It is clear from Figure \@ref(fig:SI-survey) that participants experienced the natural and synthesized stimuli differently. Specifically, participants in Experiment 1b experienced more difficulties in distinguishing between words in the experiment -- a larger proportion of participants reported that the words sounded more similar to each other than is the case for a typical native speaker of US English (for Experiment 1b, `r round(d.survey %>% filter(Experiment == "Experiment 1b (synthesized)", question == "more similar") %>% pull(value) * 100, digits = 0)`% reported word similarity, relative to `r round(d.survey %>% filter(Experiment == "Experiment 1a (natural)", question == "more similar") %>% pull(value) * 100, digits = 0)` % of participants in Experiment 1a). Participants in Experiment 1b also experienced the stimuli as robotic-sounding to a larger extent (`r round(d.survey %>% filter(Experiment == "Experiment 1b (synthesized)", question == "robotic") %>% pull(value) * 100, digits = 0)`% of participants characterized the speech as robotic in Experiment 1b, relative to `r round(d.survey %>% filter(Experiment == "Experiment 1a (natural)", question == "robotic") %>% pull(value) * 100, digits = 0)`% of participants in Experiment 1a). Finally, participants in Experiment 1b overall expressed more uncertainty about the stimuli (`r round(d.survey %>% filter(Experiment == "Experiment 1b (synthesized)", question == "unsure") %>% pull(value) * 100, digits = 0)`% of participants stated that they were often unsure which word they heard, while no participant in Experiment 1a reported that they had difficulties identifying the word).
 
-The results of the survey confirm the results from the analysis of response entropy in the main text (\@ref(sec:experiment-results)), indicating substantial differences in participant uncertainty across experiments.
+The results of the survey confirm the results from the analysis of response entropy in the main text (\@ref(sec:experiment-results)), indicating substantial differences in participant uncertainty across experiments. In addition, the survey responses also confirm that listeners' perception of the quality of the stimuli differed between experiments.
 
-(ref:SI-survey) Participants' responses to post-experiment survey questions in Experiments 1a and 1b. The figure displays response proportions, normalized by the number of participants in each experiment.
+(ref:SI-survey) Participants' responses to three of the post-experiment survey questions in Experiments 1a and 1b. The figure displays response proportions, normalized by the number of participants in each experiment. From left to right, proportion of participants that stated that: words sounded more similar to each other than what is usually the case; the stimuli sounded robotic; they were unsure about what word they heard.
 
 ```{r SI-survey, fig.width=base.width*3.5, fig.height=base.height*2, fig.pos="!ht", fig.align='center', out.width='90%', fig.cap="(ref:SI-survey)", warning=FALSE}
 # d.survey %>%
@@ -176,7 +176,7 @@ d.survey %>%
 ```
 
 ## Spectrograms of stimuli used in Experiments 1a and 1b {#sec:SI-spectrograms}
-In the main text, we plot spectrograms of *heed*, *hid*, *odd* and *hood* tokens from Experiment 1a, together with four synthesized tokens with similar formant values from Experiment 1b (Figure \@ref(fig:spectrograms)). Figure \@ref(fig:SI-spectrograms) displays spectrograms of all 8 categories from Experiment 1a together with 8 synthesized tokens from Experiment 1b---the four categories from Figure \@ref(fig:spectrograms) and the additional *head*, *had*, *hut* and *who'd* tokens.
+In the main text, we plot spectrograms of *heed*, *hid*, *odd* and *hood* tokens from Experiment 1a, together with four synthesized tokens with similar formant values from Experiment 1b (Figure \@ref(fig:spectrograms)). Figure \@ref(fig:SI-spectrograms) displays spectrograms of all eight categories from Experiment 1a together with eight synthesized tokens from Experiment 1b---the four categories from Figure \@ref(fig:spectrograms) and the additional *head*, *had*, *hut* and *who'd* vowels.
 
 (ref:SI-spectrograms) Spectrograms of eight natural recordings from Experiment 1a (**a--d**, **i--l**). Same for eight synthesized tokens with similar formant values from Experiment 1b (**e--h**; **m--p**).
 
@@ -248,7 +248,7 @@ d.test.overlappingTokens.log %<>%
       distinct())
 ```
 
-We ran the same comparison in Nearey's uniform scaling space, for tokens with a difference of $\le .018$ log along F1 and F2. This comparison, however, returned highly similar results, with substantial differences in entropies for auditorily similar tokens: mean by-item response entropy for Experiment 1a = `r d.test.overlappingTokens.log %>% filter(Experiment == "Experiment 1a (natural)") %>% summarise(mean(Response.Entropy)) %>% round(., 2)` bits, SE = `r d.test.overlappingTokens.log %>% filter(Experiment == "Experiment 1a (natural)") %>% summarise(se(Response.Entropy)) %>% round(., 2)`; Experiment 1b = `r d.test.overlappingTokens.log %>% filter(Experiment == "Experiment 1b (synthesized)") %>% summarise(mean(Response.Entropy)) %>% round(., 2)` bits, SE = `r d.test.overlappingTokens.log %>% filter(Experiment == "Experiment 1b (synthesized)") %>% summarise(se(Response.Entropy)) %>% round(., 2)`.
+We ran the same comparison in Nearey's uniform scaling space, for tokens with a difference of $\le .018$ log along F1 and F2. This comparison, however, returned highly similar results, with substantial differences in entropies for auditorily similar tokens (mean by-item response entropy for Experiment 1a = `r d.test.overlappingTokens.log %>% filter(Experiment == "Experiment 1a (natural)") %>% summarise(mean(Response.Entropy)) %>% round(., 2)` bits, SE = `r d.test.overlappingTokens.log %>% filter(Experiment == "Experiment 1a (natural)") %>% summarise(se(Response.Entropy)) %>% round(., 2)`; Experiment 1b = `r d.test.overlappingTokens.log %>% filter(Experiment == "Experiment 1b (synthesized)") %>% summarise(mean(Response.Entropy)) %>% round(., 2)` bits, SE = `r d.test.overlappingTokens.log %>% filter(Experiment == "Experiment 1b (synthesized)") %>% summarise(se(Response.Entropy)) %>% round(., 2)`).
 
 (ref:SI-overlap-tokens) Listeners' categorization responses in Experiments 1a and 1b, for comparable tokens in Hertz space. The vowel label indicates the most frequent response provided by participants on each test location. Size indicates how consistent responses were across participants, which larger symbols indicating more consistent responses (lower entropy).
 
@@ -351,7 +351,7 @@ In order to determine the extent to which this difference between experiments ca
 Experiment thus explained at least `r round(84.5-68.7, digits = 1)`% of the deviance when it was added to this model---about `r round((84.5-68.7) / 48.5 * 100, digits = 1)`% of the deviance explained if *only* experiment is included in the model (48.5%). These informal comparisons suggest that up to almost four fifths of the deviance that is explained by experiment is due to differences in formants between the experiments.
 <!-- TO DO: replace the above numbers with variables extracted from the fitted models. E.g., this should still all work if additional participants are added to the experiment. I also made some corrections. Please carefully check the change log, and ask if you have questions about my changes. -->
 
-Results using unnormalized formants confirmed these results (but, as expected if uniform scaling is approximates the normalization employed by listeners, uniformly scaled formants explained about 4% more variance in response entropy).
+Results using unnormalized formants confirmed these results (but, as expected if uniform scaling approximates the normalization employed by listeners, uniformly scaled formants explained about 4% more variance in response entropy).
 
 ```{r}
 rm(d.test.overlappingTokens, d.for_regression)
@@ -361,7 +361,7 @@ rm(d.test.overlappingTokens, d.for_regression)
 
 ## Methods
 ### Vowel data used to train ideal observers [@xie-jaeger2020] {#sec:SI-xie-jaeger}
-In this subsection, we provide additional information on the formant data from the @xie-jaeger2020 database that we used to train the ideal observers, as described in the main text. The database consists of `r d.XieJaeger %>% group_by(Talker, category) %>% distinct(Token) %>% nrow()` *hVd* word recordings from `r d.XieJaeger %>% distinct(Talker) %>% nrow()` (`r d.XieJaeger %>% filter(Gender == "female") %>% distinct(Talker) %>% nrow() + 1` female) L1 talkers of a Northeastern dialect of US English (ages 18 to 35 years old). The talkers were recorded reading a list of 180 English monosyllabic words, a list of short sentences, and a list of ten *hVd* words---the eight US English monophthongs as well as *aid* and *owed*  [for further information, see @xie-jaeger2020]. For each talker, the database contains 9-10 recordings of each *hVd* word. An automatic aligner [Penn Phonetics Lab Forced Aligner, @yuan2008] was used to obtain estimates for word and segment boundaries.
+In this subsection, we provide additional information on the formant data from the @xie-jaeger2020 database that we used to train the ideal observers, as described in the main text. The database consists of `r d.XieJaeger %>% group_by(Talker, category) %>% distinct(Token) %>% nrow()` *hVd* word recordings from `r d.XieJaeger %>% distinct(Talker) %>% nrow()` (`r d.XieJaeger %>% filter(Gender == "female") %>% distinct(Talker) %>% nrow() + 1` female) L1 talkers of a Northeastern dialect of US English (ages 18 to 35 years old). The talkers were recorded reading a list of 180 English monosyllabic words, a list of short sentences, and a list of ten *hVd* words---eight US English monophthongs (*heed*, *hid*, *head*, *had*, *hut*, *odd*, *hood*, *who'd*) as well as *aid* and *owed*  [for further information, see @xie-jaeger2020]. For each talker, the database contains 9-10 recordings of each *hVd* word. An automatic aligner [Penn Phonetics Lab Forced Aligner, @yuan2008] was used to obtain estimates for word and segment boundaries.
 
 The first author manually corrected the automatic alignments for all vowel segmentations. We then used the Burg algorithm in Praat [@boersma-weenink2022] to extract estimates of the first three formants (F1-F3) at three time points of the vowel (35, 50, and 65 percent into the vowel). The following parameterization of the Burg algorithm was used:
 
@@ -373,7 +373,7 @@ The first author manually corrected the automatic alignments for all vowel segme
 
 In addition to F1-F3, we automatically extracted vowel duration and the fundamental frequency (F0) across the entire vowel.
 
-(ref:SI-eng-vowels-all-cues) The pairwise distributions of F0, F1, F2, F3, and duration for all `r d.XieJaeger %>% group_by(Talker, category) %>% distinct(Token) %>% nrow()` recordings of the eight monophthong *hVd* words in @xie-jaeger2020. Note that axis directions are not reversed. **Panels on diagonal:** marginal cue densities of all five cues. **Lower off-diagonal panels:** each point corresponds to a recording, averaged across the three measurement points within each vowel segment. Vowel labels indicate category means across talkers. Male talkers' vowels are boldfaced. **Upper off-diagonal panels:** Same data as in the lower off-diagonal panels but showing bivariate Gaussian 95% probability mass ellipses around category means.
+(ref:SI-eng-vowels-all-cues) The pairwise distributions of F0, F1, F2, F3, and duration for all `r d.XieJaeger %>% group_by(Talker, category) %>% distinct(Token) %>% nrow()` recordings of eight monophthong *hVd* words in @xie-jaeger2020. Note that axis directions are not reversed. **Panels on diagonal:** marginal cue densities of all five cues. **Lower off-diagonal panels:** each point corresponds to a recording, averaged across the three measurement points within each vowel segment. Vowel labels indicate category means across talkers. Male talkers' vowels are boldfaced. **Upper off-diagonal panels:** Same data as in the lower off-diagonal panels but showing bivariate Gaussian 95% probability mass ellipses around category means.
 
 ```{r SI-eng-vowels-all-cues, fig.width=base.width*4.5, fig.height=base.height*4.5+.5, out.width = '100%', fig.cap="(ref:SI-eng-vowels-all-cues)", fig.pos="!ht", message=FALSE}
 d.XieJaeger.long %>%
@@ -430,7 +430,7 @@ Figure \@ref(fig:SI-eng-vowels-all-cues), adapted from @persson-jaeger2023, visu
 
 Figure \@ref(fig:SI-eng-vowels-normalized), adapted from @persson-jaeger2023, shows the distribution of F1 and F2 in the different normalization spaces used in the main paper. We make a few observations. First, transforming the space into a perceptual scale (**grey**) does not seem to affect the vowel distributions much. Second, intrinsic normalization both increase category separability and more strikingly warp the space. Third, extrinsic centering and standardizing normalization seem to reduce category variability and increase separability, though it is not visually obvious which type of account achieves better separability.
 
-(ref:SI-eng-vowels-normalized) The 8 monophthong vowels of US English from the @xie-jaeger2020 database when F1 and F2 are transformed into a perceptual scale (**grey**), intrinsically normalized (**yellow**), or extrinsically normalized through centering (**blue**) or standardizing (**purple**). Each point corresponds to one recording, averaged across the three measurement points within each vowel segment. Shape indicates gender (female talkers represented by points, male talkers by triangles).
+(ref:SI-eng-vowels-normalized) Eight monophthong vowels of US English from the @xie-jaeger2020 database when F1 and F2 are transformed into a perceptual scale (**grey**), intrinsically normalized (**yellow**), or extrinsically normalized through centering (**blue**) or standardizing (**purple**). Each point corresponds to one recording, averaged across the three measurement points within each vowel segment. Shape indicates gender (female talkers represented by points, male talkers by triangles).
 
 ```{r SI-eng-vowels-normalized, fig.width=base.width * 3.5, fig.height=base.height * 4.5, out.width='100%', fig.align='center', fig.cap="(ref:SI-eng-vowels-normalized)"}
 p <-
@@ -487,13 +487,13 @@ p
 ```
 
 ### Normalization parameters $\theta$ {#sec:SI-norm-params}
-Figure \@ref(fig:SI-norm-params) relates the normalization parameters $\theta$ obtained for each experiment to those obtained for the five training sets of the @xie-jaeger2020 database. This comparison serves two purposes. First, by comparing the $\theta$ of Experiment 1a, which was based on natural productions, to the $\theta$s obtained from @xie-jaeger2020, we can assess the extent to which the talker used for Experiment 1a is 'typical' relative to the other talkers of that database. Second, by comparing the range and variability of the $\theta$ across normalization accounts and experiments, we can assess the volatility of different types of parameters, and assess the difference between the beliefs the ideal observers have about the parameters and the parameters in the experiment stimuli.
+Figure \@ref(fig:SI-norm-params) relates the normalization parameters $\theta$ obtained for each experiment to those obtained for the five training sets of the @xie-jaeger2020 database. This comparison serves two purposes. First, by comparing the $\theta$s of the stimuli in Experiment 1a, which was based on natural productions, to the $\theta$s obtained from @xie-jaeger2020, we can assess the extent to which the talker used for Experiment 1a is 'typical' relative to the other talkers of that database. Second, by comparing the range and variability of the $\theta$s across normalization accounts and experiments, we can assess the volatility of different types of parameters. In addition, we can also assess the difference between the beliefs the ideal observers have about the parameters and the parameters in the experiment stimuli.
 
-Figure \@ref(fig:SI-norm-params) suggests that the talker used in Experiment 1a is overall aligned with the other talkers in the database, as indicated by the relative distance between the blue dots to the dotted line. How closely the estimates obtained from the talker in Experiment 1a match the estimates obtained from the other talkers depend on the $\theta$ assumed. For instance, for accounts assuming separate parameters for each formant, $\theta$s for F2 seem to be a closer match than $\theta$s for F1, with the exceptions of Gerstman's maxima and Lobanov's SD.
+Figure \@ref(fig:SI-norm-params) suggests that the talker used in Experiment 1a is overall aligned with the other talkers in the database, as indicated by the relative distance between the points to the dotted line. How closely the estimates obtained from the talker in Experiment 1a match the estimates obtained from the other talkers depend on the $\theta$ assumed. For instance, for centering accounts assuming separate parameters for each formant, $\theta$s for F2 seem to be a closer match than $\theta$s for F1.
 
-Figure \@ref(fig:SI-norm-params) further indicates that the reliability by which the formant statistics can be established for the same amount of data, seems to depend on the parameter. For instance, mean estimates display less variability than SDs and range values even within each experiment (as indicated by the larger CIs). Unsurprisingly, range values and SD also differ more between experiments than other estimates (recall that the stimuli in Experiment 1b sampled larger parts of the phonetic space, Section \@ref(sec:stimuli)).
+Figure \@ref(fig:SI-norm-params) further indicates that the reliability by which the formant statistics can be established for the same amount of data, seems to depend on the parameter. For instance, mean estimates display less variability than SDs and range values even within each experiment (as indicated by the larger CIs). Unsurprisingly, range values and SD also differ more between experiments than other estimates (distance between point and triangle for each account; recall that the stimuli in Experiment 1b sampled larger parts of the phonetic space, Section \@ref(sec:stimuli)).
 
-(ref:SI-norm-params) Comparing normalization parameters $\theta$ across the phonetic database used to estimate listeners' prior experience [@xie-jaeger2020] and Experiments 1a and 1b. Only accounts that assume talker-specific normalization parameters are shown, as these are estimated across the entire experiment stimuli. To put all parameters on a similar scale, we divided each parameter by its average value for the five folds of the phonetic database, multiplied by 100, and subtracted 100. The resulting $\delta_\theta$ indicates the difference in percent between the $\theta$ estimated for the experiment relative to the $\theta$ for the phonetic database. The horizontal dotted line ($\delta_\theta = 0$) indicates perfect alignment between $\theta$ value in database and experiment stimuli. 
+(ref:SI-norm-params) Comparing normalization parameters $\theta$ across the phonetic database used to estimate listeners' prior experience [@xie-jaeger2020] and the stimuli from Experiments 1a and 1b. Only accounts that assume talker-specific normalization parameters are shown. To put all parameters on a similar scale, we divided each parameter by its average value for the five folds of the phonetic database, multiplied by 100, and subtracted 100. The resulting $\delta_\theta$ indicates the difference in percent between the $\theta$ estimated for the experiment relative to the $\theta$ for the phonetic database. The horizontal dotted line ($\delta_\theta = 1$) indicates perfect alignment between $\theta$ value in database and experiment stimuli. 
 
 ```{r SI-norm-params, fig.width=base.width*3, fig.height=base.height*3.5, out.width='90%', fig.cap="(ref:SI-norm-params)", fig.pos="!ht", warning=FALSE}
 # Check the variability in the params across experiments and folds
@@ -634,7 +634,7 @@ d.io.normParams %>%
 rm(d.io.normParams, d.XieJaeger.wNorm.params, d.test.wNorm.params)
 ```
 
-Finally, the differences between the $\theta$s for the database and those for the experiments ($\delta_\theta$ in Figure \@ref(fig:SI-norm-params), indicating the distance from horizontal dashed line) appear to be larger for standardizing accounts, especially for F2. This is likely due to the fact that the standardizing accounts operate over Hertz space---note, for example, a similar pattern for F2 for the centering accounts operating in Hertz space. Larger differences between the $\theta$s for the database and those from an experiment imply that there is theoretically more room for that account to improve perception in the experiment. However, larger differences might also entail that listeners require more input before they have successfully converged against the correct normalization parameters for the experiment (as we mention in the general discussion, the present study shares with all previous work the limitation that it does *not* account for this incremental inference process). Without a model of how listeners infer normalization parameters from the input, it is thus not obvious whether larger differences between the $\theta$s for the database and those for an experiment should result in better or worse fit against listeners' responses. In any case, however, there was no systematic relation ship between the degree of difference in the parameters and how well accounts fit listeners' responses: when $\delta_\theta$s differed between experiments, they were almost always larger for Experiment 1b; yet, some accounts performed better in predicting listeners' responses for Experiment 1a, and others performed better in predicting listeners' responses for Experiment 1b.
+Finally, the differences between the $\theta$s for the database and those for the experiments ($\delta_\theta$ in Figure \@ref(fig:SI-norm-params), indicating the distance from horizontal dashed line) appear to be larger for standardizing accounts, especially for F2. This is likely due to the fact that the standardizing accounts operate over Hertz space---note, for example, a similar pattern for F2 for the centering accounts operating in Hertz space. Larger differences between the $\theta$s for the database and those from an experiment imply that there is theoretically more room for that account to improve perception in the experiment. However, larger differences might also entail that listeners require more input before they have successfully converged against the correct normalization parameters for the experiment (as we mention in the general discussion, the present study shares with all previous work the limitation that it does *not* account for this incremental inference process). Without a model of how listeners infer normalization parameters from the input, it is thus not obvious whether larger differences between the $\theta$s for the database and those for an experiment should result in better or worse fit against listeners' responses. In any case, however, there was no systematic relationship between the degree of difference in the parameters and how well accounts fit listeners' responses: when $\delta_\theta$s differed between experiments, they were almost always larger for Experiment 1b; yet, some accounts performed better in predicting listeners' responses for Experiment 1a, and others performed better in predicting listeners' responses for Experiment 1b.
 
 <!-- In line with this, the *t*-tests (Section \@ref(sec:SI-sign-test)) find that both Gerstman and Lobanov normalization improve the fit against listeners' responses more in Experiment 1b than in Experiment 1a. In addition, if listeners need to incrementally infer $\theta$s from the stimuli and we assume that this inference process is slower for some parameters (e.g., SD take longer to reliably estimate), this would imply that differences in $\theta$ between training and test might bias against these accounts. However, we note that some of these account seem to perform better on Experiment 1b, which is not what we would expect if this incremental process is indeed slow. --> <!-- TO DO: I commented this out b/c I didn't understand what it was meant to say, and b/c it wasn't clear to me that it comparing accounts in a valid way? Let's chat about it and remove this comment? --> 
 
@@ -757,7 +757,7 @@ rm(ttests.against.rawHz)
 ```
 
 ### Parameter estimates for best-fitting models {#sec:SI-param-est}
-In this section, we present the best-fitting estimates for the noise ratio ($\tau^{-1}$) and attentional lapses ($\lambda$). This provides insights into the relative contributions of these parameters in explaining the variability found in the behavioral data between the two experiments. Figure \ref{fig:SI-plot-io-params} visualizes the parameter estimates for each account (see also Tables \ref{tab:SI-best-fits-1a}, \ref{tab:SI-best-fits-1b} for summary of fitted values, and \ref{fig:SI-io-plot-categories-Wnoise} for an illustration of how the fitted noise affects the bivariate Gaussian categories).
+In this section, we present the best-fitting estimates for the noise ratio ($\tau^{-1}$) and attentional lapses ($\lambda$). This provides insights into the relative contributions of these parameters in explaining the variability found in the behavioral data between the two experiments. Figure \ref{fig:SI-plot-io-params} visualizes the best-fitting parameter estimates for each account (see also Tables \ref{tab:SI-best-fits-1a}, \ref{tab:SI-best-fits-1b} for summary of fitted values, and \ref{fig:SI-io-plot-categories-Wnoise} for an illustration of how the fitted noise affects the bivariate Gaussian categories).
 
 The mean $\lambda$ was overall similar across experiments (for Experiment 1a, overall mean across accounts = `r round(d.io.bestFit.params %>% filter(Experiment == "Experiment 1a (natural)") %>% group_by(Experiment) %>% summarise(mean_lapse = mean(IO.lambda)) %>% pull(mean_lapse), digits = 2)`, SD = `r round(d.io.bestFit.params %>% filter(Experiment == "Experiment 1a (natural)") %>% group_by(Experiment) %>% summarise(sd_lapse = sd(IO.lambda)) %>% pull(sd_lapse), digits = 2)`; for Experiment 1b, overall mean = `r round(d.io.bestFit.params %>% filter(Experiment == "Experiment 1b (synthesized)") %>% group_by(Experiment) %>% summarise(mean_lapse = mean(IO.lambda)) %>% pull(mean_lapse), digits = 2)`, SD = `r round(d.io.bestFit.params %>% filter(Experiment == "Experiment 1b (synthesized)") %>% group_by(Experiment) %>% summarise(sd_lapse = sd(IO.lambda)) %>% pull(sd_lapse), digits = 2)`). This suggests that listeners' categorization behavior was indeed affected by attentional lapses, and to similar extents across the two experiments. Figure \ref{fig:SI-plot-io-params} also indicates that some accounts were fitted with clearly higher $\lambda$ in Experiment 1b, e.g., Nordström & Lindblom, and Johnson normalization.
 
@@ -867,10 +867,10 @@ rm(d.io.bestFit.params)
 ```
 
 \begin{table}
-\caption{The best-fitting estimates obtained for noise ratios and lapse rates in Experiment 1a (averaged across the five cross-validation folds and ordered by best-performing models)}
+\caption{\label{tab:SI-best-fits-1a}The best-fitting estimates obtained for noise ratios and lapse rates in Experiment 1a (averaged across the five cross-validation folds and ordered by best-performing models)}
 \centering
 \small
-\begin{tabular}[t]{lrll}
+\begin{tabular}{p{6cm}p{2cm}p{5cm}p{5cm}}
 \toprule
 model & mean log likelihood & noise percentage & lapse rate\\
 \midrule
@@ -899,10 +899,10 @@ transformed (log) & -4229.01 & mean=0.54 (SD=0.32) & mean=0.06 (SD=0.01)\\
 \end{table}
 
 \begin{table}
-\caption{The best-fitting estimates obtained for noise ratios and lapse rates in Experiment 1b (averaged across the five cross-validation folds and ordered by best-performing models)}
+\caption{\label{tab:SI-best-fits-1b}The best-fitting estimates obtained for noise ratios and lapse rates in Experiment 1b (averaged across the five cross-validation folds and ordered by best-performing models)}
 \centering
 \small
-\begin{tabular}[t]{lrll}
+\begin{tabular}{p{6cm}p{2cm}p{5cm}p{5cm}}
 \toprule
 model & mean log likelihood & noise percentage & lapse rate\\
 \midrule
@@ -1262,82 +1262,88 @@ p.diff.Lob_noNorm <-
 
 Figure \@ref(fig:SI-model-ceiling-acoustic-space) suggests that normalization does not improve the likelihood fit universally across the acoustic-phonetic space. Mirroring Figure \@ref(fig:SI-model-ceiling), models achieve better fits in parts of the acoustic space where humans can more easily predict human behavior (Figure \@ref(fig:SI-model-ceiling-acoustic-space), *Panel A*). To the extent that this is not the case, it seems that normalization in general can adjust for this, improving model performance on many tokens where the maximum performance is high but the unnormalized model's predictions are low, e.g., in the left bottom and center part of the acoustic space (*Panels B-C*). 
 
-In Experiment 1a, both Nearey's uniform scaling and Johnson clearly perform worse relative to the unnormalized model in the upper right part of the space, more specifically for the `r linguisticsdown::cond_cmpl("[u]")` category, which could indicate that models are overly categorical in a part of the space where humans are less categorical (*Panels B-C*; left). Possible reasons could be 1) the stimuli sounding more like a neighbouring category to many listeners, or 2) potential effects of orthography, making humans less inclined to select the `r linguisticsdown::cond_cmpl("[u]")` category. The potential effect of the infrequent non-word response option *who'd* could have been evaluated against the synthesized stimuli in Experiment 1b. If there was indeed an effect of orthography, we should have observed a better model fit and larger between-account differences in predictions in this part of the acoustic space. Unfortunately, we under-sampled that part, which is an important caveat for Experiment 1b. For the items closest to the area in question, participants however often responded *hood*, which might indicate that items in this part of the space for this talker overall sounded more like *hood* and not *who'd* for many listeners (c.f., discussion on listeners' dialect templates in Section \@ref(sec:experiment-results)).
+In Experiment 1a, both Nearey's uniform scaling and Johnson clearly perform worse relative to the unnormalized model in the upper right part of the space, more specifically for the `r linguisticsdown::cond_cmpl("[u]")` category, which could indicate that models are overly categorical in a part of the space where humans are less categorical (*Panels B-C*; left). Possible reasons could be 1) the stimuli sounding more like a neighbouring category to many listeners, or 2) potential effects of orthography, making humans less inclined to select the `r linguisticsdown::cond_cmpl("[u]")` category. The potential effect of the infrequent non-word response option *who'd* could have been evaluated against the synthesized stimuli in Experiment 1b. If there was indeed an effect of orthography, we should have observed a better model fit and larger between-account differences in predictions in this part of the acoustic space. Unfortunately, we under-sampled that part, which is an important caveat for Experiment 1b. For the items closest to the area in question, participants, however, often responded *hood*, which might indicate that items in this part of the space for this talker overall sounded more like *hood* and not *who'd* for many listeners (c.f., discussion on listeners' dialect templates in Section \@ref(sec:experiment-results)).
 
-Comparing the two best-performing models across experiments (*Panel D*), no evident pattern of improvement in one model relative to the other seems to emerge. In Experiment 1a, Johnson provided the best fit to listeners' responses and appears to improve the fit relative to Nearey across almost the entire space. For Experiment 1b, Nearey overall improves the fit relative to Johnson, with the exception of some locations in the mid part of the phonetic space (including high, center and low vowels).
+Comparing the two best-performing models across experiments (*Panel D*), no evident pattern of improvement in one model relative to the other seems to emerge. In Experiment 1a, Johnson provided the best fit to listeners' responses and appears to improve the fit relative to Nearey's uniform scaling across almost the entire space. For Experiment 1b, Nearey's uniform scaling overall improves the fit relative to Johnson, with the exception of some locations in the mid part of the phonetic space (including high, center and low vowels).
 
 ### Comparing accounts in terms of accuracy in predicting listeners' responses {#sec:SI-accuracies}
-An alternative approach to maximum likelihood fitting is to compare the accuracies of accounts in predicting listeners' responses. Tables \ref{tab:SI-accuracies-1a} and \ref{tab:SI-accuracies-1b} report the accuracies of the accounts across the five folds for each experiment. The account with the highest accuracy in each experiment is boldfaced.
+An alternative approach to maximum likelihood fitting is to compare the accuracies of accounts in predicting listeners' responses. Tables \ref{tab:SI-accuracies-1a} and \ref{tab:SI-accuracies-1b} report the mean accuracies of the accounts averaged across the five folds for each experiment. The account with the highest accuracy in each experiment is boldfaced. For Experiment 1a, an intrinsic account, Syrdal & Gopal, achieved the highest accuracy in predicting listeners' responses, while Nearey's uniform scaling achieved the highest accuracy for Experiment 1b (see Section \@ref(sec:fitting-accounts) in the main text for a discussion on the use of accuracy as evaluation method).
 
 \begin{table}
 \caption{\label{tab:SI-accuracies-1a}Accuracy predicting listeners' responses in Experiment 1a (under Luce choice rule)}
+\centering
+\small
 \begin{tabular}[t]{ll}
 \toprule
 Normalization account & accuracy\\
 \midrule
-no normalization (Hz) & 52.3\%\\
-transformed (log) & 49.3\%\\
-transformed (Mel) & 51\%\\
-transformed (Bark) & 50.6\%\\
-transformed (ERB) & 49.7\%\\
-transformed (semitones) & 49.3\%\\
-\textbf{SyrdalGopal (Bark)} & \textbf{65.1\%}\\
-SyrdalGopal2 (Bark) & 52.9\%\\
-Miller (log) & 60.2\%\\
-Uniform scaling, Nearey (log) & 59.7\%\\
-Uniform scaling, Nordström \& Lindblom (Hz) & 58.9\%\\
-Uniform scaling, Johnson (Hz) & 61.8\%\\
-Nearey's formantwise mean (log) & 61.5\%\\
-C-CuRE (Hz) & 60.8\%\\
-C-CuRE (Mel) & 61.5\%\\
-C-CuRE (Bark) & 61.3\%\\
-C-CuRE (ERB) & 61.5\%\\
-C-CuRE (semitones) & 61.5\%\\
-Gerstman (Hz) & 43.6\%\\
-Lobanov (Hz) & 58.5\%\\
+no normalization (Hz) & mean=52.3\% (SD=2.1)\\
+transformed (log) & mean=49.3\% (SD=4.2)\\
+transformed (Mel) & mean=51\% (SD=2.1)\\
+transformed (Bark) & mean=50.6\% (SD=2.3)\\
+transformed (ERB) & mean=49.7\% (SD=2.5)\\
+transformed (semitones) & mean=49.3\% (SD=4.2)\\
+\textbf{SyrdalGopal (Bark)} & \textbf{mean=65.1\% (SD=0.5)}\\
+SyrdalGopal2 (Bark) & mean=52.9\% (SD=1.4)\\
+Miller (log) & mean=60.2\% (SD=1.4)\\
+Uniform scaling, Nearey (log) & mean=59.7\% (SD=3.4)\\
+Uniform scaling, Nordström \& Lindblom (Hz) & mean=58.9\% (SD=2.2)\\
+Uniform scaling, Johnson (Hz) & mean=61.8\% (SD=1.9)\\
+Nearey's formantwise mean (log) & mean=61.5\% (SD=1.1)\\
+C-CuRE (Hz) & mean=60.8\% (SD=2.1)\\
+C-CuRE (Mel) & mean=61.5\% (SD=1.2)\\
+C-CuRE (Bark) & mean=61.3\% (SD=1)\\
+C-CuRE (ERB) & mean=61.5\% (SD=1.1)\\
+C-CuRE (semitones) & mean=61.5\% (SD=1.1)\\
+Gerstman (Hz) & mean=43.6\% (SD=1.9)\\
+Lobanov (Hz) & mean=58.5\% (SD=1.9)\\
 \bottomrule
 \end{tabular}
 \end{table}
-
 
 \begin{table}
 \caption{\label{tab:SI-accuracies-1b}Accuracy predicting listeners' responses in Experiment 1b (under Luce choice rule)}
+\centering
+\small
 \begin{tabular}[t]{ll}
 \toprule
 Normalization account & accuracy\\
 \midrule
-no normalization (Hz) & 16.9\%\\
-transformed (log) & 26.5\%\\
-transformed (Mel) & 23\%\\
-transformed (Bark) & 24.8\%\\
-transformed (ERB) & 25.4\%\\
-transformed (semitones) & 26.5\%\\
-SyrdalGopal (Bark) & 21.6\%\\
-SyrdalGopal2 (Bark) & 24.8\%\\
-Miller (log) & 24.7\%\\
-\textbf{Uniform scaling, Nearey (log)} & \textbf{29.2\%}\\
-Uniform scaling, Nordström \& Lindblom (Hz) & 25\%\\
-Uniform scaling, Johnson (Hz) & 23.7\%\\
-Nearey's formantwise mean (log) & 27.7\%\\
-C-CuRE (Hz) & 20.7\%\\
-C-CuRE (Mel) & 26\%\\
-C-CuRE (Bark) & 27.3\%\\
-C-CuRE (ERB) & 27.4\%\\
-C-CuRE (semitones) & 27.7\%\\
-Gerstman (Hz) & 27.8\%\\
-Lobanov (Hz) & 27.7\%\\
+no normalization (Hz) & mean=16.9\% (SD=1.2)\\
+transformed (log) & mean=26.5\% (SD=0.8)\\
+transformed (Mel) & mean=23\% (SD=0.9)\\
+transformed (Bark) & mean=24.8\% (SD=0.9)\\
+transformed (ERB) & mean=25.4\% (SD=0.9)\\
+transformed (semitones) & mean=26.5\% (SD=0.8)\\
+SyrdalGopal (Bark) & mean=21.6\% (SD=0.3)\\
+SyrdalGopal2 (Bark) & mean=24.8\% (SD=0.5)\\
+Miller (log) & mean=24.7\% (SD=1.3)\\
+\textbf{Uniform scaling, Nearey (log)} & \textbf{mean=29.2\% (SD=0.3)}\\
+Uniform scaling, Nordström \& Lindblom (Hz) & mean=25\% (SD=2.6)\\
+Uniform scaling, Johnson (Hz) & mean=23.7\% (SD=3.8)\\
+Nearey's formantwise mean (log) & mean=27.7\% (SD=0.6)\\
+C-CuRE (Hz) & mean=20.7\% (SD=2.6)\\
+C-CuRE (Mel) & mean=26\% (SD=1)\\
+C-CuRE (Bark) & mean=27.3\% (SD=0.9)\\
+C-CuRE (ERB) & mean=27.4\% (SD=0.9)\\
+C-CuRE (semitones) & mean=27.7\% (SD=0.6)\\
+Gerstman (Hz) & mean=27.8\% (SD=1.4)\\
+Lobanov (Hz) & mean=27.7\% (SD=1.1)\\
 \bottomrule
 \end{tabular}
 \end{table}
 
-```{r message=FALSE}
+```{r message=FALSE, warning=FALSE}
 d.io.accuracy <- io %>% 
   group_by(Experiment, IO.NormalizationType) %>% 
-  summarise(accuracy = mean(accuracy_Luce) * 100) %>%
+  summarise(
+    accuracy = mean(accuracy_Luce) * 100,
+    sd = sd(accuracy_Luce) * 100) %>%
   mutate(across(where(is.numeric), ~ round(.x, 1))) %>%
-  mutate(accuracy = paste0(accuracy, "%")) %>%
+  mutate(accuracy = paste0("mean=", accuracy, "% (SD=", sd, ")")) %>%
   ungroup() %>%
-  rename(`Normalization account` = IO.NormalizationType)
+  rename(`Normalization account` = IO.NormalizationType) %>%
+  select(-sd)
 
 # Code kept for reproducibility
 # kable(d.io.accuracy %>% filter(Experiment == "Experiment 1a (natural)") %>% select(-Experiment),
@@ -1466,7 +1472,7 @@ d.io.bestFit.params.subset <-
   select(IO.NormalizationType, Experiment, IO.cues, IO.lambda, IO.noise_multiplier, IO.crossvalidation_group, log_likelihood_up_to_constant)
 ```
 
-```{r}
+```{r message=FALSE}
 # Subset data to calculate chance likelihood and best-possible likelihood for subset data
 d.test.by_item.subset <-
   d.test.subset %>%
@@ -1492,11 +1498,11 @@ d.test.by_item.subset <-
   left_join(d.test.subset %>% distinct(Experiment, ItemID, Item.CorrectResponse.Vowel))
 ```
 
-This subset analysis overall replicates the results from the main analysis: uniform scaling accounts again provide the best fit against listeners' responses in both experiments (Figure \@ref(fig:SI-plot-io-optimal-subset)). For both experiments, Nearey's uniform scaling provides the best fit (for Experiment 1a, log likelihood = `r round(d.io.mean_fits.subset %>% filter(IO.NormalizationType == "Uniform scaling, Nearey (log)", Experiment == "Experiment 1a (natural)") %>% pull(log_likelihood_up_to_constant.mean), digits = 0)`, SD = `r round(d.io.mean_fits.subset %>% filter(IO.NormalizationType == "Uniform scaling, Nearey (log)", Experiment == "Experiment 1a (natural)") %>% pull(log_likelihood_up_to_constant.sd), digits = 0)`; for Experiment 1b, log likelihood = `r round(d.io.mean_fits.subset %>% filter(IO.NormalizationType == "Uniform scaling, Nearey (log)", Experiment == "Experiment 1b (synthesized)") %>% pull(log_likelihood_up_to_constant.mean), digits = 0)`, SD = `r round(d.io.mean_fits.subset %>% filter(IO.NormalizationType == "Uniform scaling, Nearey (log)", Experiment == "Experiment 1b (synthesized)") %>% pull(log_likelihood_up_to_constant.sd), digits = 0)`). While the relative ordering of accounts is similar compared to the main analysis, more accounts perform within the range of the best-fits in the subset analysis. This highlights the effect of evaluating normalization accounts only on parts of the phonetic space.
+This subset analysis overall replicates the results from the main analysis: uniform scaling accounts again provide the best fit against listeners' responses in both experiments (Figure \@ref(fig:SI-plot-io-optimal-subset)). For Experiment 1a, Nordström & Lindblom provides the best fit (log likelihood = `r round(d.io.mean_fits.subset %>% filter(IO.NormalizationType == "Uniform scaling, Nordström & Lindblom (Hz)", Experiment == "Experiment 1a (natural)") %>% pull(log_likelihood_up_to_constant.mean), digits = 0)`, SD = `r round(d.io.mean_fits.subset %>% filter(IO.NormalizationType == "Uniform scaling, Nordström & Lindblom (Hz)", Experiment == "Experiment 1a (natural)") %>% pull(log_likelihood_up_to_constant.sd), digits = 0)`), whereas Nearey's uniform scaling provides the best fit to listeners' responses in Experiment 1b; for Experiment 1b, log likelihood = `r format(round(d.io.mean_fits.subset %>% filter(IO.NormalizationType == "Uniform scaling, Nearey (log)", Experiment == "Experiment 1b (synthesized)") %>% pull(log_likelihood_up_to_constant.mean), digits = 0), scientific = FALSE)`, SD = `r round(d.io.mean_fits.subset %>% filter(IO.NormalizationType == "Uniform scaling, Nearey (log)", Experiment == "Experiment 1b (synthesized)") %>% pull(log_likelihood_up_to_constant.sd), digits = 0)`). While the relative ordering of accounts is similar compared to the main analysis, more accounts perform within the range of the best-fits in the subset analysis.
 
 (ref:SI-plot-io-optimal-subset) Results of model fit to subset data. Point ranges indicate mean and 95% bootstrapped CIs of the log-likelihood summarized over the five training sets (higher is better). Accounts that fit listeners' responses to an extent that is statistically indistinguishable from the best-fitting account are marked by (\*).
 
-```{r SI-plot-io-optimal-subset, fig.width=base.width*3.5, fig.height=base.height*3.5, fig.align='center', fig.pos="!ht", out.width='90%', fig.cap="(ref:SI-plot-io-optimal-subset)"}
+```{r SI-plot-io-optimal-subset, fig.width=base.width*3.5, fig.height=base.height*3.5, fig.align='center', fig.pos="!ht", out.width='90%', fig.cap="(ref:SI-plot-io-optimal-subset)", message=FALSE}
 p.result_overall %+%
   (io.subset %>%
      filter(IO.cues == "F1-F2")) +
@@ -1523,7 +1529,7 @@ p.result_overall %+%
       mutate(IO.NormalizationType = "Uniform scaling, Nearey (log)"),
     aes(
       x = IO.NormalizationType,
-      y = ifelse(Experiment == "Experiment 1a (natural)", -3200, -13800),
+      y = ifelse(Experiment == "Experiment 1a (natural)", -3200, -13820),
       label = paste("Chance likelihood: ", log_likelihood_chance, "\nBest-possible likelihood: ", log_likelihood_human)),
     color = "black",
     hjust = 0,
@@ -1535,7 +1541,7 @@ rm(d.test.subset, d.test.long.subset, d.test.long_for_IOs.subset)
 ```
 
 ## Results for F1-F2 (subset of listeners sharing dialect template) {#sec:SI-dialect-subset}
-Analyses in the main paper suggested that not all listeners in Experiment 1a and 1b shared dialect template (Section \@ref(sec:experiment-results)). To investigate the effect of excluding listeners that likely did not use the same underlying vowel representations for categorization, we compared the `r length(levels.normalization)` normalization accounts against a subset of listeners who employed the dialect template used by the majority of participants (see lower-left of both panels in Figure \@ref(fig:human-confusion)B). This left `r (n.subset <- d.shifters %>% filter(Experiment == "Experiment 1a (natural)", hid_head < 0.5) %>% nrow())` participants for Experiment 1a (`r round(n.subset / (d.shifters %>% filter(Experiment == "Experiment 1a (natural)") %>% nrow()) * 100, 1)`%) and `r (n.subset <- d.shifters %>% filter(Experiment == "Experiment 1b (synthesized)", hid_head < 0.5) %>% nrow())` for Experiment 1b (`r round(n.subset / (d.shifters %>% filter(Experiment == "Experiment 1b (synthesized)") %>% nrow()) * 100, 1)`%). Under the assumptions that 1) our model of listeners is adequate, 2) the subset group of listeners now share dialect template and 3) the priors---the phonetic database---can approximate this template, we would expect all models to increase their likelihood fit to listeners' responses (c.f., Section \@ref(sec:G-D)).
+Analyses in the main paper suggested that not all listeners in Experiments 1a and 1b shared dialect template (Section \@ref(sec:experiment-results)). To investigate the effect of excluding listeners that likely did not use the same underlying vowel representations for categorization, we compared the `r length(levels.normalization)` normalization accounts against a subset of listeners who employed the dialect template used by the majority of participants (see lower-left of both panels in Figure \@ref(fig:human-confusion)B). This left `r (n.subset <- d.shifters %>% filter(Experiment == "Experiment 1a (natural)", hid_head < 0.5) %>% nrow())` participants for Experiment 1a (`r round(n.subset / (d.shifters %>% filter(Experiment == "Experiment 1a (natural)") %>% nrow()) * 100, 1)`%) and `r (n.subset <- d.shifters %>% filter(Experiment == "Experiment 1b (synthesized)", hid_head < 0.5) %>% nrow())` for Experiment 1b (`r round(n.subset / (d.shifters %>% filter(Experiment == "Experiment 1b (synthesized)") %>% nrow()) * 100, 1)`%). Under the assumptions that 1) our model of listeners is adequate, 2) the subset group of listeners now share dialect template, and that 3) the phonetic database can approximate this template, we would expect all models to increase their likelihood fit to listeners' responses (c.f., Section \@ref(sec:G-D)).
 
 ```{r}
 # Generate a subset of the test data where we exclude all listeners that do not seem to share dialect template
@@ -1660,11 +1666,11 @@ d.io.mean_fits.dialect.subset.scaled <-
 
 Replicating the results from the main analysis, Figure \@ref(fig:SI-plot-io-optimal-dialect-subset) indicates that uniform scaling accounts again fit listeners' behavior well across both experiments. Nearey's uniform scaling again provides the best-fit in Experiment 1b (log likelihood = `r round(d.io.mean_fits.dialect.subset %>% filter(IO.NormalizationType == "Uniform scaling, Nearey (log)", Experiment == "Experiment 1b (synthesized)") %>% pull(log_likelihood_up_to_constant.mean), digits = 0)`, SD = `r round(d.io.mean_fits.dialect.subset %>% filter(IO.NormalizationType == "Uniform scaling, Nearey (log)", Experiment == "Experiment 1b (synthesized)") %>% pull(log_likelihood_up_to_constant.sd), digits = 0)`). However, an intrinsic account, Syrdal & Gopal, now achieves the best fit to Experiment 1a (log likelihood = `r round(d.io.mean_fits.dialect.subset %>% filter(IO.NormalizationType == "SyrdalGopal (Bark)", Experiment == "Experiment 1a (natural)") %>% pull(log_likelihood_up_to_constant.mean), digits = 0)`, SD = `r round(d.io.mean_fits.dialect.subset %>% filter(IO.NormalizationType == "SyrdalGopal (Bark)", Experiment == "Experiment 1a (natural)") %>% pull(log_likelihood_up_to_constant.sd), digits = 0)`). While Nearey's uniform scaling displays relatively stable performance across experiments, Syrdal & Gopal does not, achieving one of the worst fits to listeners' responses in Experiment 1b (log likelihood = `r round(d.io.mean_fits.dialect.subset %>% filter(IO.NormalizationType == "SyrdalGopal (Bark)", Experiment == "Experiment 1b (synthesized)") %>% pull(log_likelihood_up_to_constant.mean), digits = 0)`, SD = `r round(d.io.mean_fits.dialect.subset %>% filter(IO.NormalizationType == "SyrdalGopal (Bark)", Experiment == "Experiment 1b (synthesized)") %>% pull(log_likelihood_up_to_constant.sd), digits = 0)`). As mentioned in Section \@ref(sec:visualizing-consequences), a potential explanation to large fluctuations in model fits between experiments, is the possibility of over-engineered normalization accounts. Given that formant normalization is a pre-linguistic mechanism, it ought to be able to explain listeners' responses to any type of data, including data that does not follow correlations in natural data.
 
-Finally, as expected, all models overall provide higher likelihood fits against human responses in both experiments compared to the main model. When scaling the log likelihood of models in the subset data to those of the main analysis, the results suggest that the overall improvement in likelihood across accounts for the dialect subset model to the original dataset was `r round(d.io.mean_fits.dialect.subset.scaled$improvement_log_likelihood_up_to_constant_diff[1], digits = 2)`%.
+Finally, as expected, all models overall provide higher likelihood fits against human responses in both experiments compared to the main model. When scaling the log likelihood of models in the subset data to those of the main analysis, the results suggest that the overall improvement in likelihood across accounts for the dialect subset model to the original dataset was `r round(d.io.mean_fits.dialect.subset.scaled$improvement_log_likelihood_up_to_constant_diff[1], digits = 1)`%.
 
 (ref:SI-plot-io-optimal-dialect-subset) Results of model fit to data excluding listeners that do not seem to share dialect template. Point ranges indicate mean and 95% bootstrapped CIs of the log-likelihood summarized over the five training sets (higher is better). Accounts that fit listeners' responses to an extent that is statistically indistinguishable from the best-fitting account are marked by (\*).
 
-```{r SI-plot-io-optimal-dialect-subset, fig.width=base.width*3.5, fig.height=base.height*3.5, fig.align='center', fig.pos="!ht", out.width='90%', fig.cap="(ref:SI-plot-io-optimal-dialect-subset)"}
+```{r SI-plot-io-optimal-dialect-subset, fig.width=base.width*3.5, fig.height=base.height*3.5, fig.align='center', fig.pos="!ht", out.width='90%', fig.cap="(ref:SI-plot-io-optimal-dialect-subset)", message=FALSE}
 p.result_overall %+%
   (io.dialect.subset %>%
   filter(IO.cues == "F1-F2")) +
@@ -1682,7 +1688,21 @@ p.result_overall %+%
     aes(
       y = ifelse(Experiment == "Experiment 1a (natural)", -1200, -9100)),
     label = "(*)",
-      size = 4)
+      size = 4) +
+  geom_text(
+    data = d.test.by_item %>%
+      group_by(Experiment) %>% 
+      summarise(log_likelihood_chance = round(sum(log_likelihood_chance), digits = 0),
+                log_likelihood_human = round(sum(log_likelihood_human), digits = 0)) %>%
+      # Add a col for aligning the printing of text
+      mutate(IO.NormalizationType = "Uniform scaling, Nearey (log)"),
+    aes(
+      x = IO.NormalizationType,
+      y = ifelse(Experiment == "Experiment 1a (natural)", -2650, -12220),
+      label = paste("Chance likelihood: ", log_likelihood_chance, "\nBest-possible likelihood: ", log_likelihood_human)),
+    color = "black",
+    hjust = 0,
+    size = 3)
 ```
 
 ```{r}
@@ -1702,9 +1722,9 @@ d.io.mean_fits.F1F3 <-
     log_likelihood_up_to_constant.sd = sd(log_likelihood_up_to_constant))
 ```
 
-Figure \@ref(fig:SI-plot-io-optimal-f1f3) summarizes how well the different accounts fit listeners' responses in Experiments 1a and 1b when assuming F1-F2-F3 multivariate category representations. Many aspects replicate the F1-F2 results reported in the main text. First, normalization significantly improves the fit relative to no normalization. Second, the same uniform scaling accounts again achieve the best fit against listeners' responses: for Experiment 1a, Johnson normalization account provides the best fit (log likelihood = `r round(d.io.mean_fits.F1F3 %>% filter(IO.NormalizationType == "Uniform scaling, Johnson (Hz)", Experiment == "Experiment 1a (natural)") %>% pull(log_likelihood_up_to_constant.mean), digits = 0)`, SD = `r round(d.io.mean_fits.F1F3 %>% filter(IO.NormalizationType == "Uniform scaling, Johnson (Hz)", Experiment == "Experiment 1a (natural)") %>% pull(log_likelihood_up_to_constant.sd), digits = 0)`), while Nearey's uniform scaling account provides the best fit to Experiment 1b (log likelihood = `r round(d.io.mean_fits.F1F3 %>% filter(IO.NormalizationType == "Uniform scaling, Nearey (log)", Experiment == "Experiment 1b (synthesized)") %>% pull(log_likelihood_up_to_constant.mean), digits = 0)`, SD = `r round(d.io.mean_fits.F1F3 %>% filter(IO.NormalizationType == "Uniform scaling, Nearey (log)", Experiment == "Experiment 1b (synthesized)") %>% pull(log_likelihood_up_to_constant.sd), digits = 0)`). However, we also note that the inclusion of F3 does not improve the fit to listeners' responses for several accounts (compare *squares* and *circles* in Figure \@ref(fig:SI-plot-io-optimal-f1f3)). In fact, most extrinsic accounts seem to decrease their fit, more so in Experiment 1a than 1b. At first blush, this is puzzling given that the model now has access to more information of a type that is broadly believed to be informative for US English vowel recognition [@hillenbrand1995; @peterson1952; @nearey1989]. What might be underlying the lack of improvement, and why does it appear as if some accounts actually achieve worse fits?
+Figure \@ref(fig:SI-plot-io-optimal-f1f3) summarizes how well the different accounts fit listeners' responses in Experiments 1a and 1b when assuming F1-F2-F3 multivariate category representations. Many aspects replicate the F1-F2 results reported in the main text. First, normalization significantly improves the fit relative to no normalization. Second, the same uniform scaling accounts again achieve the best fit against listeners' responses: for Experiment 1a, Johnson normalization account provides the best fit (log likelihood = `r round(d.io.mean_fits.F1F3 %>% filter(IO.NormalizationType == "Uniform scaling, Johnson (Hz)", Experiment == "Experiment 1a (natural)") %>% pull(log_likelihood_up_to_constant.mean), digits = 0)`, SD = `r round(d.io.mean_fits.F1F3 %>% filter(IO.NormalizationType == "Uniform scaling, Johnson (Hz)", Experiment == "Experiment 1a (natural)") %>% pull(log_likelihood_up_to_constant.sd), digits = 0)`), while Nearey's uniform scaling account provides the best fit to Experiment 1b (log likelihood = `r format(round(d.io.mean_fits.F1F3 %>% filter(IO.NormalizationType == "Uniform scaling, Nearey (log)", Experiment == "Experiment 1b (synthesized)") %>% pull(log_likelihood_up_to_constant.mean), digits = 0), scientific = FALSE)`, SD = `r round(d.io.mean_fits.F1F3 %>% filter(IO.NormalizationType == "Uniform scaling, Nearey (log)", Experiment == "Experiment 1b (synthesized)") %>% pull(log_likelihood_up_to_constant.sd), digits = 0)`). However, we also note that the inclusion of F3 does not improve the fit to listeners' responses for several accounts (compare *squares* and *circles* in Figure \@ref(fig:SI-plot-io-optimal-f1f3)). In fact, most extrinsic accounts seem to decrease their fit, more so in Experiment 1a than in Experiment 1b. At first blush, this is puzzling given that the model now has access to more information of a type that is broadly believed to be informative for US English vowel recognition [@hillenbrand1995; @peterson1952; @nearey1989]. What might be underlying the lack of improvement, and why does it appear as if some accounts actually achieve worse fits?
 
-One possible explanation is that listeners were only exposed to one talker in Experiment 1a. According to some theories, F3 is expected to contribute to vowel recognition when there are multiple talkers, acting as a sort of normalizer for vocal tract length [@nearey1989]. In the absence of other talkers, this advantage might instead introduce noise to the models---an additional source of information that is not useful for listeners in this context. It is also possible that the F3-distribution across categories for this particular talker is atypical given the other talkers in the database. This might explain why the raw Hertz model improves the fit with F3-inclusion. We checked for additional outliers along F3 for this talker, but we could not find that outliers would be a likely explanation. To gain further knowledge into this talker's use of F3 compared to other talkers in the database, we used the same models to predict the ground truth, i.e., the category the talker actually intended to produce. These models patterned with the other prediction results, again indicating that F3-inclusion did not improve model performance. We take this to suggest that the F1-F3 results is not about how our model uses F3, but rather about how this specific talker uses F3 (c.f., the potential dialect differences between talkers in the database, reported in Section \@ref(sec:experiment-results), as well as the talker's formant distributions in 3D-space, Figure \@ref(fig:SI-plot-cues-3d)).
+One possible explanation is that listeners were only exposed to one talker in Experiment 1a. According to some theories, F3 is expected to contribute to vowel recognition when there are multiple talkers, acting as a sort of normalizer for vocal tract length [@nearey1989]. In the absence of other talkers, this advantage might instead introduce noise to the models---an additional source of information that is not useful for listeners in this context. It is also possible that the F3-distribution across categories for this particular talker is atypical given the other talkers in the database. This might explain why the raw Hz model improves the fit with F3-inclusion. We checked for additional outliers along F3 for this talker, but we could not find that outliers would be a likely explanation. To gain further knowledge into this talker's use of F3 compared to other talkers in the database, we used the same models to predict the ground truth, i.e., the category the talker actually intended to produce. These models patterned with the other prediction results, again indicating that F3-inclusion did not improve model performance. We take this to suggest that the F1-F3 results is not about how our model uses F3, but rather about how this specific talker uses F3 (c.f., the potential dialect differences between talkers in the database, reported in Section \@ref(sec:experiment-results), as well as the talker's formant distributions in 3D-space, Figure \@ref(fig:SI-plot-cues-3d)).
 
 (ref:SI-plot-io-optimal-f1f3) Results of ideal observer models trained on F1, F2 and F3 as cues to vowel identity. As in Figure \@ref(fig:plot-io-optimal) in the main text, pointranges indicate mean and 95% bootstrapped CIs of the log-likelihood summarized over the five training sets (higher is better). For comparison, results from the F1-F2 models are included (more transparent circles). Note that the Syrdal & Gopal accounts are not included in the F1-F3 evaluation as they do not provide normalization for F3.
 
@@ -1741,7 +1761,7 @@ ttests.F1F3 <- rbind(
   rename(IO.NormalizationType = y)
 ```
 
-```{r SI-plot-io-optimal-f1f3, fig.width=base.width*3.5, fig.height=base.height*3.5+.5, out.width='90%', fig.align='center', fig.pos="!ht", fig.cap="(ref:SI-plot-io-optimal-f1f3)", warning=FALSE}
+```{r SI-plot-io-optimal-f1f3, fig.width=base.width*3.5, fig.height=base.height*3.5+.5, out.width='90%', fig.align='center', fig.pos="!ht", fig.cap="(ref:SI-plot-io-optimal-f1f3)", message=FALSE, warning=FALSE}
 ttests.SI <- ttests %>%
   mutate(IO.cues = "F1-F2") %>%
   rbind(ttests.F1F3 %>%
@@ -1791,7 +1811,22 @@ p.results.overall.SI +
     aes(
       y = ifelse(Experiment == "Experiment 1a (natural)", -3100, -13000)),
     label = "(*)",
-      size = 4) +
+      size = 4)  +
+  geom_text(
+    data = d.test.by_item %>%
+      group_by(Experiment) %>% 
+      summarise(log_likelihood_chance = round(sum(log_likelihood_chance), digits = 0),
+                log_likelihood_human = round(sum(log_likelihood_human), digits = 0)) %>%
+      # Add a col for aligning the printing of text
+      mutate(IO.NormalizationType = "Uniform scaling, Nearey (log)",
+             IO.cues = "F1-F3"),
+    aes(
+      x = IO.NormalizationType,
+      y = ifelse(Experiment == "Experiment 1a (natural)", -4320, -17050),
+      label = paste("Chance likelihood: ", log_likelihood_chance, "\nBest-possible likelihood: ", log_likelihood_human)),
+    color = "black",
+    hjust = 0,
+    size = 3) +
   guides(size = "none") +
   theme(legend.title  = element_blank())
 ```
@@ -1960,7 +1995,7 @@ p.grid %+%
     IO.NormalizationType = factor(IO.NormalizationType, levels.normalization, labels.normalization)))
 ```
 
-(ref:SI-io-grid-plot-likelihoods-F1F3-1b) Predicted likelihoods of ideal observers trained on F1-F2 for human vowel responses in Experiment 1b, under different normalization accounts, different $\lambda$s and different $\tau^{-1}$s. Likelihood is aggregated across vowels. Crosses are placed at the combination of parameters for which the maximum likelihood for an account was found. The red cross indicates the maximum likelihood achieved for a single training set and account across the entire grid search.
+(ref:SI-io-grid-plot-likelihoods-F1F3-1b) Predicted likelihoods of ideal observers trained on F1-F3 for human vowel responses in Experiment 1b, under different normalization accounts, different $\lambda$s and different $\tau^{-1}$s. Likelihood is aggregated across vowels. Crosses are placed at the combination of parameters for which the maximum likelihood for an account was found. The red cross indicates the maximum likelihood achieved for a single training set and account across the entire grid search.
 
 ```{r SI-io-grid-plot-likelihoods-F1F3-1b, fig.height=base.height * 5, fig.width=base.width * 4, out.width='90%', message=FALSE, fig.cap="(ref:SI-io-grid-plot-likelihoods-F1F3-1b)"}
 p.grid %+%
