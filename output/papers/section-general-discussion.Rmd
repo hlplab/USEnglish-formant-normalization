@@ -69,23 +69,43 @@ d.predicted.trial.likelihood <-
   filter(
     IO.cues == "F1-F2", 
     (IO.cue_normalization == "Johnson" & Experiment == "Experiment 1a (natural)") |
-    (IO.cue_normalization == "Nearey2" & Experiment == "Experiment 1b (synthesized)"))
+    (IO.cue_normalization == "Nearey2" & Experiment == "Experiment 1b (synthesized)")) %>%
+  select(Experiment, IO.cues, IO.Type, IO.cue_normalization, IO.cue_transform, IO.crossvalidation_group, IO.lambda, IO.noise_multiplier, io) %>%
+  #join in the perception data with all responses but keep best-fitting lambda and noise
+  left_join(
+    y = d.test.long_for_IOs,
+    by = join_by(
+      Experiment,
+      IO.cues == IO.cues,
+      IO.cue_normalization == cue_normalization,
+      IO.cue_transform == cue_transform),
+    multiple = "all") %>%
+  relocate(Experiment, starts_with("IO.")) %>%
+  unnest(data_perception)
+
+# Calculate the log likelihood for each response
+d.predicted.trial.likelihood %<>%
+  mutate(
+     likelihood_up_to_constant_byItem = pmap_dbl(.l = list(io, x, Response.Vowel), 
+                        .f = ~ evaluate_model(..1, ..2, ..3,
+                                              decision_rule = "proportional",
+                                              method = "likelihood-up-to-constant")))
 
 p.predicted.trial.likelihood <- 
   # Get perception data
   d.predicted.trial.likelihood %>%
-  select(Experiment, IO.cue_normalization, IO.crossvalidation_group, data_perception) %>%
-  unnest(data_perception) %>%
-  # Join likelihood by stimulus x 
-  # (which is stored at the level of unique items, rather than trials)
-  left_join(
-    d.predicted.trial.likelihood %>%
-      select(Experiment, IO.cue_normalization, IO.crossvalidation_group, log_likelihood_up_to_constant_by_item) %>%
-      unnest(log_likelihood_up_to_constant_by_item),
-    by = c("Experiment", "IO.cue_normalization", "IO.crossvalidation_group", "x")) %>%
+  select(Experiment, IO.cue_normalization, IO.crossvalidation_group, likelihood_up_to_constant_byItem, x, ItemID, Trial, Response.Vowel) %>%
+  ## if the most frequent response per item is needed, join in the d.test.by_item by stimulus ItemID 
+  #left_join(
+  #  d.test.by_item %>%
+  #    select(Experiment, ItemID, Response.Vowel_MostFrequent),
+  #  by = c("Experiment", "ItemID")) %>%
+  #group_by(Experiment, ItemID) %>%
+  ## Filter down to trials for which the selected vowel by io was the most frequently selected vowel by participants
+  #filter(Response.Vowel == Response.Vowel_MostFrequent) %>%
   # Average over the five cross-validated IOs
-  group_by(Experiment, Trial) %>%
-  summarise(likelihood = mean(log_likelihood, na.rm = T)) %>%
+  group_by(Experiment, Trial, IO.cue_normalization) %>%
+  summarise(likelihood = mean(likelihood_up_to_constant_byItem, na.rm = T)) %>%
   ggplot(
     aes(
       x = Trial,
