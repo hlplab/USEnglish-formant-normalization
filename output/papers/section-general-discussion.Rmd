@@ -64,54 +64,63 @@ p.trial.accuracy <-
 
 # use the io to calculate the likelihood for each item each participant saw at each trial
 # get the normalized cues for each trial, apply the io to those stimuli to calculate the response of the io
-d.predicted.trial.likelihood <- 
-  io %>%
-  filter(
-    IO.cues == "F1-F2", 
-    (IO.cue_normalization == "Johnson" & Experiment == "Experiment 1a (natural)") |
-    (IO.cue_normalization == "Nearey2" & Experiment == "Experiment 1b (synthesized)")) %>%
-  select(Experiment, IO.cues, IO.Type, IO.cue_normalization, IO.cue_transform, IO.crossvalidation_group, IO.lambda, IO.noise_multiplier, io) %>%
-  #join in the perception data with all responses but keep best-fitting lambda and noise
-  left_join(
-    y = d.test.long_for_IOs,
-    by = join_by(
-      Experiment,
-      IO.cues == IO.cues,
-      IO.cue_normalization == cue_normalization,
-      IO.cue_transform == cue_transform),
-    multiple = "all") %>%
-  relocate(Experiment, starts_with("IO.")) %>%
-  unnest(data_perception)
-
-# Calculate the log likelihood for each response
-d.predicted.trial.likelihood %<>%
-  mutate(
-     likelihood_up_to_constant_byItem = pmap_dbl(.l = list(io, x, Response.Vowel), 
-                        .f = ~ evaluate_model(..1, ..2, ..3,
-                                              decision_rule = "proportional",
-                                              method = "likelihood-up-to-constant")))
+if (file.exists("../../models/io-optimal-trial-level-posterior.rds") & !RESET_MODELS) {
+  d.predicted.trial.likelihood <- readRDS("../../models/io-optimal-trial-level-posterior.rds")
+} else {
+  d.predicted.trial.likelihood <- 
+    io %>%
+    filter(
+      IO.cues == "F1-F2", 
+      (IO.cue_normalization == "Johnson" & Experiment == "Experiment 1a (natural)") |
+        (IO.cue_normalization == "Nearey2" & Experiment == "Experiment 1b (synthesized)")) %>%
+    select(Experiment, IO.cues, IO.Type, IO.cue_normalization, IO.cue_transform, IO.crossvalidation_group, IO.lambda, IO.noise_multiplier, io) %>%
+    #join in the perception data with all responses but keep best-fitting lambda and noise
+    left_join(
+      y = d.test.long_for_IOs,
+      by = join_by(
+        Experiment,
+        IO.cues == IO.cues,
+        IO.cue_normalization == cue_normalization,
+        IO.cue_transform == cue_transform),
+      multiple = "all") %>%
+    relocate(Experiment, starts_with("IO.")) %>%
+    unnest(data_perception) %>%
+    # Calculate the log likelihood for each response
+    mutate(
+      likelihood_up_to_constant = 
+        pmap_dbl(
+          .l = list(io, x, Response.Vowel), 
+          .f = ~ evaluate_model(..1, ..2, ..3,
+                                decision_rule = "proportional",
+                                method = "likelihood-up-to-constant")))
+  saveRDS(d.predicted.trial.likelihood, file = "../../models/io-optimal-trial-level-posterior.rds", compress = T)
+} 
 
 p.predicted.trial.likelihood <- 
   # Get perception data
   d.predicted.trial.likelihood %>%
   select(Experiment, IO.cue_normalization, IO.crossvalidation_group, likelihood_up_to_constant_byItem, x, ItemID, Trial, Response.Vowel) %>%
-  ## if the most frequent response per item is needed, join in the d.test.by_item by stimulus ItemID 
-  #left_join(
-  #  d.test.by_item %>%
-  #    select(Experiment, ItemID, Response.Vowel_MostFrequent),
-  #  by = c("Experiment", "ItemID")) %>%
-  #group_by(Experiment, ItemID) %>%
-  ## Filter down to trials for which the selected vowel by io was the most frequently selected vowel by participants
-  #filter(Response.Vowel == Response.Vowel_MostFrequent) %>%
   # Average over the five cross-validated IOs
   group_by(Experiment, Trial, IO.cue_normalization) %>%
-  summarise(likelihood = mean(likelihood_up_to_constant_byItem, na.rm = T)) %>%
+  summarise(likelihood = mean(likelihood_up_to_constant, na.rm = T)) %>%
   ggplot(
     aes(
       x = Trial,
       y = likelihood)) +
   geom_path() +
   stat_smooth(method = "gam", formula = y ~ s(log(x))) +
+  # geom_text(
+  #   data = 
+  #     . %>%
+  #     group_by(Experiment) %>%
+  #     group_map(
+  #       .f = ~ gam(likelihood ~ s(log(Trial)), data = .) %>% 
+  #         broom::tidy()) %>% 
+  #     reduce(bind_rows) %>%
+  #     mutate(
+  #       Experiment = unique(d.predicted.trial.likelihood$Experiment),
+  #       Star = ifelse(p.value < .05, "*", "n.s.")),
+  #   aes(label = Star), x = -1, y = 1) +
   scale_x_continuous(breaks = c(1, 10, 100)) +
   scale_y_continuous("mean log likelihood of participant's responses") + 
   coord_trans(x = "log10") +
