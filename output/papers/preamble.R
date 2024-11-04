@@ -30,6 +30,7 @@ list.of.packages <-
     "brms",             # Bayesian mixed-effects multinomials regression
     "cmdstanr", 
     "mgcv",             # GAMMs
+    "itsadug",          # GAMM visualization
     "modelr",           # making data grids for model predictions
     "tidybayes",        # working with posterior draws of Bayesian models
     "MVBeliefUpdatr",   # fitting and using Ideal Observers

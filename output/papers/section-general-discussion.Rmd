@@ -38,29 +38,31 @@ Second, we made the simplifying assumption that listeners' category representati
 
 Finally, the evaluation of normalization accounts in the present study shares with all previous work [e.g., @apfelbaum-mcmurray2015; @cole2010; @mcmurray-jongman2011; @barreda2021; @nearey1989;  @richter2017] another simplifying assumption that is clearly wrong: the assumption that listeners *know* the talker-specific formant properties required for normalization. Specifically, we normalized the input for each ideal observer using the maximum likelihood estimates of the normalization parameters over all stimuli for the respective experiment. For example, for the evaluation of the ideal observer trained on Lobanov normalized formants against listeners' responses in Experiment 1a, we used the formant means and standard deviations of the stimuli used in Experiment 1a to normalize F1 and F2. While this follows previous work, it constitutes a problematic assumption for the evaluation of extrinsic normalization accounts. For extrinsic accounts, the approach adopted here would seem to entail the ability to predict the future: even on the first trial of the experiment, the input to the ideal observers were formants that were normalized based on the normalization parameters estimated over the acoustic properties of *all* stimuli. Listeners instead need to *incrementally infer* talker-specific properties from the speech input [@nearey-assmann2007; @xie2023]. An important avenue for future research is thus the development and evaluation of incremental normalization accounts.
 
-The present data only allow an initial, rather tentative, look at this question. For example, for Experiment 1a, for which each trial had a known correct answer (the vowel intended by the talker), we can assess whether participants' recognition accuracy improved across trials. Figure \@ref(fig:trial-accuracies)A suggests that this was indeed the case: the non-parametric listeners' average recognition accuracy improved over the course of the experiment from about 65% to 88%, with most of the improvements occurring during the first ten trials. This result should, however, be interpreted with great caution. Experiment 1a was not designed to address questions about incremental changes across the experiment. The number of recruited participants is likely too small to average out differences in the distribution of stimuli across trials---leaving open whether the observed changes in recognition accuracy reflect item-specific effects, rather than improvements across trials.
+The present data only allow an initial, rather tentative, look at this question. For example, for Experiment 1a, for which each trial had a known correct answer (the vowel intended by the talker), we can assess whether participants' recognition accuracy improved across trials. Figure \@ref(fig:trial-accuracies)A suggests that this was indeed the case: the non-parametric listeners' average recognition accuracy improved over the course of the experiment from about 65% to 88%, with most of the improvements occurring during the first ten trials. To address potential confounds due to differences in the distribution of stimuli across trials, we used a generalized additive mixed-effect model to predict the listeners' accuracy from log-transformed trial order while accounting for random by-participant and by-item intercepts and slopes for the log-transformed trial order (blue lines). Still, this result should be interpreted with caution, as Experiment 1a was not designed to reliably address questions about incremental changes across the experiment. 
 
-Figure \@ref(fig:trial-accuracies)B shows how the fit of the best-fitting normalization model changes across trials. Given that our evaluation of normalization accounts assumed that the normalization parameters were already known on the first trial of the experiment, we would expect that the likelihood of listeners' responses under a normalization model would improve the more input listeners have received (i.e., as the simplifying assumptions of our evaluation become increasingly more plausible). For Experiment 1a, this indeed appears to be the case. However, just as the improvements in listeners' accuracy in Figure \@ref(fig:trial-accuracies)A might reflect item-specific effects, the improved fit of the normalization model in Figure \@ref(fig:trial-accuracies)B also might reflect item-specific effects, rather than incremental improvements in the fit of the normalization model. In line with this concern, no incremental improvement in the fit of the normalization model was observed for Experiment 1b. In fact, the fit for the best-fitting normalization model decreased towards the end of the experiment. Such a pattern would be expected if, for example, participants became increasingly inattentive---a possibility we did not consider in the evaluation of normalization accounts. In short, it is difficult to draw decisive conclusions from the present data about the extent to which normalization proceeds incrementally.
+Figure \@ref(fig:trial-accuracies)B shows how the fit of the best-fitting normalization model changes across trials. We used a generalized additive mixed-effect model to predict the log-likelihood of listeners' responses from log-transformed trial order while accounting for random by-participant and by-item intercepts and slopes for the log-transformed trial order (blue lines). Given that our evaluation of normalization accounts assumed that the normalization parameters were already known on the first trial of the experiment, we would expect that the likelihood of listeners' responses under a normalization model would improve the more input listeners have received (i.e., as the simplifying assumptions of our evaluation become increasingly more plausible). For Experiment 1a, this indeed appears to be the case. However, no clear evidence for such incremental improvements in the fit of the normalization model is observed for Experiment 1b. In short, the present data does not support decisive conclusions about the extent to which normalization proceeds incrementally.
 
-(ref:trial-accuracies) **Panel A**: Changes across trials in listeners' average accuracy in recognizing the vowel intended by the talker in Experiment 1a, averaged across items and participants (black line). Blue line shows a non-parametric smooth fit predicting accuracy from (log-transformed) trial order, with 95% CIs. **Panel B**: Log-likelihood of listeners' responses under the best-fitting normalization account at each trial, averaged across items and participants (Johnson's uniform scaling for Experiment 1a and Nearey's uniform scaling for Experiment 1b). Blue line shows a non-parametric smooth fit predicting log-likelihood from (log-transformed) trial order, with 95% CIs.
+(ref:trial-accuracies) **Panel A**: Changes across trials in listeners' average accuracy in recognizing the vowel intended by the talker in Experiment 1a, averaged across items and participants (black line). Blue line shows a generalized additive mixed-effects model predicting accuracy from (log-transformed) trial order, with 95% CIs. **Panel B**: Log-likelihood of listeners' responses under the best-fitting normalization account at each trial, averaged across items and participants (Johnson's uniform scaling for Experiment 1a and Nearey's uniform scaling for Experiment 1b). Blue lines show generalized additive mixed-effects models predicting log-likelihood from (log-transformed) trial order, with 95% CIs.
 
-```{r trial-accuracies,  fig.width=base.width*4, fig.height=base.height*3, out.width='90%', fig.cap="(ref:trial-accuracies)", fig.pos="!ht", message=FALSE, warning=FALSE}
-# Calculate average accuracy by trials across participants
-p.trial.accuracy <- 
-  d.test %>%
-  filter(Experiment == "Experiment 1a (natural)") %>%
-  group_by(Experiment, Trial) %>%
-  summarise(Response.Proportion = mean(Response.Vowel == Item.CorrectResponse.Vowel) * 100) %>%
-  ggplot(
-    aes(
-      x = Trial,
-      y = Response.Proportion)) +
-  geom_path() +
-  stat_smooth(method = "gam", formula = y ~ s(log(x))) +
-  scale_y_continuous("mean accuracy of participants' responses", limits = c(50, 100), breaks = c(50, 75, 100)) + 
-  scale_x_continuous(breaks = c(1, 10, 100)) + 
-  coord_trans(x = "log10") +
-  facet_wrap(~ Experiment)
+```{r gamm-fits, include=FALSE}
+# Fit GAMMs to listeners' accuracy and extract predictions and CIs
+m <- 
+  bam(
+    data = 
+      d.test %>%
+      filter(Experiment == "Experiment 1a (natural)") %>%
+      mutate(
+        logTrial = log(Trial),
+        across(ends_with("ID"), factor)),
+    formula =  
+      I(Response.Vowel == Item.CorrectResponse.Vowel) ~ 1 + s(logTrial) + 
+      s(ParticipantID, bs = "re") + s(ItemID, bs = "re") +
+      s(ParticipantID, logTrial, bs = "re") + s(ItemID, logTrial, bs = "re"))
+
+d.smooth.acc <- 
+  plot_smooth(m, view = "logTrial", transform.view = "exp", print.summary = F)$fv[,c("logTrial", "fit", "ll", "ul")] %>%
+  rename(Trial = logTrial) %>%
+  mutate(across(c(fit, ll, ul), ~ .x * 100))
 
 # use the io to calculate the likelihood for each item each participant saw at each trial
 # get the normalized cues for each trial, apply the io to those stimuli to calculate the response of the io
@@ -96,6 +98,65 @@ if (file.exists("../../models/io-optimal-trial-level-posterior.rds") & !RESET_MO
   saveRDS(d.predicted.trial.likelihood, file = "../../models/io-optimal-trial-level-posterior.rds", compress = T)
 } 
 
+# Fit GAMMs to log-likelihood and extract predictions and CIs
+m1 <- 
+  bam(
+    data = 
+      d.predicted.trial.likelihood %>%
+      filter(Experiment == "Experiment 1a (natural)") %>%
+      mutate(
+        logTrial = log(Trial),
+        across(ends_with("ID"), factor)),
+    formula =  
+      likelihood_up_to_constant ~ 1 + s(logTrial) + 
+      s(ParticipantID, bs = "re") + s(ItemID, bs = "re") +
+      s(ParticipantID, logTrial, bs = "re") + s(ItemID, logTrial, bs = "re"))
+
+m2 <- 
+  bam(
+    data = 
+      d.predicted.trial.likelihood %>%
+      filter(Experiment == "Experiment 1b (synthesized)") %>%
+      mutate(
+        logTrial = log(Trial),
+        across(ends_with("ID"), factor)),
+    formula =  
+      likelihood_up_to_constant ~ 1 + s(logTrial) + 
+      s(ParticipantID, bs = "re") + s(ItemID, bs = "re") +
+      s(ParticipantID, logTrial, bs = "re") + s(ItemID, logTrial, bs = "re"))
+
+d.smooth <- 
+  bind_rows(
+    plot_smooth(m1, view = "logTrial", transform.view = "exp", print.summary = F)$fv[,c("logTrial", "fit", "ll", "ul")] %>%
+      mutate(Experiment = "Experiment 1a (natural)"),
+    plot_smooth(m2, view = "logTrial", transform.view = "exp", print.summary = F)$fv[,c("logTrial", "fit", "ll", "ul")] %>% 
+      mutate(Experiment = "Experiment 1b (synthesized)")) %>%
+  rename(Trial = logTrial)
+```
+
+```{r trial-accuracies, fig.width=base.width*4, fig.height=base.height*3, out.width='90%', fig.cap="(ref:trial-accuracies)", fig.pos="!ht", message=FALSE, warning=FALSE}
+# Calculate average accuracy by trials across participants
+p.trial.accuracy <- 
+  d.test %>%
+  filter(Experiment == "Experiment 1a (natural)") %>%
+  group_by(Experiment, Trial) %>%
+  summarise(Response.Proportion = mean(Response.Vowel == Item.CorrectResponse.Vowel) * 100) %>%
+  ggplot(
+    aes(
+      x = Trial,
+      y = Response.Proportion)) +
+  geom_path() +
+  geom_ribbon(
+    data = d.smooth.acc,
+    aes(ymin = ll, ymax = ul, y = fit), fill = "gray75", alpha = .3) +
+  geom_line(
+    data = d.smooth.acc,
+    aes(y = fit), color = "blue", lwd = 1) +
+  scale_y_continuous("mean accuracy of participants' responses", limits = c(50, 100), breaks = c(50, 75, 100)) + 
+  scale_x_continuous(breaks = c(1, 10, 100)) + 
+  coord_trans(x = "log10") +
+  facet_wrap(~ Experiment)
+
 p.predicted.trial.likelihood <- 
   # Get perception data
   d.predicted.trial.likelihood %>%
@@ -108,19 +169,12 @@ p.predicted.trial.likelihood <-
       x = Trial,
       y = likelihood)) +
   geom_path() +
-  stat_smooth(method = "gam", formula = y ~ s(log(x))) +
-  # geom_text(
-  #   data = 
-  #     . %>%
-  #     group_by(Experiment) %>%
-  #     group_map(
-  #       .f = ~ gam(likelihood ~ s(log(Trial)), data = .) %>% 
-  #         broom::tidy()) %>% 
-  #     reduce(bind_rows) %>%
-  #     mutate(
-  #       Experiment = unique(d.predicted.trial.likelihood$Experiment),
-  #       Star = ifelse(p.value < .05, "*", "n.s.")),
-  #   aes(label = Star), x = -1, y = 1) +
+  geom_ribbon(
+    data = d.smooth,
+    aes(ymin = ll, ymax = ul, y = fit), fill = "gray75", alpha = .3) +
+  geom_line(
+    data = d.smooth,
+    aes(y = fit), color = "blue", lwd = 1) +
   scale_x_continuous(breaks = c(1, 10, 100)) +
   scale_y_continuous("mean log likelihood of participant's responses") + 
   coord_trans(x = "log10") +
@@ -133,10 +187,10 @@ p.trial.accuracy + p.predicted.trial.likelihood +
   theme(plot.tag = element_text(face = "bold", size = 11, hjust = 0, vjust = 0),
         plot.tag.position = c(0.02, 0.8))
 ```
+
 ```{r}
 rm(d.predicted.trial.likelihood)
 ```
-
 
 ## Concluding remarks
 We set out to compare how well competing accounts of formant normalization explain listeners' perception of vowels. We developed a computational framework that makes it possible to compare a large number of different accounts against multiple data sets. The code we share on OSF makes it possible to 'plug in' different accounts of vowel normalization, different phonetic databases, and different perception experiments. This, we hope, will substantially reduce the effort necessary to conduct similar evaluations on other datasets, dialects, and languages. 
