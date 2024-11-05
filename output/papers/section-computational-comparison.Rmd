@@ -615,8 +615,8 @@ d.chance.max <-
               distinct(),
             by = "Experiment") %>%
   mutate(
-    log_likelihood_human_scaled = round(log_likelihood_human / N, digits = 3),
-    log_likelihood_chance_scaled = round(log_likelihood_chance / N, digits = 3))
+    log_likelihood_human_scaled = round(log_likelihood_human / N, digits = 2),
+    log_likelihood_chance_scaled = round(log_likelihood_chance / N, digits = 2))
 ```
 
 ```{r significance-t-test}
@@ -649,7 +649,7 @@ ttests <-
   rename(IO.NormalizationType = y)
 ```
 
-(ref:plot-io-optimal) Comparison of normalization accounts against listeners' responses. Point ranges indicate mean and 95% bootstrapped CIs of the log-likelihood summarized over the five training sets (higher is better), and normalized by the number of responses in each experiment. Accounts that fit listeners' responses to an extent that is statistically indistinguishable from the best-fitting account are marked by (\*).
+(ref:plot-io-optimal) Comparison of normalization accounts against listeners' responses. Point ranges indicate mean and 95% bootstrapped CIs of the per-token log-likelihood summarized over the five training sets (higher is better), and normalized by the number of responses in each experiment. Accounts that fit listeners' responses to an extent that is statistically indistinguishable from the best-fitting account are marked by (\*). Note that per-token likelihoods cannot be directly compared across experiments because the best-possible likelihoods differ across experiments (due to, e.g., differences in stimulus placement and other factors).
 
 ```{r plot-io-optimal, fig.width=base.width*3.5, fig.height=base.height*3, fig.align='center', out.width='95%', fig.cap="(ref:plot-io-optimal)", fig.pos="!ht"}
 Experiment.labs <- c("Experiment 1a \n(natural)", "Experiment 1b \n(synthesized)")
@@ -709,7 +709,7 @@ p.result_overall +
     aes(
       x = IO.NormalizationType,
       y = ifelse(Experiment == "Experiment 1a (natural)", -1.11, -1.9),
-      label = paste("Chance likelihood: ", log_likelihood_chance_scaled, "\nBest-possible likelihood: ", log_likelihood_human_scaled)),
+      label = paste("Best-possible likelihood: ", log_likelihood_human_scaled, "\nChance likelihood: ", log_likelihood_chance_scaled)),
     color = "black",
     hjust = 0,
     size = 3)
