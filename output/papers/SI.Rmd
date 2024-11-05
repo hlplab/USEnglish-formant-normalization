@@ -1457,22 +1457,29 @@ ttests.SI.subset <-
 ```
 
 ```{r message=FALSE}
-# Identify best-fitting lambdas and noise_multipliers for each account and experiment
 d.io.mean_fits.subset <-
   io.subset %>%
   filter(IO.cues == "F1-F2") %>%
+  # Add scaled log likelihoods by the number of responses in each experiment
+  group_by(Experiment) %>%
+  mutate(
+    N = map_int(data_perception, ~ nrow(.x)),
+    log_likelihood_up_to_constant_scaled = log_likelihood_up_to_constant / N) %>%
   group_by(Experiment, IO.NormalizationType) %>%
   summarise(
     log_likelihood_up_to_constant.mean = mean(log_likelihood_up_to_constant),
-    log_likelihood_up_to_constant.sd = sd(log_likelihood_up_to_constant))
+    log_likelihood_up_to_constant.sd = sd(log_likelihood_up_to_constant),
+    log_likelihood_up_to_constant_scaled.mean = mean(log_likelihood_up_to_constant_scaled),
+    log_likelihood_up_to_constant_scaled.sd = sd(log_likelihood_up_to_constant_scaled))
 
+# Identify best-fitting lambdas and noise_multipliers for each account and experiment
 d.io.bestFit.params.subset <-
   io.subset %>%
   filter(IO.cues == "F1-F2") %>%
   select(IO.NormalizationType, Experiment, IO.cues, IO.lambda, IO.noise_multiplier, IO.crossvalidation_group, log_likelihood_up_to_constant)
 ```
 
-```{r message=FALSE}
+```{r message=FALSE, warning=FALSE}
 # Subset data to calculate chance likelihood and best-possible likelihood for subset data
 d.test.by_item.subset <-
   d.test.subset %>%
@@ -1496,41 +1503,62 @@ d.test.by_item.subset <-
     Response.Entropy = sum(Response.Proportion * -log2(Response.Proportion))) %>%
   ungroup() %>%
   left_join(d.test.subset %>% distinct(Experiment, ItemID, Item.CorrectResponse.Vowel))
+
+d.chance.max.subset <-
+  d.test.by_item.subset %>%
+  group_by(Experiment) %>%
+  summarise(
+    log_likelihood_human = sum(log_likelihood_human),
+    log_likelihood_chance = sum(log_likelihood_chance)) %>%
+  # Join in N of responses from each experiment to scale chance and best possible performance
+  left_join(io.subset %>%
+              filter(IO.cues == "F1-F2") %>%
+              select(Experiment, data_perception) %>%
+              group_by(Experiment) %>%
+              summarise(
+                N = map_int(data_perception, ~ nrow(.x))) %>%
+              distinct(),
+            by = "Experiment") %>%
+  mutate(
+    log_likelihood_human_scaled = round(log_likelihood_human / N, digits = 2),
+    log_likelihood_chance_scaled = round(log_likelihood_chance / N, digits = 2))
 ```
 
-This subset analysis overall replicates the results from the main analysis: uniform scaling accounts again provide the best fit against listeners' responses in both experiments (Figure \@ref(fig:SI-plot-io-optimal-subset)). For Experiment 1a, Nordström & Lindblom provides the best fit (log likelihood = `r round(d.io.mean_fits.subset %>% filter(IO.NormalizationType == "Uniform scaling, Nordström & Lindblom (Hz)", Experiment == "Experiment 1a (natural)") %>% pull(log_likelihood_up_to_constant.mean), digits = 0)`, SD = `r round(d.io.mean_fits.subset %>% filter(IO.NormalizationType == "Uniform scaling, Nordström & Lindblom (Hz)", Experiment == "Experiment 1a (natural)") %>% pull(log_likelihood_up_to_constant.sd), digits = 0)`), whereas Nearey's uniform scaling provides the best fit to listeners' responses in Experiment 1b; for Experiment 1b, log likelihood = `r format(round(d.io.mean_fits.subset %>% filter(IO.NormalizationType == "Uniform scaling, Nearey (log)", Experiment == "Experiment 1b (synthesized)") %>% pull(log_likelihood_up_to_constant.mean), digits = 0), scientific = FALSE)`, SD = `r round(d.io.mean_fits.subset %>% filter(IO.NormalizationType == "Uniform scaling, Nearey (log)", Experiment == "Experiment 1b (synthesized)") %>% pull(log_likelihood_up_to_constant.sd), digits = 0)`). While the relative ordering of accounts is similar compared to the main analysis, more accounts perform within the range of the best-fits in the subset analysis.
+This subset analysis overall replicates the results from the main analysis: uniform scaling accounts again provide the best fit against listeners' responses in both experiments (Figure \@ref(fig:SI-plot-io-optimal-subset)). For Experiment 1a, Nordström & Lindblom provides the best fit (log likelihood = `r round(d.io.mean_fits.subset %>% filter(IO.NormalizationType == "Uniform scaling, Nordström & Lindblom (Hz)", Experiment == "Experiment 1a (natural)") %>% pull(log_likelihood_up_to_constant.mean), digits = 0)`, SD = `r round(d.io.mean_fits.subset %>% filter(IO.NormalizationType == "Uniform scaling, Nordström & Lindblom (Hz)", Experiment == "Experiment 1a (natural)") %>% pull(log_likelihood_up_to_constant.sd), digits = 0)`; log likelihood normalized by the number of participants = `r round(d.io.mean_fits.subset %>% filter(IO.NormalizationType == "Uniform scaling, Nordström & Lindblom (Hz)", Experiment == "Experiment 1a (natural)") %>% pull(log_likelihood_up_to_constant_scaled.mean), digits = 2)`), whereas Nearey's uniform scaling provides the best fit to listeners' responses in Experiment 1b; for Experiment 1b, log likelihood = `r format(round(d.io.mean_fits.subset %>% filter(IO.NormalizationType == "Uniform scaling, Nearey (log)", Experiment == "Experiment 1b (synthesized)") %>% pull(log_likelihood_up_to_constant.mean), digits = 0), scientific = FALSE)`, SD = `r round(d.io.mean_fits.subset %>% filter(IO.NormalizationType == "Uniform scaling, Nearey (log)", Experiment == "Experiment 1b (synthesized)") %>% pull(log_likelihood_up_to_constant.sd), digits = 0)`; log likelihood normalized by the number of participants = `r round(d.io.mean_fits.subset %>% filter(IO.NormalizationType == "Uniform scaling, Nearey (log)", Experiment == "Experiment 1b (synthesized)") %>% pull(log_likelihood_up_to_constant_scaled.mean), digits = 2)`). While the relative ordering of accounts is similar compared to the main analysis, more accounts perform within the range of the best-fits in the subset analysis.
 
 (ref:SI-plot-io-optimal-subset) Results of model fit to subset data. Point ranges indicate mean and 95% bootstrapped CIs of the log-likelihood summarized over the five training sets (higher is better). Accounts that fit listeners' responses to an extent that is statistically indistinguishable from the best-fitting account are marked by (\*).
 
 ```{r SI-plot-io-optimal-subset, fig.width=base.width*3.5, fig.height=base.height*3.5, fig.align='center', fig.pos="!ht", out.width='90%', fig.cap="(ref:SI-plot-io-optimal-subset)", message=FALSE}
 p.result_overall %+%
   (io.subset %>%
-     filter(IO.cues == "F1-F2")) +
+     filter(IO.cues == "F1-F2") %>%
+     # Scale the log likelihoods by the number of responses in each experiment
+     group_by(Experiment) %>%
+     mutate(
+       N = map_int(data_perception, ~ nrow(.x)),
+       log_likelihood_up_to_constant_scaled = log_likelihood_up_to_constant / N)) +
   geom_text(
     data = io.subset %>%
       filter(IO.cues == "F1-F2", IO.NormalizationType %in% labels.normalization[10:11]),
     aes(
       x = ifelse(Experiment == "Experiment 1a (natural)", labels.normalization[11], labels.normalization[10]),
-      y = ifelse(Experiment == "Experiment 1a (natural)", -2410, -11500),
+      y = ifelse(Experiment == "Experiment 1a (natural)", -.81, -1.49),
       label = "*",
       size = 4)) +
   geom_text(
     data = ttests.SI.subset,
     aes(
-      y = ifelse(Experiment == "Experiment 1a (natural)", -2410, -11500)),
+      y = ifelse(Experiment == "Experiment 1a (natural)", -.81, -1.49)),
     label = "(*)",
     size = 4) +
   geom_text(
-    data = d.test.by_item.subset %>%
-      group_by(Experiment) %>% 
-      summarise(log_likelihood_chance = round(sum(log_likelihood_chance), digits = 0),
-                log_likelihood_human = round(sum(log_likelihood_human), digits = 0)) %>%
+    data = d.chance.max.subset %>%
       # Add a col for aligning the printing of text
       mutate(IO.NormalizationType = "Uniform scaling, Nearey (log)"),
     aes(
       x = IO.NormalizationType,
-      y = ifelse(Experiment == "Experiment 1a (natural)", -3200, -13820),
-      label = paste("Chance likelihood: ", log_likelihood_chance, "\nBest-possible likelihood: ", log_likelihood_human)),
+      y = ifelse(Experiment == "Experiment 1a (natural)", -1.07, -1.79),
+      label = paste("Chance likelihood: ", log_likelihood_chance_scaled, "\nBest-possible likelihood: ", log_likelihood_human_scaled)),
     color = "black",
     hjust = 0,
     size = 3)
@@ -1643,63 +1671,91 @@ ttests.SI.dialect.subset <-
 d.io.mean_fits.dialect.subset <-
   io.dialect.subset %>%
   filter(IO.cues == "F1-F2") %>%
+  # Add scaled log likelihoods by the number of responses in each experiment
+  group_by(Experiment) %>%
+  mutate(
+    N = map_int(data_perception, ~ nrow(.x)),
+    log_likelihood_up_to_constant_scaled = log_likelihood_up_to_constant / N) %>%
   group_by(Experiment, IO.NormalizationType) %>%
   summarise(
     log_likelihood_up_to_constant.mean = mean(log_likelihood_up_to_constant),
-    log_likelihood_up_to_constant.sd = sd(log_likelihood_up_to_constant))
+    log_likelihood_up_to_constant.sd = sd(log_likelihood_up_to_constant),
+    log_likelihood_up_to_constant_scaled.mean = mean(log_likelihood_up_to_constant_scaled),
+    log_likelihood_up_to_constant_scaled.sd = sd(log_likelihood_up_to_constant_scaled))
 
-d.io.mean_fits.dialect.subset.scaled <-
+d.io.mean_fits.dialect.subset.scaledToMain <-
   io.dialect.subset %>%
   filter(IO.cues == "F1-F2") %>%
   group_by(Experiment, IO.NormalizationType) %>%
   mutate(
-    log_likelihood_up_to_constant_scaled = log_likelihood_up_to_constant * (nrow(d.test) / nrow(d.test.dialect.subset))) %>%
+    log_likelihood_up_to_constant_scaledToMain = log_likelihood_up_to_constant * (nrow(d.test) / nrow(d.test.dialect.subset))) %>%
   summarise(
-    log_likelihood_up_to_constant_scaled.mean = mean(log_likelihood_up_to_constant_scaled),
-    log_likelihood_up_to_constant_scaled.sd = sd(log_likelihood_up_to_constant_scaled)) %>%
+    log_likelihood_up_to_constant_scaledToMain.mean = mean(log_likelihood_up_to_constant_scaledToMain),
+    log_likelihood_up_to_constant_scaledToMain.sd = sd(log_likelihood_up_to_constant_scaledToMain)) %>%
   left_join(d.io.mean_fits.dialect.subset,
             by = c("Experiment", "IO.NormalizationType")) %>%
   group_by(Experiment, IO.NormalizationType) %>% 
   mutate(
-    improvement_log_likelihood_up_to_constant_diff = 100 - abs((log_likelihood_up_to_constant.mean - log_likelihood_up_to_constant_scaled.mean) / log_likelihood_up_to_constant.mean) * 100)
+    improvement_log_likelihood_up_to_constant_diff = 100 - abs((log_likelihood_up_to_constant.mean - log_likelihood_up_to_constant_scaledToMain.mean) / log_likelihood_up_to_constant.mean) * 100)
+
+d.chance.max.dialect.subset <-
+  d.test.by_item %>%
+  group_by(Experiment) %>%
+  summarise(
+    log_likelihood_human = sum(log_likelihood_human),
+    log_likelihood_chance = sum(log_likelihood_chance)) %>%
+  # Join in N of responses from each experiment to scale chance and best possible performance
+  left_join(io.dialect.subset %>%
+              filter(IO.cues == "F1-F2") %>%
+              select(Experiment, data_perception) %>%
+              group_by(Experiment) %>%
+              summarise(
+                N = map_int(data_perception, ~ nrow(.x))) %>%
+              distinct(),
+            by = "Experiment") %>%
+  mutate(
+    log_likelihood_human_scaled = round(log_likelihood_human / N, digits = 2),
+    log_likelihood_chance_scaled = round(log_likelihood_chance / N, digits = 2))
 ```
 
-Replicating the results from the main analysis, Figure \@ref(fig:SI-plot-io-optimal-dialect-subset) indicates that uniform scaling accounts again fit listeners' behavior well across both experiments. Nearey's uniform scaling again provides the best-fit in Experiment 1b (log likelihood = `r round(d.io.mean_fits.dialect.subset %>% filter(IO.NormalizationType == "Uniform scaling, Nearey (log)", Experiment == "Experiment 1b (synthesized)") %>% pull(log_likelihood_up_to_constant.mean), digits = 0)`, SD = `r round(d.io.mean_fits.dialect.subset %>% filter(IO.NormalizationType == "Uniform scaling, Nearey (log)", Experiment == "Experiment 1b (synthesized)") %>% pull(log_likelihood_up_to_constant.sd), digits = 0)`). However, an intrinsic account, Syrdal & Gopal, now achieves the best fit to Experiment 1a (log likelihood = `r round(d.io.mean_fits.dialect.subset %>% filter(IO.NormalizationType == "SyrdalGopal (Bark)", Experiment == "Experiment 1a (natural)") %>% pull(log_likelihood_up_to_constant.mean), digits = 0)`, SD = `r round(d.io.mean_fits.dialect.subset %>% filter(IO.NormalizationType == "SyrdalGopal (Bark)", Experiment == "Experiment 1a (natural)") %>% pull(log_likelihood_up_to_constant.sd), digits = 0)`). While Nearey's uniform scaling displays relatively stable performance across experiments, Syrdal & Gopal does not, achieving one of the worst fits to listeners' responses in Experiment 1b (log likelihood = `r round(d.io.mean_fits.dialect.subset %>% filter(IO.NormalizationType == "SyrdalGopal (Bark)", Experiment == "Experiment 1b (synthesized)") %>% pull(log_likelihood_up_to_constant.mean), digits = 0)`, SD = `r round(d.io.mean_fits.dialect.subset %>% filter(IO.NormalizationType == "SyrdalGopal (Bark)", Experiment == "Experiment 1b (synthesized)") %>% pull(log_likelihood_up_to_constant.sd), digits = 0)`). As mentioned in Section \@ref(sec:visualizing-consequences), a potential explanation to large fluctuations in model fits between experiments, is the possibility of over-engineered normalization accounts. Given that formant normalization is a pre-linguistic mechanism, it ought to be able to explain listeners' responses to any type of data, including data that does not follow correlations in natural data.
+Replicating the results from the main analysis, Figure \@ref(fig:SI-plot-io-optimal-dialect-subset) indicates that uniform scaling accounts again fit listeners' behavior well across both experiments. Nearey's uniform scaling again provides the best-fit in Experiment 1b (log likelihood = `r round(d.io.mean_fits.dialect.subset %>% filter(IO.NormalizationType == "Uniform scaling, Nearey (log)", Experiment == "Experiment 1b (synthesized)") %>% pull(log_likelihood_up_to_constant.mean), digits = 0)`, SD = `r round(d.io.mean_fits.dialect.subset %>% filter(IO.NormalizationType == "Uniform scaling, Nearey (log)", Experiment == "Experiment 1b (synthesized)") %>% pull(log_likelihood_up_to_constant.sd), digits = 0)`; log likelihood normalized by the number of participants = `r round(d.io.mean_fits.dialect.subset %>% filter(IO.NormalizationType == "Uniform scaling, Nearey (log)", Experiment == "Experiment 1b (synthesized)") %>% pull(log_likelihood_up_to_constant_scaled.mean), digits = 2)`). However, an intrinsic account, Syrdal & Gopal, now achieves the best fit to Experiment 1a (log likelihood = `r round(d.io.mean_fits.dialect.subset %>% filter(IO.NormalizationType == "SyrdalGopal (Bark)", Experiment == "Experiment 1a (natural)") %>% pull(log_likelihood_up_to_constant.mean), digits = 0)`, SD = `r round(d.io.mean_fits.dialect.subset %>% filter(IO.NormalizationType == "SyrdalGopal (Bark)", Experiment == "Experiment 1a (natural)") %>% pull(log_likelihood_up_to_constant.sd), digits = 0)`; log likelihood normalized by the number of participants = `r round(d.io.mean_fits.dialect.subset %>% filter(IO.NormalizationType == "SyrdalGopal (Bark)", Experiment == "Experiment 1a (natural)") %>% pull(log_likelihood_up_to_constant_scaled.mean), digits = 2)`). While Nearey's uniform scaling displays relatively stable performance across experiments, Syrdal & Gopal does not, achieving one of the worst fits to listeners' responses in Experiment 1b (log likelihood = `r round(d.io.mean_fits.dialect.subset %>% filter(IO.NormalizationType == "SyrdalGopal (Bark)", Experiment == "Experiment 1b (synthesized)") %>% pull(log_likelihood_up_to_constant.mean), digits = 0)`, SD = `r round(d.io.mean_fits.dialect.subset %>% filter(IO.NormalizationType == "SyrdalGopal (Bark)", Experiment == "Experiment 1b (synthesized)") %>% pull(log_likelihood_up_to_constant.sd), digits = 0)`). As mentioned in Section \@ref(sec:visualizing-consequences), a potential explanation to large fluctuations in model fits between experiments, is the possibility of over-engineered normalization accounts. Given that formant normalization is a pre-linguistic mechanism, it ought to be able to explain listeners' responses to any type of data, including data that does not follow correlations in natural data.
 
-Finally, as expected, all models overall provide higher likelihood fits against human responses in both experiments compared to the main model. When scaling the log likelihood of models in the subset data to those of the main analysis, the results suggest that the overall improvement in likelihood across accounts for the dialect subset model to the original dataset was `r round(d.io.mean_fits.dialect.subset.scaled$improvement_log_likelihood_up_to_constant_diff[1], digits = 1)`%.
+Finally, as expected, all models overall provide higher likelihood fits against human responses in both experiments compared to the main model. When scaling the log likelihood of models in the subset data to those of the main analysis, the results suggest that the overall improvement in likelihood across accounts for the dialect subset model to the original dataset was `r round(d.io.mean_fits.dialect.subset.scaledToMain$improvement_log_likelihood_up_to_constant_diff[1], digits = 1)`%.
 
 (ref:SI-plot-io-optimal-dialect-subset) Results of model fit to data excluding listeners that do not seem to share dialect template. Point ranges indicate mean and 95% bootstrapped CIs of the log-likelihood summarized over the five training sets (higher is better). Accounts that fit listeners' responses to an extent that is statistically indistinguishable from the best-fitting account are marked by (\*).
 
 ```{r SI-plot-io-optimal-dialect-subset, fig.width=base.width*3.5, fig.height=base.height*3.5, fig.align='center', fig.pos="!ht", out.width='90%', fig.cap="(ref:SI-plot-io-optimal-dialect-subset)", message=FALSE}
 p.result_overall %+%
   (io.dialect.subset %>%
-  filter(IO.cues == "F1-F2")) +
+  filter(IO.cues == "F1-F2") %>%
+     # Scale the log likelihoods by the number of responses in each experiment
+     group_by(Experiment) %>%
+     mutate(
+       N = map_int(data_perception, ~ nrow(.x)),
+       log_likelihood_up_to_constant_scaled = log_likelihood_up_to_constant / N)) +
   geom_text(
     # create dummy dataframe bcs of color assignment issues
     data = rbind(
       tibble(Experiment = "Experiment 1a (natural)", IO.NormalizationType = "SyrdalGopal (Bark)"),
       tibble(Experiment = "Experiment 1b (synthesized)", IO.NormalizationType = "Uniform scaling, Nearey (log)")),
     aes(
-      y = ifelse(Experiment == "Experiment 1a (natural)", -1200, -9100),
+      y = ifelse(Experiment == "Experiment 1a (natural)", -.4, -1.38),
       label = "*",
       size = 4)) +
   geom_text(
     data = ttests.SI.dialect.subset,
     aes(
-      y = ifelse(Experiment == "Experiment 1a (natural)", -1200, -9100)),
+      y = ifelse(Experiment == "Experiment 1a (natural)", -.4, -1.38)),
     label = "(*)",
       size = 4) +
   geom_text(
-    data = d.test.by_item %>%
-      group_by(Experiment) %>% 
-      summarise(log_likelihood_chance = round(sum(log_likelihood_chance), digits = 0),
-                log_likelihood_human = round(sum(log_likelihood_human), digits = 0)) %>%
+    data = d.chance.max.dialect.subset %>%
       # Add a col for aligning the printing of text
       mutate(IO.NormalizationType = "Uniform scaling, Nearey (log)"),
     aes(
       x = IO.NormalizationType,
-      y = ifelse(Experiment == "Experiment 1a (natural)", -2650, -12220),
-      label = paste("Chance likelihood: ", log_likelihood_chance, "\nBest-possible likelihood: ", log_likelihood_human)),
+      y = ifelse(Experiment == "Experiment 1a (natural)", -.95, -1.85),
+      label = paste("Chance likelihood: ", log_likelihood_chance_scaled, "\nBest-possible likelihood: ", log_likelihood_human_scaled)),
     color = "black",
     hjust = 0,
     size = 3)
@@ -1716,17 +1772,24 @@ The models evaluated in the main text were trained and evaluated on bivariate (F
 d.io.mean_fits.F1F3 <-
   io %>%
   filter(IO.cues == "F1-F3") %>%
+  # Add scaled log likelihoods by the number of responses in each experiment
+  group_by(Experiment) %>%
+  mutate(
+    N = map_int(data_perception, ~ nrow(.x)),
+    log_likelihood_up_to_constant_scaled = log_likelihood_up_to_constant / N) %>%
   group_by(Experiment, IO.NormalizationType) %>%
   summarise(
     log_likelihood_up_to_constant.mean = mean(log_likelihood_up_to_constant),
-    log_likelihood_up_to_constant.sd = sd(log_likelihood_up_to_constant))
+    log_likelihood_up_to_constant.sd = sd(log_likelihood_up_to_constant),
+    log_likelihood_up_to_constant_scaled.mean = mean(log_likelihood_up_to_constant_scaled),
+    log_likelihood_up_to_constant_scaled.sd = sd(log_likelihood_up_to_constant_scaled))
 ```
 
-Figure \@ref(fig:SI-plot-io-optimal-f1f3) summarizes how well the different accounts fit listeners' responses in Experiments 1a and 1b when assuming F1-F2-F3 multivariate category representations. Many aspects replicate the F1-F2 results reported in the main text. First, normalization significantly improves the fit relative to no normalization. Second, the same uniform scaling accounts again achieve the best fit against listeners' responses: for Experiment 1a, Johnson normalization account provides the best fit (log likelihood = `r round(d.io.mean_fits.F1F3 %>% filter(IO.NormalizationType == "Uniform scaling, Johnson (Hz)", Experiment == "Experiment 1a (natural)") %>% pull(log_likelihood_up_to_constant.mean), digits = 0)`, SD = `r round(d.io.mean_fits.F1F3 %>% filter(IO.NormalizationType == "Uniform scaling, Johnson (Hz)", Experiment == "Experiment 1a (natural)") %>% pull(log_likelihood_up_to_constant.sd), digits = 0)`), while Nearey's uniform scaling account provides the best fit to Experiment 1b (log likelihood = `r format(round(d.io.mean_fits.F1F3 %>% filter(IO.NormalizationType == "Uniform scaling, Nearey (log)", Experiment == "Experiment 1b (synthesized)") %>% pull(log_likelihood_up_to_constant.mean), digits = 0), scientific = FALSE)`, SD = `r round(d.io.mean_fits.F1F3 %>% filter(IO.NormalizationType == "Uniform scaling, Nearey (log)", Experiment == "Experiment 1b (synthesized)") %>% pull(log_likelihood_up_to_constant.sd), digits = 0)`). However, we also note that the inclusion of F3 does not improve the fit to listeners' responses for several accounts (compare *squares* and *circles* in Figure \@ref(fig:SI-plot-io-optimal-f1f3)). In fact, most extrinsic accounts seem to decrease their fit, more so in Experiment 1a than in Experiment 1b. At first blush, this is puzzling given that the model now has access to more information of a type that is broadly believed to be informative for US English vowel recognition [@hillenbrand1995; @peterson1952; @nearey1989]. What might be underlying the lack of improvement, and why does it appear as if some accounts actually achieve worse fits?
+Figure \@ref(fig:SI-plot-io-optimal-f1f3) summarizes how well the different accounts fit listeners' responses in Experiments 1a and 1b when assuming F1-F2-F3 multivariate category representations. Many aspects replicate the F1-F2 results reported in the main text. First, normalization significantly improves the fit relative to no normalization. Second, the same uniform scaling accounts again achieve the best fit against listeners' responses: for Experiment 1a, Johnson normalization account provides the best fit (log likelihood = `r round(d.io.mean_fits.F1F3 %>% filter(IO.NormalizationType == "Uniform scaling, Johnson (Hz)", Experiment == "Experiment 1a (natural)") %>% pull(log_likelihood_up_to_constant.mean), digits = 0)`, SD = `r round(d.io.mean_fits.F1F3 %>% filter(IO.NormalizationType == "Uniform scaling, Johnson (Hz)", Experiment == "Experiment 1a (natural)") %>% pull(log_likelihood_up_to_constant.sd), digits = 0)`; log likelihood normalized by the number of participants = `r round(d.io.mean_fits.F1F3 %>% filter(IO.NormalizationType == "Uniform scaling, Johnson (Hz)", Experiment == "Experiment 1a (natural)") %>% pull(log_likelihood_up_to_constant_scaled.mean), digits = 2)`), while Nearey's uniform scaling account provides the best fit to Experiment 1b (log likelihood = `r format(round(d.io.mean_fits.F1F3 %>% filter(IO.NormalizationType == "Uniform scaling, Nearey (log)", Experiment == "Experiment 1b (synthesized)") %>% pull(log_likelihood_up_to_constant.mean), digits = 0), scientific = FALSE)`, SD = `r round(d.io.mean_fits.F1F3 %>% filter(IO.NormalizationType == "Uniform scaling, Nearey (log)", Experiment == "Experiment 1b (synthesized)") %>% pull(log_likelihood_up_to_constant.sd), digits = 0)`; log likelihood normalized by the number of participants = `r round(d.io.mean_fits.F1F3 %>% filter(IO.NormalizationType == "Uniform scaling, Nearey (log)", Experiment == "Experiment 1b (synthesized)") %>% pull(log_likelihood_up_to_constant_scaled.mean), digits = 2)`). However, we also note that the inclusion of F3 does not improve the fit to listeners' responses for several accounts (compare *squares* and *circles* in Figure \@ref(fig:SI-plot-io-optimal-f1f3)). In fact, most extrinsic accounts seem to decrease their fit, more so in Experiment 1a than in Experiment 1b. At first blush, this is puzzling given that the model now has access to more information of a type that is broadly believed to be informative for US English vowel recognition [@hillenbrand1995; @peterson1952; @nearey1989]. What might be underlying the lack of improvement, and why does it appear as if some accounts actually achieve worse fits?
 
 One possible explanation is that listeners were only exposed to one talker in Experiment 1a. According to some theories, F3 is expected to contribute to vowel recognition when there are multiple talkers, acting as a sort of normalizer for vocal tract length [@nearey1989]. In the absence of other talkers, this advantage might instead introduce noise to the models---an additional source of information that is not useful for listeners in this context. It is also possible that the F3-distribution across categories for this particular talker is atypical given the other talkers in the database. This might explain why the raw Hz model improves the fit with F3-inclusion. We checked for additional outliers along F3 for this talker, but we could not find that outliers would be a likely explanation. To gain further knowledge into this talker's use of F3 compared to other talkers in the database, we used the same models to predict the ground truth, i.e., the category the talker actually intended to produce. These models patterned with the other prediction results, again indicating that F3-inclusion did not improve model performance. We take this to suggest that the F1-F3 results is not about how our model uses F3, but rather about how this specific talker uses F3 (c.f., the potential dialect differences between talkers in the database, reported in Section \@ref(sec:experiment-results), as well as the talker's formant distributions in 3D-space, Figure \@ref(fig:SI-plot-cues-3d)).
 
-(ref:SI-plot-io-optimal-f1f3) Results of ideal observer models trained on F1, F2 and F3 as cues to vowel identity. As in Figure \@ref(fig:plot-io-optimal) in the main text, pointranges indicate mean and 95% bootstrapped CIs of the log-likelihood summarized over the five training sets (higher is better). For comparison, results from the F1-F2 models are included (more transparent circles). Note that the Syrdal & Gopal accounts are not included in the F1-F3 evaluation as they do not provide normalization for F3.
+(ref:SI-plot-io-optimal-f1f3) Results of ideal observer models trained on F1, F2 and F3 as cues to vowel identity. As in Figure \@ref(fig:plot-io-optimal) in the main text, pointranges indicate mean and 95% bootstrapped CIs of the log-likelihood summarized over the five training sets, and normalized by the number of responses in each experiment (higher is better). For comparison, results from the F1-F2 models are included (more transparent circles). Note that the Syrdal & Gopal accounts are not included in the F1-F3 evaluation as they do not provide normalization for F3.
 
 ```{r significance-t-test-f1f3}
 # Use Johnson as ref category for 1a
@@ -1768,10 +1831,15 @@ ttests.SI <- ttests %>%
           mutate(IO.cues = "F1-F3"))
 
 p.results.overall.SI <- io %>%
+  # Scale the log likelihoods by the number of responses in each experiment
+  group_by(Experiment) %>%
+  mutate(
+    N = map_int(data_perception, ~ nrow(.x)),
+    log_likelihood_up_to_constant_scaled = log_likelihood_up_to_constant / N) %>%
   ggplot(
     aes(
       x = IO.NormalizationType,
-      y = log_likelihood_up_to_constant,
+      y = log_likelihood_up_to_constant_scaled,
       color = IO.NormalizationType,
       alpha = IO.cues,
       shape = IO.cues,
@@ -1803,27 +1871,24 @@ p.results.overall.SI +
       filter(IO.NormalizationType %in% c("Uniform scaling, Nearey (log)", "Uniform scaling, Johnson (Hz)")),
     aes(
       x = ifelse(Experiment == "Experiment 1a (natural)", labels.normalization[12], "Uniform scaling, Nearey (log)"),
-      y = ifelse(Experiment == "Experiment 1a (natural)", -3100, -13000),
+      y = ifelse(Experiment == "Experiment 1a (natural)", -.78, -1.47),
       label = "*",
       size = 4)) +
   geom_text(
     data = ttests.SI,
     aes(
-      y = ifelse(Experiment == "Experiment 1a (natural)", -3100, -13000)),
+      y = ifelse(Experiment == "Experiment 1a (natural)", -.78, -1.47)),
     label = "(*)",
       size = 4)  +
   geom_text(
-    data = d.test.by_item %>%
-      group_by(Experiment) %>% 
-      summarise(log_likelihood_chance = round(sum(log_likelihood_chance), digits = 0),
-                log_likelihood_human = round(sum(log_likelihood_human), digits = 0)) %>%
+    data = d.chance.max %>%
       # Add a col for aligning the printing of text
       mutate(IO.NormalizationType = "Uniform scaling, Nearey (log)",
              IO.cues = "F1-F3"),
     aes(
       x = IO.NormalizationType,
-      y = ifelse(Experiment == "Experiment 1a (natural)", -4320, -17050),
-      label = paste("Chance likelihood: ", log_likelihood_chance, "\nBest-possible likelihood: ", log_likelihood_human)),
+      y = ifelse(Experiment == "Experiment 1a (natural)", -1.11, -1.91),
+      label = paste("Chance likelihood: ", log_likelihood_chance_scaled, "\nBest-possible likelihood: ", log_likelihood_human_scaled)),
     color = "black",
     hjust = 0,
     size = 3) +
