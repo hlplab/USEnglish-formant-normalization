@@ -20,7 +20,7 @@ Similar concerns apply to dialectology, research on language change, second lang
 ## Limitations and future directions
 As mentioned in the introduction, we take it as relatively uncontroversial *that* normalization is part of human speech perception. Independent of any benefits that such normalization conveys for speech perception, its existence is supported by evidence from cross-species comparisons and neuro-physiological studies [for review, see @barreda2020]. There are, however, important questions as to how decisions we made in comparing normalization accounts against each other might have affected their fit against listeners' responses.
 
-For instance, we followed previous work in focusing on formants, and specifically estimates of the formants in the *center* of the vowel. There is, however, ample evidence that formant dynamics throughout the vowel can strongly affect perception [@assmann-katz2005, @hillenbrand-nearey1999; @nearey-assmann1986].<!-- TO DO: only cite perception--> In addition, there are proposals that entirely give up the assumption that formants are the primary cues to vowel identity [e.g., whole-spectrum accounts, @hillenbrand2006]. While these proposals might provide a more informative representation of vowels, we consider it unlikely that they would entirely remove the problem of cross-talker variability. For instance, @richter2017 still found benefits of normalization even when the entire frequency spectrum throughout vowels was considered (in the form of Mel-Frequency Cepstral Coefficients and their derivatives). For the present work, auxiliary analyses in the SI (\@ref(sec:SI-F1F3)) replicated our core findings when F3 was included in the model. Still, it remains unclear whether the inclusion of additional cues, such as VISC, or additional formant dynamics, would alter the results of the present study. 
+For instance, we followed previous work in focusing on formants, and specifically estimates of the formants in the *center* of the vowel. There is, however, ample evidence that formant dynamics throughout the vowel can strongly affect perception [@assmann-katz2005, @hillenbrand-nearey1999; @nearey-assmann1986]. In addition, there are proposals that entirely give up the assumption that formants are the primary cues to vowel identity [e.g., whole-spectrum accounts, @hillenbrand2006]. While these proposals might provide a more informative representation of vowels, we consider it unlikely that they would entirely remove the problem of cross-talker variability. For instance, @richter2017 still found benefits of normalization even when the entire frequency spectrum throughout vowels was considered (in the form of Mel-Frequency Cepstral Coefficients and their derivatives). For the present work, auxiliary analyses in the SI (\@ref(sec:SI-F1F3)) replicated our core findings when F3 was included in the model. Still, it remains unclear whether the inclusion of additional cues, such as VISC, or additional formant dynamics, would alter the results of the present study. 
 
 As is the case of any computational work, the present study committed to a number of assumptions that are not critical, but were necessary in order to deliver clear quantitative predictions. *Quantitative tests* of theories---as we have done here---require assumptions about *every* aspect of the model. Here, this included all the steps necessary to link properties of the stimuli to listeners' responses. For this purpose, we adopted the ASP framework [@xie2023], and visualized the graphical model that links stimuli ($x$) to responses ($r$) in Figure \@ref(fig:model-perceptual-decision-making). 
 
@@ -87,7 +87,7 @@ if (file.exists("../../models/io-optimal-trial-level-posterior.rds") & !RESET_MO
       multiple = "all") %>%
     relocate(Experiment, starts_with("IO.")) %>%
     unnest(data_perception) %>%
-    # Calculate the log likelihood for each response
+    # Calculate the log-likelihood for each response
     mutate(
       likelihood_up_to_constant = 
         pmap_dbl(
@@ -176,14 +176,14 @@ p.predicted.trial.likelihood <-
     data = d.smooth,
     aes(y = fit), color = "blue", lwd = 1) +
   scale_x_continuous(breaks = c(1, 10, 100)) +
-  scale_y_continuous("mean log likelihood of participant's responses") + 
+  scale_y_continuous("mean log-likelihood of participant's responses") + 
   coord_trans(x = "log10") +
   facet_wrap(~ Experiment, scales = "free_x") +
   ggh4x::force_panelsizes(cols = base.width, rows = base.height)
 
 p.trial.accuracy + p.predicted.trial.likelihood + 
   plot_annotation(tag_levels = list(c('A', 'B'))) +
-  plot_layout(guides = "collect", widths = c(.95,2)) &
+  plot_layout(guides = "collect", widths = c(.97,2)) &
   theme(plot.tag = element_text(face = "bold", size = 11, hjust = 0, vjust = 0),
         plot.tag.position = c(0.02, 0.8))
 ```
