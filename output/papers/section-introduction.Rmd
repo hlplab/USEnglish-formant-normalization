@@ -161,8 +161,7 @@ Normalization\newline\hglue6pt procedure\vrule depth 6pt width0pt&
 & \cellcolor[HTML]{C9C0BB}{---}
 & \cellcolor[HTML]{C9C0BB}{ERB}  
 & \cellcolor[HTML]{C9C0BB}{Glasberg \& Moore (1990)}
-& \cellcolor[HTML]{C9C0BB}{$F_n^{ERB} = 21.4 \times \log_{10}(1 + F_n
-\times 0.00437) $} \\
+& \cellcolor[HTML]{C9C0BB}{$F_n^{ERB} = 21.4 \times \log_{10}(1 + F_n\times 0.00437) $} \\
 \multirow[c]{-11}{*}{\hskip24pt\rotatebox{90}
 {\hskip-24pt\vbox{\bf \hbox{trans-}\hbox{formation}}}
 \hskip-30pt}
