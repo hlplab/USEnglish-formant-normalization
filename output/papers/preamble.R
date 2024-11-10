@@ -35,7 +35,8 @@ list.of.packages <-
     "tidybayes",        # working with posterior draws of Bayesian models
     "MVBeliefUpdatr",   # fitting and using Ideal Observers
     "future",           # parallel processing
-    "furrr"             # parallel map fur future
+    "furrr",            # parallel map fur future
+    "english"           # convert numbers to text
 )
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if (length(new.packages)) {
