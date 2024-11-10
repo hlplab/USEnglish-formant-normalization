@@ -5,6 +5,11 @@
 *.gz
 *.Rproj
 *.tex
+*.aux
+*.bbl
+*.blg
+*.ent
+*.pdf
 .Rproj.user
 .Rhistory
 .RData

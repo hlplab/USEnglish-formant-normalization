@@ -432,7 +432,7 @@ Figure \@ref(fig:SI-eng-vowels-normalized), adapted from @persson-jaeger2023, sh
 
 (ref:SI-eng-vowels-normalized) Eight monophthong vowels of US English from the @xie-jaeger2020 database when F1 and F2 are transformed into a perceptual scale (**grey**), intrinsically normalized (**yellow**), or extrinsically normalized through centering (**blue**) or standardizing (**purple**). Each point corresponds to one recording, averaged across the three measurement points within each vowel segment. Shape indicates gender (female talkers represented by points, male talkers by triangles).
 
-```{r SI-eng-vowels-normalized, fig.width=base.width * 3.5, fig.height=base.height * 4.5, out.width='100%', fig.align='center', fig.cap="(ref:SI-eng-vowels-normalized)"}
+```{r SI-eng-vowels-normalized, fig.width=base.width * 3.5, fig.height=base.height * 4.5, out.width='90%', fig.align='center', fig.cap="(ref:SI-eng-vowels-normalized)"}
 p <-
   d.XieJaeger.long %>%
   ggplot(
@@ -495,7 +495,7 @@ Figure \@ref(fig:SI-norm-params) further indicates that the reliability by which
 
 (ref:SI-norm-params) Comparing normalization parameters $\theta$ across the phonetic database used to estimate listeners' prior experience [@xie-jaeger2020] and the stimuli from Experiments 1a and 1b. Only accounts that assume talker-specific normalization parameters are shown. To put all parameters on a similar scale, we divided each parameter by its average value for the five folds of the phonetic database, multiplied by 100, and subtracted 100. The resulting $\delta_\theta$ indicates the difference in percent between the $\theta$ estimated for the experiment relative to the $\theta$ for the phonetic database. The horizontal dotted line ($\delta_\theta = 1$) indicates perfect alignment between $\theta$ value in database and experiment stimuli. 
 
-```{r SI-norm-params, fig.width=base.width*3, fig.height=base.height*3.5, out.width='90%', fig.cap="(ref:SI-norm-params)", fig.pos="!ht", warning=FALSE}
+```{r SI-norm-params, fig.width=base.width*3, fig.height=base.height*3.5, out.width='80%', fig.cap="(ref:SI-norm-params)", fig.pos="!ht", warning=FALSE}
 # Check the variability in the params across experiments and folds
 d.io.normParams <-
   d.XieJaeger.wNorm.params %>%
@@ -693,7 +693,7 @@ ttests.against.rawHz <-
 \caption{\label{tab:SI-ttest-1a} {\em t}-test predicting the model log likelihood as a function of normalization account for Experiment 1a (ordered in descending order by best-fitting models). Estimate mean represents the estimate of the reference account (no normalization), and Diff. in means indicates the increase in estimate mean for that account relative to the reference account.}
 \centering
 \small
-\begin{tabular}{p{6cm}p{2cm}p{3cm}p{3cm}p{2cm}}
+\begin{tabular}{l l c c c}
 \toprule
 Normalization account & Statistic & Estimate mean & Diff. in means & p\_value\\
 \midrule
@@ -725,7 +725,7 @@ transformed (semitones) & 0.688 & -3620.93 & -31.765 & 0.735\\
 \caption{\label{tab:SI-ttest-1b} {\em t}-tests predicting the model log likelihood as a function of normalization account for Experiment 1b (ordered in descending order by best-fitting models). Estimate mean represents the estimate of the reference account (no normalization), and Diff. in means indicates the increase in estimate mean for that account relative to the reference account.}
 \centering
 \small
-\begin{tabular}{p{6cm}p{2cm}p{3cm}p{3cm}p{2cm}}
+\begin{tabular}{l l c c c}
 \toprule
 Normalization account & Statistic & Estimate mean & Diff. in means & p\_value\\
 \midrule
@@ -867,10 +867,10 @@ rm(d.io.bestFit.params)
 ```
 
 \begin{table}
+\footnotesize
 \caption{\label{tab:SI-best-fits-1a}The best-fitting estimates obtained for noise ratios and lapse rates in Experiment 1a (averaged across the five cross-validation folds and ordered by best-performing models)}
 \centering
-\small
-\begin{tabular}{p{6cm}p{2cm}p{5cm}p{5cm}}
+\begin{tabular}{l l l l l}
 \toprule
 model & mean log likelihood & noise percentage & lapse rate\\
 \midrule
@@ -899,10 +899,10 @@ transformed (log) & -4229.01 & mean=0.54 (SD=0.32) & mean=0.06 (SD=0.01)\\
 \end{table}
 
 \begin{table}
+\footnotesize
 \caption{\label{tab:SI-best-fits-1b}The best-fitting estimates obtained for noise ratios and lapse rates in Experiment 1b (averaged across the five cross-validation folds and ordered by best-performing models)}
 \centering
-\small
-\begin{tabular}{p{6cm}p{2cm}p{5cm}p{5cm}}
+\begin{tabular}{l l l l l}
 \toprule
 model & mean log likelihood & noise percentage & lapse rate\\
 \midrule
@@ -1079,7 +1079,7 @@ d.io.by_Item.Johnson_noNorm <- d.io.by_Item.model.diff %>%
 
 (ref:SI-model-ceiling) By-item model improvement from no normalization, relative to the maximum possible performance (predicting human responses from human responses). Maximum log likelihood across items indicated by ticks on axis. Arrows indicate change from no normalization to Nearey's uniform scaling (**panel A**), Johnson (**panel B**), and Lobanov (**panel C**), for items with a change of more than 35%. Points represent items for which change is less than 35%. Color and arrow head indicate decrease or increase in log likelihood.
 
-```{r SI-model-ceiling, fig.cap="(ref:SI-model-ceiling)", fig.width=base.width*3, fig.height=base.height*5, fig.align='center', out.widht='100%', warning=FALSE, message=FALSE}
+```{r SI-model-ceiling, fig.cap="(ref:SI-model-ceiling)", fig.width=base.width*3, fig.height=base.height*4.5, fig.align='center', out.widht='90%', warning=FALSE, message=FALSE}
 # p.by.item.Near_J <-
 #   make_by_item_plot(
 #     d.io.by_Item.Near_J,
@@ -1557,8 +1557,8 @@ p.result_overall %+%
       mutate(IO.NormalizationType = "Uniform scaling, Nearey (log)"),
     aes(
       x = IO.NormalizationType,
-      y = ifelse(Experiment == "Experiment 1a (natural)", -1.07, -1.79),
-      label = paste("\nBest-possible likelihood: ", log_likelihood_human_scaled, "Chance likelihood: ", log_likelihood_chance_scaled)),
+      y = ifelse(Experiment == "Experiment 1a (natural)", -1.075, -1.79),
+      label = paste("Best-possible likelihood: ", log_likelihood_human_scaled, "\nChance likelihood ln(1/8): ", log_likelihood_chance_scaled)),
     color = "black",
     hjust = 0,
     size = 3)
@@ -1754,8 +1754,8 @@ p.result_overall %+%
       mutate(IO.NormalizationType = "Uniform scaling, Nearey (log)"),
     aes(
       x = IO.NormalizationType,
-      y = ifelse(Experiment == "Experiment 1a (natural)", -.95, -1.85),
-      label = paste("\nBest-possible likelihood: ", log_likelihood_human_scaled, "Chance likelihood: ", log_likelihood_chance_scaled)),
+      y = ifelse(Experiment == "Experiment 1a (natural)", -.94, -1.85),
+      label = paste("\nBest-possible likelihood: ", log_likelihood_human_scaled, "\nChance likelihood ln(1/8): ", log_likelihood_chance_scaled)),
     color = "black",
     hjust = 0,
     size = 3)
@@ -1887,8 +1887,8 @@ p.results.overall.SI +
              IO.cues = "F1-F3"),
     aes(
       x = IO.NormalizationType,
-      y = ifelse(Experiment == "Experiment 1a (natural)", -1.11, -1.91),
-      label = paste("\nBest-possible likelihood: ", log_likelihood_human_scaled, "Chance likelihood: ", log_likelihood_chance_scaled)),
+      y = ifelse(Experiment == "Experiment 1a (natural)", -1.09, -1.91),
+      label = paste("\nBest-possible likelihood: ", log_likelihood_human_scaled, "\nChance likelihood ln(1/8): ", log_likelihood_chance_scaled)),
     color = "black",
     hjust = 0,
     size = 3) +
