@@ -854,7 +854,7 @@ make_categorization_F1F2_landscape_plot <- function(
 }
 ```
 
-```{r prediction-landscapes-optim-io, fig.cap="(ref:prediction-landscapes-optim-io)", fig.pos = "!ht", out.width='100%', message=FALSE, warning=FALSE}
+```{r prediction-landscapes-optim-io, fig.cap="(ref:prediction-landscapes-optim-io)", fig.pos = "!ht", out.width='80%', message=FALSE, warning=FALSE}
 if (RESET_MODELS || !file.exists("../../figures/p.prediction-landscapes-study1.png")) {
 
   # Visualizing the predictions for unnormalized models and some of the best-fitting models
@@ -865,13 +865,13 @@ if (RESET_MODELS || !file.exists("../../figures/p.prediction-landscapes-study1.p
   p <-
     p.raw / p.johnson / p.nearey2 +
     plot_layout(
-      guides = "collect", ) &
+      guides = "collect") &
     plot_annotation(
-      tag_levels = list(paste(LETTERS[1:4], labels.normalization[c(1, 12, 10, 19)], sep = " - "))) &
+      tag_levels = list(paste(LETTERS[1:4], labels.normalization[c(1, 12, 10)], sep = " - "))) &
     theme(legend.position = "bottom",
           legend.justification = "bottom",
           legend.margin = margin(0, 0, 0, 0, unit = "pt"),
-          plot.tag.position = c(0, 0.95),
+          plot.tag.position = c(0, 0.97),
           plot.tag = element_text(face = "bold", size = 11, hjust = 0, vjust = 0))
 
   ggsave(p, file = "../../figures/p.prediction-landscapes-study1.png", width = base.width*3.5, height = base.height*4.5)
