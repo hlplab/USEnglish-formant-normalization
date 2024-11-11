@@ -4,7 +4,7 @@ shorttitle: "Comparing normalization against perception"
 
 author:
   - name: Anna Persson
-    affiliation: Swedish Language and Multilingualism, Stockholm University
+    affiliation: Swedish Language and Multilingualism, Stockholm University, Stockholm, SE-106 91, Sweden
     # etal: Persson # First author's last name.
     email: anna.persson\@su.se # Indicates corresponding Author
     institution: Department of Swedish Language and Multilingualism
