@@ -89,6 +89,8 @@ papaja::r_refs(
 # CONSTANTS ----------------------------------------------------------------------------------
 set.seed(333421864)
 
+# Make sure to keep aux files etc. after knitting
+options(tinytex.clean = FALSE)
 options(knitr.table.format = "latex")
 base.width = 2.5
 base.height = 2.5
