@@ -82,7 +82,7 @@ theme_set(theme_bw())
 ```
 
 ```{r functions}
-source("../functions.R")
+#source("../functions.R")
 source("../../output/papers/constants-functions.R")
 ```
 
@@ -92,13 +92,13 @@ The script outputs repaired vowel statistics on the test data, csv-files that wi
 
 With regard to the repairing of the test data, the following repairs are done:
   * corrected height-backness values in the manually created test grid that is used for resynthesis.
-  * F3 values are added to the experiment tokens. For Experiment 1a, these F3 values are predicted from the tokens' F1 and F2 values. For Experiment 1b, the F3 values are the natural F3 values for talker E2 (the talker whose natural tokens are used in Experiment 1b).
+  * F3 values are added to the experiment tokens. For Experiment 1a, the F3 values are the natural F3 values for talker E2. For Experiment 1b, these F3 values are predicted from the tokens' F1 and F2 values.
 
 # Repairing vowel formant information in test data for Experiment 1a and 1b
 
 ```{r load-data}
 # Load the test token data. One dataframe for each experiment
-d.test.tokens.1a <- read.csv('../../experiments/experiment-A/lists/NORM-A-test-forward.csv') %>%
+d.test.tokens.1b <- read.csv('../../experiments/experiment-A/lists/NORM-A-test-forward.csv') %>%
   # Rename variables to match the test data
   rename(
     "Item.Filename" = "filename") %>%
@@ -108,17 +108,17 @@ d.test.tokens.1a <- read.csv('../../experiments/experiment-A/lists/NORM-A-test-f
     Item.Backness = as.numeric(sapply(strsplit(REMOVE.Item, "_"), function(x) x[3]))) %>%
   select(-REMOVE.Item)
 
-d.test.tokens.1b <- read.csv('../../experiments/experiment-A/lists/NORM-A-natural-E2-test-forward.csv')
+d.test.tokens.1a <- read.csv('../../experiments/experiment-A/lists/NORM-A-natural-E2-test-forward.csv')
 
 ```
 
 ## Correct height-backness values in test data
-We made a mistake in the labeling of the file names for Experiment 1b (natural stimuli), resulting in those file names containing incorrect height-backness values. When looking at visualizations of the natural stimuli in experiment report, we noticed that some of the vowels seemed to be off location. I first started to do manual correction of these values, and discovered that there were small differences on almost all vowels between the cue values in each vowel's file name from its actual height-backness values. The file used for manual correction had different F0_gm's than the one used to generate the original stimuli list with height-backness values in file names and the later on generated normalized cue values. This was because the first list had statistics run on all 10 vowels, including diphthongized /owed/ and /aid/, while the latter had filtered out these values, hence the difference in F0. F0 is used in the formula for converting F1 and F2 to height and backness, respectively.
+We made a mistake in the labeling of the file names for Experiment 1a (natural stimuli), resulting in those file names containing incorrect height-backness values. When looking at visualizations of the natural stimuli in experiment report, we noticed that some of the vowels seemed to be off location. I first started to do manual correction of these values, and discovered that there were small differences on almost all vowels between the cue values in each vowel's file name from its actual height-backness values. The file used for manual correction had different F0_gm's than the one used to generate the original stimuli list with height-backness values in file names and the later on generated normalized cue values. This was because the first list had statistics run on all 10 vowels, including diphthongized /owed/ and /aid/, while the latter had filtered out these values, hence the difference in F0. F0 is used in the formula for converting F1 and F2 to height and backness, respectively.
 We therefore corrected all of these height and backness values while keeping the file name constant (that is, keeping the original file name, that is 'wrong' in terms of reflecting the token's actual height-backness values).
 
 ```{r }
-# Read in the manually corrected list of height backness values for stimuli in experiment 1b; replace the original data frame *d.test.tokens.1b* with this one, since this has the variable Talker.Token - a manually added identifier for each token. This identifier is used further down in order to overwrite the height backness values from filenames.
-d.test.tokens.1b <-
+# Read in the manually corrected list of height backness values for stimuli in experiment 1a; replace the original data frame *d.test.tokens.1a* with this one, since this has the variable Talker.Token - a manually added identifier for each token. This identifier is used further down in order to overwrite the height backness values from filenames.
+d.test.tokens.1a <-
   read_csv("../repair-information-from-phonetic-databases/NORM-A-natural-E2-test-forward-hb-repaired.csv") %>%
   mutate(
     target_word = factor(
@@ -142,17 +142,17 @@ d.test.tokens.1b <-
   select(-c(Talker.Token, height_gm, backness_gm))
 
 #ggplotly()
-# Write a csv-file with experiment 1b tokens together with their automatically extracted F3 values to be double-checked by manual measurements, in order to check possible effects of F3 values on synthesized stimuli (please see Reflections section, Experiment report rmd, located in this repository at \url{scripts/experiment-reports/}). For several of the back vowels (especially odd, had, hut), the automatic extraction of F3 values in Praat might have generated false values (seem to have tracked formants in between the second and the third). Code kept here for reproducibility.
+# Write a csv-file with experiment 1a tokens together with their automatically extracted F3 values to be double-checked by manual measurements, in order to check possible effects of F3 values on synthesized stimuli (please see Reflections section, Experiment report rmd, located in this repository at \url{scripts/experiment-reports/}). For several of the back vowels (especially odd, had, hut), the automatic extraction of F3 values in Praat might have generated false values (seem to have tracked formants in between the second and the third). Code kept here for reproducibility.
 #write.csv(
-#  d.test.tokens.1b %>%
+#  d.test.tokens.1a %>%
 #    select(Item.Filename, F3),
-#  file = "../../scripts/repair-information-from-phonetic-databases/NORM-B-F3values_to_check.csv",
+#  file = "../../scripts/repair-information-from-phonetic-databases/NORM-1A-F3values_to_check.csv",
 #   row.names = FALSE, quote = FALSE)
 
 ```
 
 ## Add F3 values to the synthesized test data
-We also add F3 values to the synthesized experiment tokens. This will allow us to assess the differences in the F3 distributions on the natural and the synthesized stimuli. For the tokens in Experiment 1a, the F3 values are predicted from each token's F1 and F2 values. For Experiment 1b, the F3 values are the natural F3 values for talker E2 (the talker whose natural tokens are used in Experiment 1b).
+We also add F3 values to the synthesized experiment tokens. This will allow us to assess the differences in the F3 distributions on the natural and the synthesized stimuli. For the tokens in Experiment 1b, the F3 values are predicted from each token's F1 and F2 values. For Experiment 1a, the F3 values are the natural F3 values for talker E2 (the talker whose natural tokens are used in Experiment 1a).
 
 We adopted the following procedure: the manually created test grid for resynthesis is joined with a general F0 value and F3 values. The F3 values are either averaged across that same talker's vowels or predicted from the tokens' height and backness values. In @wadeEffectsAcousticVariability2007a, the F3-value was the averaged F3 for each vowel and each language condition; which we interpreted as the average vowel-specific F3 based on either native or non-native production data. We however decided to also build a model for estimating F3 based on height and backness, by running a linear regression with F3 as dependent variable and height, backness and the interaction between height and backness as linear predictors, in order to assess how much of the between-vowel variability is carried by F3.
 
@@ -320,7 +320,7 @@ vowel.grid.E2.predF3 %<>%
   select(height, backness, F3, synthtalker_F0)
 
 # Add the predicted F3 values for the synthesized stimuli
-d.test.tokens.1a %<>%
+d.test.tokens.1b %<>%
   left_join(
   vowel.grid.E2.predF3 %>%
   rename(
@@ -332,28 +332,28 @@ d.test.tokens.1a %<>%
     #Add SR for backtransforming into Hz
     #SR = d.test.tokens.1b$SR[1],
     # Add experiment variable
-    Experiment = "1a (synthesized)",
+    Experiment = "1b (synthesized)",
     SR = F0_to_SR(synthtalker_F0),
     F1 = height_to_F1(Item.Height, SR),
     F2 = backness_to_F2(Item.Backness, Item.Height, SR)) %>%
   # and to rename the cols with formants in hertz and the F0 for resynth talker
     rename(F0 = synthtalker_F0)
 
-d.test.tokens.1b %<>%
+d.test.tokens.1a %<>%
   mutate(
     # Add experiment variable + in order for norm function to run, we need a fold-col.
-    Experiment = "1b (natural)") %>%
+    Experiment = "1a (natural)") %>%
   # rename the cols with formants in hertz
   rename(F0 = F0_gm, F1 = F1_gm, F2 = F2_gm)
 
 # Write csv-files with the repaired vowel data, to be read in by experiment-report rmd.
 write_csv(
-  d.test.tokens.1a, 
-  file =  "../../data/phonetic vowel statistics/English/vowel-formants-Experiment-1a.csv")
-
-write_csv(
   d.test.tokens.1b, 
   file =  "../../data/phonetic vowel statistics/English/vowel-formants-Experiment-1b.csv")
+
+write_csv(
+  d.test.tokens.1a, 
+  file =  "../../data/phonetic vowel statistics/English/vowel-formants-Experiment-1a.csv")
 
 ###Old code said this file was read in. the F3 values differs slightly. Can however not find any documentation indicating where this was generated and in any other way than the above procedure.
 # d.test.tokens.1a %>%
@@ -385,12 +385,12 @@ We are transforming the test tokens' cue values into other normalization spaces.
 #       rename_with(.fn = ~ paste(.x, "r", sep = "_"), .cols = ends_with(c("Hz", "Mel", "Bark", "ERB", "semitones")))
 #   }
 # 
-# d.test.tokens.1a %<>%
+# d.test.tokens.1b %<>%
 #   mutate(
 #     #Add SR for backtransforming into Hz
-#     SR = d.test.tokens.1b$SR[1],
+#     SR = d.test.tokens.1a$SR[1],
 #     # Add experiment variable
-#     Experiment = "1a (synthesized)") %>%
+#     Experiment = "1b (synthesized)") %>%
 #   add_Hz_from_height_backness() %>%
 # # in order for norm function to run, we need a Talker variable, F0 values and a fold-col.
 #   mutate(
@@ -400,8 +400,8 @@ We are transforming the test tokens' cue values into other normalization spaces.
 #   # and to rename the cols with formants in hertz and the F0 for resynth talker
 #     #rename(F1 = Item.Cue_Hz_F1, F2 = Item.Cue_Hz_F2, F0 = synthtalker_F0)
 # 
-# # Transform token cues from Experiment 1a into different cue spaces using normalization functions.
-# d.test.tokens.1a %<>%
+# # Transform token cues from Experiment 1b into different cue spaces using normalization functions.
+# d.test.tokens.1b %<>%
 #   #group_by(crossvalidation_group) %>%
 #   # Get transformations, apply normalizations (both classic formants one and C-CuRE)
 #   group_map(
@@ -415,17 +415,17 @@ We are transforming the test tokens' cue values into other normalization spaces.
 
 
 ```{r}
-# Transform token cues from Experiment 1b into different cue spaces using normalization functions.
-# d.test.tokens.1b %<>%
+# Transform token cues from Experiment 1a into different cue spaces using normalization functions.
+# d.test.tokens.1a %<>%
 #   mutate(
 #     # Add experiment variable + in order for norm function to run, we need a fold-col.
-#     Experiment = "1b (natural)",
+#     Experiment = "1a (natural)",
 #     fold_type = "training") %>%
 #   # rename the cols with formants in hertz
 #   rename(F0 = F0_gm, F1 = F1_gm, F2 = F2_gm)
 # 
 # # Normalize the test data
-# d.test.tokens.1b %<>%
+# d.test.tokens.1a %<>%
 #   #group_by(crossvalidation_group) %>%
 #   # Get transformations, apply normalizations (both classic formants one and C-CuRE)
 #   group_map(

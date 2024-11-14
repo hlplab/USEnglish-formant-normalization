@@ -4,7 +4,7 @@ shorttitle: "Comparing normalization against perception"
 
 author:
   - name: Anna Persson
-    affiliation: Swedish Language and Multilingualism, Stockholm University
+    affiliation: Swedish Language and Multilingualism, Stockholm University, Stockholm, SE-106 91, Sweden
     # etal: Persson # First author's last name.
     email: anna.persson\@su.se # Indicates corresponding Author
     institution: Department of Swedish Language and Multilingualism
@@ -20,7 +20,7 @@ author:
 # The following prints the current date (optional, set to false to remove).
 date: true
 classoption:
-  - preprint # Set to "reprint" or "preprint" 
+  - preprint # Set to "reprint" or "preprint"
 # The reprint style typesets the manuscript with two columns and 10pt font size.  
 #  - NumberedRefs # Uncomment to use numbered references rather than the default author-year style.
 #  - trackchanges # Uncomment to track changes in the manuscript. (Use with preprint option).
@@ -36,8 +36,8 @@ abstract:
 # ``novel'' in the abstract. An article usually includes an abstract, a
 # concise summary of the work covered at length in the main body of the
 # article.
-  Human speech perception tends to achieve robust speech recognition, despite substantial cross-talker variability. Believed to be critical to this ability are auditory normalization mechanisms whereby listeners adapt to individual differences in vocal tract physiology in vowel perception. This study asks what types of computations are involved in such normalization. Two 8-way alternative forced-choice experiments assessed L1 listeners' categorizations across the entire US English vowel space---both for unaltered and for synthesized stimuli. Listeners' responses in these experiments were compared against the predictions of twenty influential normalization accounts that differ starkly in the inference and memory capacities they imply for speech perception. Listeners' responses were best explained by *extrinsic* normalization accounts, suggesting that listeners learn and store distributional properties of talkers' speech. Of the extrinsic accounts, it was the *computationally least complex* variants that best fit listeners' responses, using a single parameter. These findings have consequences for any research that aims to investigate the perceptual, social, and linguistic information of vowel productions. This includes research in phonetics and phonology, sociolinguistics, and language acquisition. In these fields, it remains common to employ normalization accounts that the present study confirms to be inadequate models of human perception (e.g., Lobanov normalization). 
-
+  Human speech recognition tends to be robust, despite substantial cross-talker variability. Believed to be critical to this ability are auditory normalization mechanisms whereby listeners adapt to individual differences in vocal tract physiology. This study investigates the computations involved in such normalization. Two 8-way alternative forced-choice experiments assessed L1 listeners' categorizations across the entire US English vowel space---both for unaltered and for synthesized stimuli. Listeners' responses in these experiments were compared against the predictions of twenty influential normalization accounts that differ starkly in the inference and memory capacities they imply for speech perception. This includes variants of *estimation-free* transformations into psycho-acoustic spaces, *intrinsic* normalizations relative to concurrent acoustic properties, and *extrinsic* normalizations relative to talker-specific statistics. Listeners' responses were best explained by extrinsic normalization, suggesting that listeners learn and store distributional properties of talkers' speech. Specifically, *computationally simple* (single-parameter) extrinsic normalization best fit listeners' responses. This simple extrinsic normalization also clearly outperformed Lobanov normalization---a computationally more complex account that remains popular in research on phonetics and phonology, sociolinguistics, typology, and language acquisition.
+  
 keywords          : "speech perception; normalization; vowels; formants; ideal observers"
 bibliography      : ["latex-stuff/library.bib", "latex-stuff/r-references.bib"]
 
@@ -58,8 +58,21 @@ source("preamble.R")
 ```
 
 ```{r global-options, include=FALSE}
+# % In order to compile the document without the SI, while still having all 
+# % cross-reference to the SI, we're using the xr package:
+# % 1) Knit the document with INCLUDE_SI = T.
+# % 2) Rename the .aux file to "manuscript-with-SI.aux"
+# % 3) Reknit the document with INCLUDE_SI = F
+# % 
+# % For this to work:
+# % a) the xr latex package needs to be loaded as part of the preamble of the 
+# %    document you're knitting: \usepackage{xr}
+# % b) "manuscript-with-SI" needs to be part of the preamble of the document
+# %    you're knitting: \externaldocument{manuscript-with-SI}
+# % c) options(tinytex.clean = FALSE) needs to be specified in the R code, so 
+# %    that the aux and bibliography files are kept after knitting.
+INCLUDE_SI = F          # switch on/off to get SI.
 INCLUDE_TODO = F        # switch on/off to get to do list.
-INCLUDE_SI = T          # switch on/off to get SI.
 RESET_MODELS = F        # switch on/off whether model optimization etc. is re-run
 
 # Use fig.process to rename figure files generated by R so that they comply with
@@ -82,7 +95,7 @@ knitr::opts_chunk$set(
 
 # The JASA LaTeX class depends on the LaTeX package "revtex4-2". If you are
 # using a full LaTeX distro, you should make sure "revtex4-2" is installed, and
-# install it if not. 
+# install it if not.
 ```
 
 \setcounter{secnumdepth}{5}
@@ -102,9 +115,8 @@ knitr::opts_chunk$set(
 ```
 
 \begin{acknowledgments}
-Earlier versions of this work were presented at 2023 ASA meeting, ExLing 2022, at the Department of Computational Linguistics at the University of Zürich and at the Department of Swedish language and multilingualism at Stockholm University. We are grateful to OMITTED FOR REVIEW.
+Earlier versions of this work were presented at 2023 ASA meeting, ExLing 2022, at the Department of Computational Linguistics at the University of Zürich and at the Department of Swedish language and multilingualism at Stockholm University. We are grateful to Maryann Tan, Chigusa Kurumada, and Xin Xie for feedback on this work. We thank Travis Wade for clarifications on the synthesis procedure used in his study. We thank Leslie Li and Xin Xie for sharing their database of L1-US English *hVd* productions, and the JASA copy editing staff for help with the Latex formatting. This work was partially funded by grants to AP from Kungliga Vetenskapsakademien, Kungliga Vitterhetsakademien, and the Department of Swedish Language and Multilingualism at Stockholm University, as well as grants to TFJ by the Helge Ax:son Johnson foundation, the Stockholm University Board of Human Science (Funding for Strategic Investments), and the Stockholm University Faculty of Humanities’ Research School (Kvalitetssäkrande medel grant).
 \end{acknowledgments}
-<!-- Maryann Tan, Chigusa Kurumada, and Xin Xie for feedback on this work. We thank Leslie Li and Xin Xie for sharing their database of L1-US English *hVd* productions, and the JASA copy editing staff for help with the Latex formatting. This work was partially funded by grants to AP from Kungliga Vetenskapsakademien, Kungliga Vitterhetsakademien, and the Department of Swedish Language and Multilingualism at Stockholm University, as well as grants to TFJ by the Helge Ax:son Johnson foundation, the Stockholm University Board of Human Science (Funding for Strategic Investments), and the Stockholm University Faculty of Humanities’ Research School (Kvalitetssäkrande medel grant). -->
 
 
 # Author Contributions {-}
@@ -113,10 +125,12 @@ AP designed the experiments and collected the data, with input from TFJ. TFJ pro
 
 # Author Declarations {-}
 ## Conflict of Interest {-}
-The authors declare that the research was conducted in the absence of any commercial or financial relationships that could be construed as a potential conflict of interest.
+The authors have no conflicts to disclose.
 
 ## Ethics approval {-}
 This study was reviewed and approved Research Subjects Review Board (RSRB) of the University of Rochester (STUDY00000417) under the OHSP and UR policies, and in accordance with Federal regulation 45 CFR 46 under the university’s Federal-wide Assurance (FWA00009386).
+
+`r if (!INCLUDE_SI) cat("\\externaldocument{Eng-vowel-norm copy}")`
 
 ```{r, child="SI.Rmd", eval= if (INCLUDE_SI) TRUE else FALSE}
 ```
@@ -131,6 +145,7 @@ This study was reviewed and approved Research Subjects Review Board (RSRB) of th
 
 <div id="refs" custom-style="Bibliography"></div>
 
+\nocite{balzano1982}
 \nocite{barreda-nearey2018}
 \nocite{goldinger1996}
 \nocite{hay2017}
@@ -138,9 +153,12 @@ This study was reviewed and approved Research Subjects Review Board (RSRB) of th
 \nocite{johnson1999}
 \nocite{kleinschmidt-jaeger2016}
 \nocite{mcgowan2015}
+\nocite{shankweiler1978}
 \nocite{shannon1948}
+\nocite{strange-jenkins2012}
 \nocite{sumner2011}
 \nocite{walker-hay2011}
-
+\nocite{zwicker1957}
+\nocite{zwicker-terhardt1980}
 
 \endgroup

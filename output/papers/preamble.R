@@ -30,11 +30,13 @@ list.of.packages <-
     "brms",             # Bayesian mixed-effects multinomials regression
     "cmdstanr", 
     "mgcv",             # GAMMs
+    "itsadug",          # GAMM visualization
     "modelr",           # making data grids for model predictions
     "tidybayes",        # working with posterior draws of Bayesian models
     "MVBeliefUpdatr",   # fitting and using Ideal Observers
     "future",           # parallel processing
-    "furrr"             # parallel map fur future
+    "furrr",            # parallel map fur future
+    "english"           # convert numbers to text
 )
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if (length(new.packages)) {
@@ -87,6 +89,8 @@ papaja::r_refs(
 # CONSTANTS ----------------------------------------------------------------------------------
 set.seed(333421864)
 
+# Make sure to keep aux files etc. after knitting
+options(tinytex.clean = FALSE)
 options(knitr.table.format = "latex")
 base.width = 2.5
 base.height = 2.5
