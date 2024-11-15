@@ -130,8 +130,6 @@ The authors have no conflicts to disclose.
 ## Ethics approval {-}
 This study was reviewed and approved Research Subjects Review Board (RSRB) of the University of Rochester (STUDY00000417) under the OHSP and UR policies, and in accordance with Federal regulation 45 CFR 46 under the university’s Federal-wide Assurance (FWA00009386).
 
-`r if (!INCLUDE_SI) cat("\\externaldocument{Eng-vowel-norm copy}")`
-
 ```{r, child="SI.Rmd", eval= if (INCLUDE_SI) TRUE else FALSE}
 ```
 
