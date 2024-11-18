@@ -4,8 +4,8 @@
 *.log
 *.gz
 *.Rproj
-*.tex
-*.aux
+.tex
+.aux
 *.bbl
 *.blg
 *.ent
