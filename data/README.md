@@ -1,1 +1,2 @@
 This folder contains phonetic vowel statistics for the phonetic database used to train ideal observers and for the stimuli used in the two experiments (phonetic vowel statistics/), as well as raw data from the two experiments conducted (raw/).
+The csv-file (Experiment-NORM-AB-before-processing.csv) contains listeners' responses to the two experiments, alongside stimulus properties, *before* exclusions.
