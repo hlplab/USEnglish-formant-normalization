@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %DIF LATEXDIFF DIFFERENCE FILE
-%DIF DEL JASA - Round 1/Eng-vowel-norm.tex   Sun Nov 10 14:01:28 2024
-%DIF ADD Eng-vowel-norm.tex                  Tue Nov 12 18:38:35 2024
+%DIF DEL JASA - Round 1/Eng-vowel-norm-wo-SI.tex   Fri Nov 22 13:42:47 2024
+%DIF ADD Eng-vowel-norm.tex                        Fri Nov 22 13:47:11 2024
 %  JASA LaTeX Template File
 %  To make articles using JASA.cls, Version 1.1
 %  September 14, 2019
@@ -295,6 +295,7 @@ This motivates the present work. We take a broad-coverage approach by comparing 
 \parindent=0pt
 \vskip3pt}
 
+
 \def\endxrotatetable{\egroup
 \nolinenumbers
 \noindent\hskip-40pt\rotatebox{90}{\vbox{\unvbox0\vfill}}
@@ -354,7 +355,7 @@ Normalization\newline\hglue6pt procedure\vrule depth 6pt width0pt&
 & \cellcolor[HTML]{C9C0BB}{---}
 & \cellcolor[HTML]{C9C0BB}{ERB}
 & \cellcolor[HTML]{C9C0BB}{Glasberg \& Moore (1990)}
-& \cellcolor[HTML]{C9C0BB}{$F_n^{ERB} = 21.4 \times \log_{10}(1 + F_n\times 0.00437) $}  \\
+& \cellcolor[HTML]{C9C0BB}{$F_n^{ERB} = 21.4 \times \log_{10}(1 + F_n\times 0.00437) $} \\
 \multirow[c]{-11}{*}{\hskip24pt\rotatebox{90}
 {\hskip-24pt\vbox{\bf \hbox{trans-}\hbox{formation}}}
 \hskip-30pt}
@@ -933,7 +934,13 @@ We set out to compare how well competing accounts of formant normalization expla
 
 Comparing 20 of the most influential normalization accounts against L1 listeners' perception of US English monophthongs, we found that the normalization accounts that best describe listeners' perception share that they (1) learn and store talker-specific properties and (2) \DIFdelbegin \DIFdel{that they }\DIFdelend seem to be computationally very simple---taking advantage of the physics of sound generation to use as few as a single parameter to normalize inter-talker variability in vocal tract size. While the number of studies that have compared normalization accounts against \emph{listeners'} behavior remains surprisingly small, these two results confirm the findings from more targeted comparisons that were focused on 2-3 accounts at a time \citep{barreda2021, nearey1989, richter2017}. Overall then, we submit that it is time for research in speech perception and beyond to consider simple uniform scaling the most-likely candidate for human formant normalization.
 
-\begin{acknowledgments}
+\DIFaddbegin \section*{\DIFadd{Supplementary Material}}\label{supplementary-material}
+\addcontentsline{toc}{section}{\DIFadd{Supplementary Material}}
+
+\DIFadd{See supplementary material at }\url{https://osf.io/zemwn/} \DIFadd{for more details on participant and experiment data, on the vowel database used, and on the computational models presented in the paper. The supplementary material also contains additional auxiliary analyses, including models trained on different subsets of the data, and on additional cues besides F1-F2.
+}
+
+\DIFaddend \begin{acknowledgments}
 Earlier versions of this work were presented at 2023 ASA meeting, ExLing 2022, at the Department of Computational Linguistics at the University of Zürich and at the Department of Swedish language and multilingualism at Stockholm University. We are grateful to \DIFdelbegin \DIFdel{OMITTED FOR REVIEW. }\DIFdelend \DIFaddbegin \DIFadd{Maryann Tan, Chigusa Kurumada, and Xin Xie for feedback on this work. We thank Travis Wade for clarifications on the synthesis procedure used in his study. We thank Leslie Li and Xin Xie for sharing their database of L1-US English *hVd* productions, and the JASA copy editing staff for help with the Latex formatting. This work was partially funded by grants to AP from Kungliga Vetenskapsakademien, Kungliga Vitterhetsakademien, and the Department of Swedish Language and Multilingualism at Stockholm University, as well as grants to TFJ by the Helge Ax:son Johnson foundation, the Stockholm University Board of Human Science (Funding for Strategic Investments), and the Stockholm University Faculty of Humanities’ Research School (Kvalitetssäkrande medel grant).
 }\DIFaddend \end{acknowledgments}
 
