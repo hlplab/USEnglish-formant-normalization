@@ -4,7 +4,7 @@ To compare the performance of different normalization accounts against listeners
 (ref:exp-procedure) Screen shot of the eight-alternative forced-choice (8-AFC) task used in both Experiment 1a and 1b.
 
 ```{r exp-procedure, echo=FALSE, fig.cap="(ref:exp-procedure)", fig.width=base.width*1.5, fig.height=base.height*1.5, out.width='40%', fig.align='center'}
-knitr::include_graphics("figures/response-grid.png")
+knitr::include_graphics("figures-to-import/response-grid.png")
 ```
 
 Experiment 1a employs recordings of *hVd* word productions from a female talker of US English, these recordings are 'natural' in the sense that they were not synthesized or otherwise phonetically manipulated. One consequence of this is that the formant values of these recordings are clustered around the talker's category means, and thus span only a comparatively small part of the phonetic space. This can limit the statistical power to distinguish between competing accounts. Natural recordings furthermore vary not only along the primary cues to vowel quality in US English (F1, F2) but also along secondary cues (e.g., F0, F3, vowel duration, and vowel inherent spectral change---VISC) as well as other unknown properties, which can make it difficult to discern whether the performance of a normalization model is due to the normalization itself or other reasons, e.g., because a normalized cue happens to correlate with another cue that listeners are sensitive to but that is not included in the model.
@@ -134,8 +134,10 @@ The stimuli for Experiment 1b were synthesized from a single *had* recording use
 
 ```{r spectrograms, fig.align='center', fig.show='hold', out.width='20%', fig.ncol = 4, fig.cap="(ref:spectrograms)", fig.subcap = c("natural \\emph{heed}", "natural \\emph{hid}", "natural \\emph{odd}", "natural \\emph{hood}", "resynthesized \\emph{heed}", "resynthesized \\emph{hid}", "resynthesized \\emph{hod}", "resynthesized \\emph{hood}"), results='asis', echo=FALSE}
 knitr::include_graphics(c(
-  "figures/spectrogram_heed_1a.png","figures/spectrogram_hid_1a.png","figures/spectrogram_odd_1a.png", "figures/spectrogram_hood_1a.png",
-  "figures/spectrogram_heed.png","figures/spectrogram_hid.png","figures/spectrogram_hod.png", "figures/spectrogram_hood.png"))
+  "figures-to-import/spectrogram_heed_1a.png", "figures-to-import/spectrogram_hid_1a.png",
+  "figures-to-import/spectrogram_odd_1a.png", "figures-to-import/spectrogram_hood_1a.png",
+  "figures-to-import/spectrogram_heed.png","figures-to-import/spectrogram_hid.png", 
+  "figures-to-import/spectrogram_hod.png", "figures-to-import/spectrogram_hood.png"))
 ```
 
 We generated `r d.test.1b %>% distinct(ItemID) %>% nrow()` synthesized *hVd* recordings that spanned the F1 and F2 space. The specific F1-F2 locations chosen were determined by a mix of modeling (using ideal observers described in the next section to predict listeners' categorization responses) and intuition. Specifically, we selected 64 recordings that we expected to fall within the bivariate 95% confidence intervals (CIs) of the eight US English monophthongs, and 82 recordings that we expected to fall between those CIs. Figure \@ref(fig:human-performance) under *Results* shows the distribution of stimuli for both experiments. Of note, our procedure also generated formant combinations that are physiologically unlikely to have all been produced by the same talker during 'normal' vowel production [also known as "off-template" instances, @nearey1978].
