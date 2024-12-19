@@ -100,7 +100,7 @@ knitr::opts_chunk$set(
   dpi = 150,
   dev = c('cairo_pdf'), # default format of figures
   fig.align = "center",
-  fig.process = make_plot_namer(width=3),
+  fig.process = make_plot_namer(width=1),
   # fig.process = function(x) {
   #   x2 = sub('-\\d+([.][a-z]+)$', '\\1', x)
   #   if (file.rename(x, x2)) x2 else x
