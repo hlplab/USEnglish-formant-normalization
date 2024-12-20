@@ -140,6 +140,45 @@ knitr::include_graphics(c(
   "figures-to-import/spectrogram_hod.png", "figures-to-import/spectrogram_hood.png"))
 ```
 
+```{r save-composed-image-with-subcaptions, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
+# Generate composed image and read in below
+# # List of images and subcaptions
+# images <- c(
+#   "figures-to-import/spectrogram_heed_1a.png", "figures-to-import/spectrogram_hid_1a.png",
+#   "figures-to-import/spectrogram_odd_1a.png", "figures-to-import/spectrogram_hood_1a.png",
+#   "figures-to-import/spectrogram_heed.png", "figures-to-import/spectrogram_hid.png",
+#   "figures-to-import/spectrogram_hod.png", "figures-to-import/spectrogram_hood.png"
+# )
+# 
+# subcaptions <- c(
+#   expression("(a) natural " * italic("heed")), expression("(b) natural " * italic("hid")),
+#   expression("(c) natural " * italic("odd")), expression("(d) natural " * italic("hood")),
+#   expression("(e) resynthesized " * italic("heed")), expression("(f) resynthesized " * italic("hid")),
+#   expression("(g) resynthesized " * italic("hod")), expression("(h) resynthesized " * italic("hood"))
+# )
+# 
+# fig.cap="(ref:spectrograms)"
+# 
+# # Create individual grobs for each image + caption
+# image_grobs <- lapply(seq_along(images), function(i) {
+#   img <- grid::rasterGrob(png::readPNG(images[i]), interpolate = TRUE)  # Load image
+#   caption <- grid::textGrob(subcaptions[i], x = 0.5, y = 0.5, just = "center", gp = grid::gpar(fontsize = 42))
+#   gridExtra::grid.arrange(img, caption, nrow = 2, heights = c(4, 1))  # Combine image + caption
+# })
+# 
+# # Arrange the image-caption grobs in a grid
+# composed_figure <- do.call(gridExtra::grid.arrange, c(image_grobs, ncol = 4))
+# 
+# # Save the composed figure as an image
+# png("figures/Figure3.png", width = 3200, height = 1600)
+# grid::grid.draw(composed_figure)
+# dev.off()
+```
+
+```{r spectrograms1, echo=FALSE, fig.align='center', out.width='90%', fig.cap="(ref:spectrograms)"}
+#knitr::include_graphics("figures/Figure3.png")
+```
+
 We generated `r d.test.1b %>% distinct(ItemID) %>% nrow()` synthesized *hVd* recordings that spanned the F1 and F2 space. The specific F1-F2 locations chosen were determined by a mix of modeling (using ideal observers described in the next section to predict listeners' categorization responses) and intuition. Specifically, we selected 64 recordings that we expected to fall within the bivariate 95% confidence intervals (CIs) of the eight US English monophthongs, and 82 recordings that we expected to fall between those CIs. Figure \@ref(fig:human-performance) under *Results* shows the distribution of stimuli for both experiments. Of note, our procedure also generated formant combinations that are physiologically unlikely to have all been produced by the same talker during 'normal' vowel production [also known as "off-template" instances, @nearey1978].
 
 ### Procedure{#sec:procedure}
