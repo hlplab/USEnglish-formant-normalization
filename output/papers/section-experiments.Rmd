@@ -3,8 +3,8 @@ To compare the performance of different normalization accounts against listeners
 
 (ref:exp-procedure) Screen shot of the eight-alternative forced-choice (8-AFC) task used in both Experiment 1a and 1b.
 
-```{r exp-procedure, echo=FALSE, fig.cap="(ref:exp-procedure)", fig.width=base.width*1.5, fig.height=base.height*1.5, out.width='40%', fig.align='center'}
-knitr::include_graphics("figures-to-import/response-grid.png")
+```{r exp-procedure, echo=FALSE, fig.cap="(ref:exp-procedure)", out.width='40%', fig.align='center', fig.show='asis'}
+include_and_generate_graphics("figures-to-import/response-grid.png")
 ```
 
 Experiment 1a employs recordings of *hVd* word productions from a female talker of US English, these recordings are 'natural' in the sense that they were not synthesized or otherwise phonetically manipulated. One consequence of this is that the formant values of these recordings are clustered around the talker's category means, and thus span only a comparatively small part of the phonetic space. This can limit the statistical power to distinguish between competing accounts. Natural recordings furthermore vary not only along the primary cues to vowel quality in US English (F1, F2) but also along secondary cues (e.g., F0, F3, vowel duration, and vowel inherent spectral change---VISC) as well as other unknown properties, which can make it difficult to discern whether the performance of a normalization model is due to the normalization itself or other reasons, e.g., because a normalized cue happens to correlate with another cue that listeners are sensitive to but that is not included in the model.
@@ -132,12 +132,16 @@ The stimuli for Experiment 1b were synthesized from a single *had* recording use
 
 (ref:spectrograms) **Top:** Spectrograms of four natural recordings from Experiment 1a. **Bottom:** Same for four synthesized tokens with similar formant values from Experiment 1b. Additional spectrograms are provided in the SI \@ref(sec:SI-spectrograms).
 
-```{r spectrograms, fig.align='center', fig.show='hold', out.width='20%', fig.ncol = 4, fig.cap="(ref:spectrograms)", fig.subcap = c("natural \\emph{heed}", "natural \\emph{hid}", "natural \\emph{odd}", "natural \\emph{hood}", "resynthesized \\emph{heed}", "resynthesized \\emph{hid}", "resynthesized \\emph{hod}", "resynthesized \\emph{hood}"), results='asis', echo=FALSE}
-knitr::include_graphics(c(
-  "figures-to-import/spectrogram_heed_1a.png", "figures-to-import/spectrogram_hid_1a.png",
-  "figures-to-import/spectrogram_odd_1a.png", "figures-to-import/spectrogram_hood_1a.png",
-  "figures-to-import/spectrogram_heed.png","figures-to-import/spectrogram_hid.png", 
-  "figures-to-import/spectrogram_hod.png", "figures-to-import/spectrogram_hood.png"))
+```{r spectrograms, fig.align='center', fig.cap="(ref:spectrograms)", fig.height=base.heigh*2, echo=FALSE}
+include_and_generate_graphics(
+  c(
+    "figures-to-import/spectrogram_heed_1a.png", "figures-to-import/spectrogram_hid_1a.png",
+    "figures-to-import/spectrogram_odd_1a.png", "figures-to-import/spectrogram_hood_1a.png",
+    "figures-to-import/spectrogram_heed.png","figures-to-import/spectrogram_hid.png", 
+    "figures-to-import/spectrogram_hod.png", "figures-to-import/spectrogram_hood.png"),
+  labels = c("Natural: heed", "hid", "odd", "hood", "Resynthesized: heed", "hid", "hod", "hood"),
+  label_size = 11, hjust = 0,
+  ncol = 4)
 ```
 
 ```{r save-composed-image-with-subcaptions, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
@@ -170,18 +174,18 @@ knitr::include_graphics(c(
 # composed_figure <- do.call(gridExtra::grid.arrange, c(image_grobs, ncol = 4))
 # 
 # # Save the composed figure as an image
-# png("figures/Figure3.png", width = 3200, height = 1600)
+# png(figure_file("Figure3.png"), width = 3200, height = 1600)
 # grid::grid.draw(composed_figure)
 # dev.off()
 ```
 
 ```{r spectrograms1, echo=FALSE, fig.align='center', out.width='90%', fig.cap="(ref:spectrograms)"}
-#knitr::include_graphics("figures/Figure3.png")
+#include_and_generate_graphics(figure_file("Figure3.png"))
 ```
 
 We generated `r d.test.1b %>% distinct(ItemID) %>% nrow()` synthesized *hVd* recordings that spanned the F1 and F2 space. The specific F1-F2 locations chosen were determined by a mix of modeling (using ideal observers described in the next section to predict listeners' categorization responses) and intuition. Specifically, we selected 64 recordings that we expected to fall within the bivariate 95% confidence intervals (CIs) of the eight US English monophthongs, and 82 recordings that we expected to fall between those CIs. Figure \@ref(fig:human-performance) under *Results* shows the distribution of stimuli for both experiments. Of note, our procedure also generated formant combinations that are physiologically unlikely to have all been produced by the same talker during 'normal' vowel production [also known as "off-template" instances, @nearey1978].
 
-### Procedure{#sec:procedure}
+### Procedure {#sec:procedure}
 The procedure for both experiments was identical. Live instances of each experiment can be found at <https://www.hlp.rochester.edu/experiments/DLPL2S/experiment-A/experiments.html>. At the start of the experiment, participants acknowledged that they met all requirements and provided consent, as per the Research Subjects Review Board of the University of Rochester. Before starting the experiment, participants performed a sound check. Participants were then instructed to listen to a female talker saying words, and click on the word on screen to report what word they heard. On each trial, all eight *hVd*-words were displayed on screen. Half of the participants in each experiment saw the response options organized as in Figure \@ref(fig:exp-procedure) (resembling the IPA representation of a vowel space), half saw the response options in the opposite order (flipping top and bottom and left and right in Figure \@ref(fig:exp-procedure)). Each trial started with the response grid on screen, together with a light green dot centered on screen. After 1000 ms, an *hVd* recording played, and participants indicated their response by a mouse-click. After a 1000 ms intertrial interval, the screen reset, and the next trial started.
 
 In both experiments, participants heard two blocks of the materials described in the previous sections, for a total of `r d.test.1a %>% distinct(ItemID) %>% nrow() * 2` trials in Experiment 1a and `r d.test.1b %>% distinct(ItemID) %>% nrow() * 2` trials in Experiment 1b. Presentation within each block was randomized for each participant in order to reduce confounds due to stimulus order [known to affect vowel perception, @repp-crowder1990 and references therein]. Participants were not informed about the block structure of the experiment.

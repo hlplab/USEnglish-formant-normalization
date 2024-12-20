@@ -855,7 +855,7 @@ make_categorization_F1F2_landscape_plot <- function(
 ```
 
 ```{r prediction-landscapes-optim-io, fig.cap="(ref:prediction-landscapes-optim-io)", fig.pos = "!ht", out.width='80%', message=FALSE, warning=FALSE}
-if (RESET_MODELS || !file.exists("figures/p.prediction-landscapes-study1.png")) {
+if (RESET_MODELS || !file.exists("figures-to-import/p.prediction-landscapes-study1.png")) {
 
   # Visualizing the predictions for unnormalized models and some of the best-fitting models
   p.raw <- make_categorization_F1F2_landscape_plot(io = io, test.data = d.test, IO.cue_normalization = "r", IO.cue_transform = "Hz")
@@ -874,11 +874,11 @@ if (RESET_MODELS || !file.exists("figures/p.prediction-landscapes-study1.png")) 
           plot.tag.position = c(0, 0.97),
           plot.tag = element_text(face = "bold", size = 11, hjust = 0, vjust = 0))
 
-  ggsave(p, file = "figures/p.prediction-landscapes-study1.png", width = base.width*3.5, height = base.height*4.5)
+  ggsave(p, file = "figures-to-import/p.prediction-landscapes-study1.png", width = base.width*3.5, height = base.height*4.5)
 
 } 
 
-knitr::include_graphics("figures/p.prediction-landscapes-study1.png")
+include_and_generate_graphics("figures-to-import/p.prediction-landscapes-study1.png")
 ```
 
 ```{r study1-best-fit-parameters, message=FALSE}
