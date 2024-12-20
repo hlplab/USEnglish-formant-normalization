@@ -68,6 +68,8 @@ my_priors <- c(
 # Functions ------------------------------------------------------------------
 
 ## General functions ------------------------------------------------------------------
+figure_file <- function(name) paste0("./", name)
+
 percent <- function(p) paste0(round(p * 100, 1), "%")
 se <- function(x) sqrt(var(x) / (length(x) - 1))
 
@@ -1726,7 +1728,6 @@ make_posterior_prediction_plots <- function(
   model <- readRDS(paste0("../../models/", filename))
   data <- model$data
   
-  figure_path <- "../../figures/"
   depvar <- paste0(if (logit) "logit" else "p", "(vowel | cues)")
   groups <- if (!is.null(animate.n)) c(cues, "Response", ".draw") else c(cues, "Response")
   draws <- if (!is.null(animate.n)) sample(unique(data.grid$.draw), animate.n) else NULL
@@ -1807,36 +1808,38 @@ make_posterior_prediction_plots <- function(
       animate(
         p, 
         renderer = gifski_renderer(
-          file = paste0(
-            figure_path,
-            paste(
-              "posterior_predictions_faceted_by_vowel", 
-              model.type,
-              experiment,
-              paste(cues, collapse = "+"),
-              cue_normalization,
-              cue_transform,
-              RE,
-              sep = "-"),
-            if (logit) "-logit" else "-probability",
-            "-animation.gif"),
+          file = 
+            figure_file(
+              paste0(
+                paste(
+                  "posterior_predictions_faceted_by_vowel", 
+                  model.type,
+                  experiment,
+                  paste(cues, collapse = "+"),
+                  cue_normalization,
+                  cue_transform,
+                  RE,
+                  sep = "-"),
+                if (logit) "-logit" else "-probability",
+                "-animation.gif")),
           width = 1400, height = 400)) 
     } else {
       ggsave(
         p, 
-        file = paste0(
-          figure_path,
-          paste(
-            "posterior_predictions_faceted_by_vowel", 
-            model.type,
-            experiment,
-            paste(cues, collapse = "+"),
-            cue_normalization,
-            cue_transform,
-            RE,
-            sep = "-"),
-          if (logit) "-logit" else "-probability",
-          "-marginal.png"),
+        file = 
+          figure_file(
+            paste0(
+              paste(
+                "posterior_predictions_faceted_by_vowel", 
+                model.type,
+                experiment,
+                paste(cues, collapse = "+"),
+                cue_normalization,
+                cue_transform,
+                RE,
+                sep = "-"),
+              if (logit) "-logit" else "-probability",
+              "-marginal.png")),
         width = 8, height = 4) 
     }
   } else {
@@ -1889,36 +1892,38 @@ make_posterior_prediction_plots <- function(
       animate(
         p, 
         renderer = gifski_renderer(
-          file = paste0(
-            figure_path,
-            paste(
-              "posterior_predictions", 
-              model.type,
-              experiment,
-              paste(cues, collapse = "+"),
-              cue_normalization,
-              cue_transform,
-              RE,
-              sep = "-"),
-            if (logit) "-logit" else "-probability",
-            "-animation.gif"),
+          file = 
+            figure_file(
+              paste0(
+                paste(
+                  "posterior_predictions", 
+                  model.type,
+                  experiment,
+                  paste(cues, collapse = "+"),
+                  cue_normalization,
+                  cue_transform,
+                  RE,
+                  sep = "-"),
+                if (logit) "-logit" else "-probability",
+                "-animation.gif")),
           width = 800, height = 800)) 
     } else {
       ggsave(
         p, 
-        file = paste0(
-          figure_path,
-          paste(
-            "posterior_predictions_faceted_by_vowel", 
-            model.type,
-            experiment,
-            paste(cues, collapse = "+"),
-            cue_normalization,
-            cue_transform,
-            RE,
-            sep = "-"),
-          if (logit) "-logit" else "-probability",
-          "-marginal.png"),
+        file = 
+          figure_file(
+            paste0(
+              paste(
+                "posterior_predictions_faceted_by_vowel", 
+                model.type,
+                experiment,
+                paste(cues, collapse = "+"),
+                cue_normalization,
+                cue_transform,
+                RE,
+                sep = "-"),
+              if (logit) "-logit" else "-probability",
+              "-marginal.png")),
         width = 8, height = 8) 
     }
   }
