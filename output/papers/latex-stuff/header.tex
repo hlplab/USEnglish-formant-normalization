@@ -13,14 +13,20 @@
 \usepackage{xr}
 \externaldocument{manuscript-with-SI}
 
-\usepackage{fontspec}
-
-%% Special font for IPA
-%% Make sure "Doulos SIL" is installed on your computer
-%% For other typefaces supporting IPA symbols, see
-%% https://en.wikipedia.org/wiki/International_Phonetic_Alphabet#Typefaces
-\newfontfamily\ipa{Doulos SIL} % Font for IPA symbols
-\DeclareTextFontCommand{\ipatext}{\ipa}
+% Usually, we would use Latex package fontspec with Latex command \ipatext and Doulos SIL, 
+% in combination with the linguisticsdown library in R to deal with unicode symbols (incl. 
+% IPA). But JASA requires 
+% that we use Latex package tipa with commmand textipa instead
+% \usepackage{fontspec}
+% 
+% %% Special font for IPA
+% %% Make sure "Doulos SIL" is installed on your computer
+% %% For other typefaces supporting IPA symbols, see
+% %% https://en.wikipedia.org/wiki/International_Phonetic_Alphabet#Typefaces
+% \newfontfamily\ipa{Doulos SIL} % Font for IPA symbols
+% \DeclareTextFontCommand{\ipatext}{\ipa}
+% Text command for tipa
+\DeclareTextFontCommand{\ipatext}{\textipa}
 
 %%%         Section for CJK Characters                   %%%
 %%%   You may want to uncomment the code below if        %%%
