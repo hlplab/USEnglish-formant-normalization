@@ -21,7 +21,6 @@ list.of.packages <-
     "cowplot",
     "plotly",           # plotting 3D plots (in SI)
     "ellipse",          # covariance ellipses
-    "linguisticsdown",  # IPA symbols
     "Cairo",            # plotting IPA and other special symbols
     # Doesn't interact well with JASA template since it automatically loads a number of 
     # latex packages, including pdflscape, which doesn't interact well with revtex 4.1,
