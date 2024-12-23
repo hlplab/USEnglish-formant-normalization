@@ -9,64 +9,11 @@ Training ideal observers on a database of vowel productions has the advantage th
 
 ### A general-purpose categorization model for $J$-AFC categorization tasks {#sec:predict-perception}
 
-\begin{figure}[!ht]
-\begin{center}
-   \tikz{ %
-    \node[obs] (r) {$r$} ; %
-    \node[const, right=of r, xshift=-.009cm] (r_description) {{\em categorization response}} ; %
-    \node[det, below=of r] (decision) {} ; %
-% decisions
-    \node[const, right=of decision, xshift=-.009cm] (decision_rule) {{\em decision rule} (Luce choice rule)} ; %
-    \factor[below=of decision, xshift=-.009cm, yshift=-.5cm] {response-dist} {left: $\mathcal{M}$} {} {}; %
-    \factor[right=of response-dist, xshift=.8cm, yshift=-1cm] {prior-dist} {left: Multi} {} {}; %
-    \factor[below=of response-dist, xshift=-.009cm, yshift=-1cm] {multi} {left: Multi} {} {}; %
-    \node[latent, right=of response-dist, xshift=1.5cm] (l) {$\lambda$} ; %
-    \node[const, right=of l, xshift=-.009cm] (lapse) {{\em lapse rate} ($1$ DF)} ; %
-    \node[latent, right=of prior-dist, xshift=.2cm, yshift=-.009cm] (pi_n) {$\pi_{c}$} ; %
-    \node[right=of pi_n] (beta_description) {{\em response biases}} ;
-% edges
-    \edge {decision} {r} ;
-    \edge {response-dist} {decision} ; %
-    \edge {multi} {response-dist} ; %
-    \edge {prior-dist} {response-dist} ; %
-    \edge {prior-dist} {multi} ; %
-    \edge {l} {response-dist} ; %
-    \edge {pi_n} {prior-dist} ;
-% representations
-    \factor[below=of multi,  yshift=-1cm] {x_prime} {left:$\mathcal{N}$} {} {}; %
-     %\node[above=of x_prime] (dots) {$\vdots$} ; %
-    \node[obs, right=of x_prime, yshift=.5cm, xshift=.3cm] (mu_n) {$\mu_{c}$} ; %
-    \node[obs, right=of x_prime, yshift=-.5cm, xshift=.3cm] (sigma_n) {$\Sigma_{c}$} ; %
-    \node[right=of mu_n] (mu_n_description) {{\em category means} (estimated from phonetic database)} ;
-    \node[right=of sigma_n] (sigma_n_description) {{\em category covariance} (estimated from phonetic database)} ;
+(ref:model-perceptual-decision-making) Graphical model of ASP's general categorization framework (adapted for the current purpose from Xie et al., 2023, Figure 4). Here $J=8$ (the eight vowel response options in Experiments 1a and 1b). We use this framework to compare normalization accounts against listeners' categorization responses from Experiments 1a and 1b. Filled gray circles represent variables that are known to the researcher. Empty circles represent latent variables that are not observable. Diamonds represent variable-free processes, annotated with the distributions resulting at that level of the model: $\mathcal{N}$(ormal), Multi(nomial), and $\mathcal{M}$(ixture) distributions.
 
-% edges
-    \edge {x_prime} {multi} ; %
-    \edge {mu_n} {x_prime} ; %
-    \edge {sigma_n} {x_prime} ; %
-% noise
-    \node[det, below=of x_prime, yshift=-1cm] (x_prime2) {} ; %
-      %\node[above=of x_prime2] (dots) {$\vdots$} ; %
-    \node[latent, right=of x_prime2] (sigma_noise) {$\Sigma_{noise}$} ; %
-    \node[right=of sigma_noise, xshift=-.3cm] (sigma_noise_description) {{\em internal \& external noise} (1 DF)} ;
-%edges
-    \edge {x_prime2} {x_prime} ; %
-    \edge {sigma_noise} {x_prime2} ; %
-% normalization
-    \node[det, below=of x_prime2, yshift=-.4cm] (x_prime3) {} ; %
-    \node[obs, right=of x_prime3] (theta) {$\theta$} ; %
-    \node[right=of theta] (theta_description) {{\em normalization parameters} (estimated from phonetic database \& stimuli)} ; %
-    \node[obs, below=of x_prime3] (x) {x} ; %
-    \node[const, right=of x, xshift=-.009cm] (x_description) {{\em acoustic properties of stimulus} (formants)} ;
-%edges
-    \edge {x_prime3} {x_prime2} ; %
-    \edge {theta} {x_prime3} ; %
-    \edge {x} {x_prime3} ; %
-}
-
-\caption{Graphical model of ASP's general categorization framework (adapted for the current purpose from Xie et al., 2023, Figure 4). Here $J=8$ (the eight vowel response options in Experiments 1a and 1b). We use this framework to compare normalization accounts against listeners' categorization responses from Experiments 1a and 1b. Filled gray circles represent variables that are known to the researcher. Empty circles represent latent variables that are not observable. Diamonds represent variable-free processes, annotated with the distributions resulting at that level of the model: $\mathcal{N}$(ormal), Multi(nomial), and $\mathcal{M}$(ixture) distributions.} \label{fig:model-perceptual-decision-making}
-\end{center}
-\end{figure}
+```{r model-perceptual-decision-making, fig.cap="(ref:model-perceptual-decision-making)", fig.width=10, out.width="95%"}
+include_and_generate_graphics("figures-to-import/ASP-graphical-model.pdf")
+```
 
 Figure \@ref(fig:model-perceptual-decision-making) summarises ASP's categorization model for a $J$-alternative forced-choice task [for an in-depth description, we refer to @xie2023]. The model combines Bayesian ideal observers [as used in e.g., @clayards2008; @feldman2009; @norris-mcqueen2008; @xie2021; for a closely related approach, see also @nearey-hogan1986] with psychometric lapsing models [@wichmann-hill2001]. To reduce researchers' degrees of freedom, we adopt all assumptions made in @xie2023, and do not introduce additional assumptions.
 
@@ -407,7 +354,7 @@ This yielded `r 5 * length(levels.normalization)` ideal observer models, five fo
 
 (ref:io-plot-categories) Visualizing the bivariate Gaussian categories (prior to adding $\Sigma_{noise}$) of four example normalization accounts in F1-F2 space. Separate ellipses are shown for each of the five training sets (each set corresponds to one set of eight ellipses). The relative stability of the category ellipses across training sets indicates that the database is sufficiently large for the present purpose.
 
-```{r io-plot-categories, fig.width=base.width*3.5, fig.height=base.height*2+1/4, out.width='95%', fig.cap="(ref:io-plot-categories)", fig.pos = "!ht", message=FALSE}
+```{r io-plot-categories, fig.width=base.width*3.5, fig.height=base.height*2+1/4, out.width='95%', fig.cap="(ref:io-plot-categories)", message=FALSE}
 p.io.categories.1a <-
   p.vowel_space %+%
   (io %>%
@@ -458,7 +405,7 @@ The magnitude of $\Sigma_{noise}$ affects the slope of the categorization functi
 
 (ref:prediction-landscapes) Illustrating the consequences of perceptual and external noise ($\Sigma_{noise}$) and attentional lapse rates ($\lambda$) on the predicted posterior distribution of vowel categorizations. Shown are the average predicted posteriors across all five folds for Nearey's uniform scaling account. **Panel A**: Predicted posterior distribution for noise ratio $\tau^{-1} = \lambda$ = 0. **Panel B**: Same for $\tau^{-1}$ = 1 and $\lambda$ = 0. **Panel C**: Same for $\tau^{-1} = 0$ and $\lambda$ = 0.5. Transparency of a color is determined by that vowel's posterior probability. Contours indicate the highest posterior probability of any vowel (at .4, .5, .7, .95 probability level).
 
-```{r prediction-landscapes, fig.cap="(ref:prediction-landscapes)", fig.width=base.width*4, fig.height=base.height*2.5, fig.pos="!ht", out.width='95%', message=FALSE, warning=FALSE}
+```{r prediction-landscapes, fig.cap="(ref:prediction-landscapes)", fig.width=base.width*4, fig.height=base.height*2.5, out.width='95%', message=FALSE, warning=FALSE}
 p.nearey2.0noise.0lapse <-
   make_posterior_grid_from_io(
     io = io.basic %>%
@@ -651,7 +598,7 @@ ttests <-
 
 (ref:plot-io-optimal) Comparison of normalization accounts against listeners' responses. Point ranges indicate mean and 95% bootstrapped CIs of the per-token log-likelihoods summarized over the five training sets (higher is better), normalized by the number of listener responses in each experiment. Accounts that fit listeners' responses to an extent that is statistically indistinguishable from the best-fitting account are marked by (\*). Note that per-token likelihoods cannot be directly compared across experiments because the best-possible likelihoods differ across experiments (due to differences in stimulus placement and other factors).
 
-```{r plot-io-optimal, fig.width=base.width*3.5, fig.height=base.height*3, fig.align='center', out.width='95%', fig.cap="(ref:plot-io-optimal)", fig.pos="!ht"}
+```{r plot-io-optimal, fig.width=base.width*3.5, fig.height=base.height*3, out.width='95%', fig.cap="(ref:plot-io-optimal)"}
 Experiment.labs <- c("Experiment 1a \n(natural)", "Experiment 1b \n(synthesized)")
 names(Experiment.labs) <- c("Experiment 1a (natural)", "Experiment 1b (synthesized)")
 
@@ -854,7 +801,7 @@ make_categorization_F1F2_landscape_plot <- function(
 }
 ```
 
-```{r prediction-landscapes-optim-io, fig.cap="(ref:prediction-landscapes-optim-io)", fig.pos = "!ht", out.width='80%', message=FALSE, warning=FALSE}
+```{r prediction-landscapes-optim-io, fig.cap="(ref:prediction-landscapes-optim-io)", out.width='80%', message=FALSE, warning=FALSE}
 if (RESET_MODELS || !file.exists("figures-to-import/p.prediction-landscapes-study1.png")) {
 
   # Visualizing the predictions for unnormalized models and some of the best-fitting models

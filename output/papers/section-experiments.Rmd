@@ -3,7 +3,7 @@ To compare the performance of different normalization accounts against listeners
 
 (ref:exp-procedure) Screen shot of the eight-alternative forced-choice (8-AFC) task used in both Experiment 1a and 1b.
 
-```{r exp-procedure, echo=FALSE, fig.cap="(ref:exp-procedure)", out.width='40%', fig.align='center', fig.show='asis'}
+```{r exp-procedure, echo=FALSE, fig.cap="(ref:exp-procedure)", out.width='40%', fig.show='asis'}
 include_and_generate_graphics("figures-to-import/response-grid.png")
 ```
 
@@ -34,6 +34,7 @@ d.test.exclusion <-
   d.test %>%
   add.ExclusionCriteria()
 ```
+
 ```{r message=FALSE}
 d.test <-
   d.test.exclusion %>%
@@ -119,6 +120,7 @@ d.test.by_item <-
 d.test.by_item.1a <- d.test.by_item %>% filter(Experiment == "Experiment 1a (natural)")
 d.test.by_item.1b <- d.test.by_item %>% filter(Experiment == "Experiment 1b (synthesized)")
 ```
+
 An optional post-experiment survey recorded participant demographics using NIH prescribed categories, including participant sex (`r d.Participant %>% group_by(Participant.Sex) %>% tally() %>% mutate(x = paste(Participant.Sex, n, sep = ": ", collapse = ", ")) %>% pull(x) %>% first()`), age (mean = `r round(mean(d.Participant$Participant.Age, na.rm = T), 1)` years; SD = `r round(sd(d.Participant$Participant.Age, na.rm = T), 1)`; 95% quantiles = `r paste(quantile(d.Participant$Participant.Age, c(.025, .975), na.rm = T), collapse = "-")` years), race (`r d.Participant %>% group_by(Participant.Race) %>% tally() %>% mutate(x = paste(Participant.Race, n, sep = ": ", collapse = ", ")) %>% pull(x) %>% first()`), and ethnicity (`r d.Participant %>% group_by(Participant.Ethnicity) %>% tally() %>% mutate(x = paste(Participant.Ethnicity, n, sep = ": ", collapse = ", ")) %>% pull(x) %>% first()`). All but `r 66 - nrow(d.Participant)` participant completed the survey.
 
 ```{r}
@@ -132,7 +134,7 @@ The stimuli for Experiment 1b were synthesized from a single *had* recording use
 
 (ref:spectrograms) **Top:** Spectrograms of four natural recordings from Experiment 1a. **Bottom:** Same for four synthesized tokens with similar formant values from Experiment 1b. Additional spectrograms are provided in the SI \@ref(sec:SI-spectrograms).
 
-```{r spectrograms, fig.align='center', fig.cap="(ref:spectrograms)", fig.height=base.height*2, echo=FALSE}
+```{r spectrograms, fig.cap="(ref:spectrograms)", fig.height=base.height*2, out.width="100%"}
 include_and_generate_graphics(
   c(
     "figures-to-import/spectrogram_heed_1a.png", "figures-to-import/spectrogram_hid_1a.png",
@@ -142,45 +144,6 @@ include_and_generate_graphics(
   labels = c("Natural: heed", "hid", "odd", "hood", "Resynthesized: heed", "hid", "hod", "hood"),
   label_size = 11, hjust = 0,
   ncol = 4)
-```
-
-```{r save-composed-image-with-subcaptions, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
-# Generate composed image and read in below
-# # List of images and subcaptions
-# images <- c(
-#   "figures-to-import/spectrogram_heed_1a.png", "figures-to-import/spectrogram_hid_1a.png",
-#   "figures-to-import/spectrogram_odd_1a.png", "figures-to-import/spectrogram_hood_1a.png",
-#   "figures-to-import/spectrogram_heed.png", "figures-to-import/spectrogram_hid.png",
-#   "figures-to-import/spectrogram_hod.png", "figures-to-import/spectrogram_hood.png"
-# )
-# 
-# subcaptions <- c(
-#   expression("(a) natural " * italic("heed")), expression("(b) natural " * italic("hid")),
-#   expression("(c) natural " * italic("odd")), expression("(d) natural " * italic("hood")),
-#   expression("(e) resynthesized " * italic("heed")), expression("(f) resynthesized " * italic("hid")),
-#   expression("(g) resynthesized " * italic("hod")), expression("(h) resynthesized " * italic("hood"))
-# )
-# 
-# fig.cap="(ref:spectrograms)"
-# 
-# # Create individual grobs for each image + caption
-# image_grobs <- lapply(seq_along(images), function(i) {
-#   img <- grid::rasterGrob(png::readPNG(images[i]), interpolate = TRUE)  # Load image
-#   caption <- grid::textGrob(subcaptions[i], x = 0.5, y = 0.5, just = "center", gp = grid::gpar(fontsize = 42))
-#   gridExtra::grid.arrange(img, caption, nrow = 2, heights = c(4, 1))  # Combine image + caption
-# })
-# 
-# # Arrange the image-caption grobs in a grid
-# composed_figure <- do.call(gridExtra::grid.arrange, c(image_grobs, ncol = 4))
-# 
-# # Save the composed figure as an image
-# png(figure_file("Figure3.png"), width = 3200, height = 1600)
-# grid::grid.draw(composed_figure)
-# dev.off()
-```
-
-```{r spectrograms1, echo=FALSE, fig.align='center', out.width='90%', fig.cap="(ref:spectrograms1)"}
-#include_and_generate_graphics(figure_file("Figure3.png"))
 ```
 
 We generated `r d.test.1b %>% distinct(ItemID) %>% nrow()` synthesized *hVd* recordings that spanned the F1 and F2 space. The specific F1-F2 locations chosen were determined by a mix of modeling (using ideal observers described in the next section to predict listeners' categorization responses) and intuition. Specifically, we selected 64 recordings that we expected to fall within the bivariate 95% confidence intervals (CIs) of the eight US English monophthongs, and 82 recordings that we expected to fall between those CIs. Figure \@ref(fig:human-performance) under *Results* shows the distribution of stimuli for both experiments. Of note, our procedure also generated formant combinations that are physiologically unlikely to have all been produced by the same talker during 'normal' vowel production [also known as "off-template" instances, @nearey1978].
@@ -273,7 +236,7 @@ Since the intended category was known for Experiment 1a, it was possible to calc
 
 (ref:human-confusion) Category confusability in Experiments 1a and 1b. **Panel A** summarizes the category confusability. Since correct responses were not defined for Experiment 1b, we grouped items along the x-axis based on most frequent response that listeners provided (for Experiment 1a, this was always identical to the intended response). Response percentages sum to 100 in each column, showing the response distribution depending on the most frequent response. **Panel B** summarizes individual differences across listeners, in terms of the listener-specific confusability of [\textipa{I}] with [\textipa{E}] (x-axis), [\textipa{E}] with [\textipa{\ae}] (y-axis), and [\textipa{u}] with [\textipa{U}] (color fill). 
 
-```{r human-confusion, fig.width=base.width*4, fig.height=base.height*4, out.width='90%', fig.cap="(ref:human-confusion)", fig.pos="!ht", message=FALSE}
+```{r human-confusion, fig.width=base.width*4, fig.height=base.height*4, out.width='90%', fig.cap="(ref:human-confusion)", message=FALSE}
 # Generate temp file for confusion matrices
 d.confusion <- 
   d.test %>%

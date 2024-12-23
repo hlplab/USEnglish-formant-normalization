@@ -1,8 +1,7 @@
 \usepackage{tipa}
-\usepackage{tikz}
-\usetikzlibrary{bayesnet}
-% rotating must be loaded before tablefootnote
-% \usepackage{rotating}
+% If used, package rotating must be loaded before tablefootnote
+% But JASA's cls comes with its own table rotating package (so
+% no need to load rotating here).
 \usepackage{multirow}
 \usepackage{colortbl}
 \usepackage{tablefootnote}
@@ -12,35 +11,6 @@
 % For references to external document
 \usepackage{xr}
 \externaldocument{manuscript-with-SI}
-
-% Usually, we would use Latex package fontspec with Latex command \ipatext and Doulos SIL, 
-% in combination with the linguisticsdown library in R to deal with unicode symbols (incl. 
-% IPA). But JASA requires 
-% that we use Latex package tipa with commmand textipa instead
-% \usepackage{fontspec}
-% 
-% %% Special font for IPA
-% %% Make sure "Doulos SIL" is installed on your computer
-% %% For other typefaces supporting IPA symbols, see
-% %% https://en.wikipedia.org/wiki/International_Phonetic_Alphabet#Typefaces
-% \newfontfamily\ipa{Doulos SIL} % Font for IPA symbols
-% \DeclareTextFontCommand{\ipatext}{\ipa}
-% Text command for tipa
-\DeclareTextFontCommand{\ipatext}{\textipa}
-
-%%%         Section for CJK Characters                   %%%
-%%%   You may want to uncomment the code below if        %%%
-%%%   you're writing this document with CJK characters   %%%
-
-%\usepackage{xeCJK}  % Uncomment for using CJK characters
-%% Set main font for CJK characters
-%% Make sure your system has the font set
-%\setCJKmainfont[
-%	BoldFont={HanWangHeiHeavy}  % Set font for CJK boldface
-%    ]{標楷體}    % Set font for normal CJK
-%% Some Traditional Chinese fonts: AR PL KaitiM Big5, PingFang TC, Noto Sans CJK TC
-%\XeTeXlinebreaklocale "zh"
-%\XeTeXlinebreakskip = 0pt plus 1pt
 
 %% Added by Florian to make biblatex and its \refsection work since pandoc does not parse 
 %% content within latex environments. \refsection in turn is required to allow authors
