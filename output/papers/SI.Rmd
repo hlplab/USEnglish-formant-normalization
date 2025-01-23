@@ -82,7 +82,7 @@ Finally, no participant was excluded based on the forth criteria (too many missi
 
 (ref:SI-exp1b-responses) Participants' response patterns in Experiment 1b. Color and vowel label indicate response provided by participants on each test location. Each vowel was repeated twice. Participants that displayed unusual response patterns and were therefore excluded, are highlighted.
 
-```{r SI-exp1a-responses, fig.width=base.width*4.5, fig.height=base.height*5.5, fig.pos="!ht", fig.align='center', out.width='90%', fig.cap="(ref:SI-exp1a-responses)", warning=FALSE}
+```{r SI-exp1a-responses, fig.width=base.width*4.5, fig.height=base.height*5.5, out.width='90%', fig.cap="(ref:SI-exp1a-responses)", warning=FALSE}
 # Experiment 1a - By participant
 p.vowel_space %+%
   (d.test.raw %>%
@@ -101,7 +101,7 @@ p.vowel_space %+%
             color = "red", fill = NA, size = 2)
 ```
 
-```{r SI-exp1b-responses, fig.width=base.width*4.5, fig.height=base.height*5.5, fig.pos="!ht", fig.align='center', out.width='90%', fig.cap="(ref:SI-exp1b-responses)", warning=FALSE}
+```{r SI-exp1b-responses, fig.width=base.width*4.5, fig.height=base.height*5.5, out.width='90%', fig.cap="(ref:SI-exp1b-responses)", warning=FALSE}
 # Experiment 1b - By participant
 p.vowel_space %+%
   (d.test.raw %>% filter(Experiment == levels(Experiment)[2])) +
@@ -150,7 +150,7 @@ The results of the survey confirm the results from the analysis of response entr
 
 (ref:SI-survey) Participants' responses to three of the post-experiment survey questions in Experiments 1a and 1b. The figure displays response proportions, normalized by the number of participants in each experiment. From left to right, proportion of participants that stated that: words sounded more similar to each other than what is usually the case; the stimuli sounded robotic; they were unsure about what word they heard.
 
-```{r SI-survey, fig.width=base.width*3.5, fig.height=base.height*2, fig.pos="!ht", fig.align='center', out.width='90%', fig.cap="(ref:SI-survey)", warning=FALSE}
+```{r SI-survey, fig.width=base.width*3.5, fig.height=base.height*2, out.width='90%', fig.cap="(ref:SI-survey)", warning=FALSE}
 # d.survey %>%
 #   select(Experiment, ParticipantID, robotic, more_similar, not_sure) %>%
 #   pivot_longer(
@@ -178,18 +178,26 @@ d.survey %>%
 ## Spectrograms of stimuli used in Experiments 1a and 1b {#sec:SI-spectrograms}
 In the main text, we plot spectrograms of *heed*, *hid*, *odd* and *hood* tokens from Experiment 1a, together with four synthesized tokens with similar formant values from Experiment 1b (Figure \@ref(fig:spectrograms)). Figure \@ref(fig:SI-spectrograms) displays spectrograms of all eight categories from Experiment 1a together with eight synthesized tokens from Experiment 1b---the four categories from Figure \@ref(fig:spectrograms) and the additional *head*, *had*, *hut* and *who'd* vowels.
 
-(ref:SI-spectrograms) Spectrograms of eight natural recordings from Experiment 1a (**a--d**, **i--l**). Same for eight synthesized tokens with similar formant values from Experiment 1b (**e--h**; **m--p**).
+(ref:SI-spectrograms) Spectrograms of eight natural recordings from Experiment 1a and eight synthesized tokens with similar formant values from Experiment 1b.
 
-```{r SI-spectrograms, fig.align='center', fig.show='hold', out.width='20%', fig.ncol = 4, fig.cap="(ref:SI-spectrograms)", fig.subcap = c("natural \\emph{heed}", "natural \\emph{hid}", "natural \\emph{odd}", "natural \\emph{hood}", "resynthesized \\emph{heed}", "resynthesized \\emph{hid}", "resynthesized \\emph{hod}", "resynthesized \\emph{hood}", "natural \\emph{head}", "natural \\emph{had}", "natural \\emph{hut}", "natural \\emph{who'd}", "resynthesized \\emph{head}", "resynthesized \\emph{had}", "resynthesized \\emph{hud}", "resynthesized \\emph{who'd}"), results='asis', echo=FALSE}
-include_graphics(c(
-  "figures-to-import/spectrogram_heed_1a.png", "figures-to-import/spectrogram_hid_1a.png",
-  "figures-to-import/spectrogram_odd_1a.png", "figures-to-import/spectrogram_hood_1a.png",
-  "figures-to-import/spectrogram_heed.png", "figures-to-import/spectrogram_hid.png",
-  "figures-to-import/spectrogram_hod.png", "figures-to-import/spectrogram_hood.png", 
-  "figures-to-import/spectrogram_head_1a.png", "figures-to-import/spectrogram_had_1a.png",
-  "figures-to-import/spectrogram_hut_1a.png", "figures-to-import/spectrogram_whod_1a.png",
-  "figures-to-import/spectrogram_head.png", "figurfigures-to-importes/spectrogram_had.png",
-  "figures-to-import/spectrogram_hud.png", "figures-to-import/spectrogram_whod.png"))
+```{r SI-spectrograms, fig.cap="(ref:SI-spectrograms)", fig.height=base.height*4, out.width="85%"}
+include_and_generate_graphics(
+  c(
+    "figures-to-import/spectrogram_heed_1a.png", "figures-to-import/spectrogram_hid_1a.png",
+    "figures-to-import/spectrogram_odd_1a.png", "figures-to-import/spectrogram_hood_1a.png",
+    "figures-to-import/spectrogram_heed.png", "figures-to-import/spectrogram_hid.png",
+    "figures-to-import/spectrogram_hod.png", "figures-to-import/spectrogram_hood.png",
+    "figures-to-import/spectrogram_head_1a.png", "figures-to-import/spectrogram_had_1a.png",
+    "figures-to-import/spectrogram_hut_1a.png", "figures-to-import/spectrogram_whod_1a.png",
+    "figures-to-import/spectrogram_head.png", "figures-to-import/spectrogram_had.png",
+    "figures-to-import/spectrogram_hud.png", "figures-to-import/spectrogram_whod.png"),
+  labels = c(
+    "Natural: heed", "hid", "odd", "hood",
+    "Resynthesized: heed", "hid", "hod", "hood",
+    "Natural: head", "had", "hut", "who'd",
+    "Resynthesized: head", "had", "hud", "who'd"),
+  label_size = 11, hjust = 0,
+  ncol = 4)
 ```
 
 ## Distribution of stimuli F1-F3 in Experiments 1a and 1b
@@ -201,7 +209,7 @@ Figure \@ref(fig:SI-plot-cues-3d)**(b)** further suggests that the talker used i
 
 <!-- TO DO: change the aspect ratio to be closer to 1:1:1? Also what is panel C adding? It's not clear to me, so I commented it out.-->
 
-```{r SI-plot-cues-3d, fig.cap="(ref:SI-plot-cues-3d)", fig.show='hold', out.width='60%', fig.ncol=1, fig.align='center', fig.subcap = c("Looking at F1 and F2 (F3 is depth). This perspective illustrates that the stimuli of Experiment 1b spanned a much larger part of the F1-F2 space.", "Looking at F2 and F3 (F1 is depth). This perspective illustrates differences in the distribution of F3 across the two experiments. In Experiment 1b, F3 was synthesized to follow a linear function of F1 and F2, fit based on the stimuli from Experiment 1a. This perspective also illustrates that some stimuli of Experiment 1a had much higher or lower F3 than expected based on their F1 and F2 (under the assumption of a linear relation)."), warning=FALSE}
+```{r SI-plot-cues-3d, fig.cap="(ref:SI-plot-cues-3d)", fig.show='hold', out.width='60%', fig.ncol=1, fig.subcap = c("Looking at F1 and F2 (F3 is depth). This perspective illustrates that the stimuli of Experiment 1b spanned a much larger part of the F1-F2 space.", "Looking at F2 and F3 (F1 is depth). This perspective illustrates differences in the distribution of F3 across the two experiments. In Experiment 1b, F3 was synthesized to follow a linear function of F1 and F2, fit based on the stimuli from Experiment 1a. This perspective also illustrates that some stimuli of Experiment 1a had much higher or lower F3 than expected based on their F1 and F2 (under the assumption of a linear relation)."), warning=FALSE}
 # Code kept for reproducibility
 # p.3d.cues <- d.test.by_item %>%
 #   plot_ly(
@@ -228,7 +236,7 @@ Figure \@ref(fig:SI-plot-cues-3d)**(b)** further suggests that the talker used i
 #         autorange = "reversed")))
 
 # orca(p.3d.cues, file = "figures-to-import/p.3d.cues.png", width = 1200, height = 800, scale = 2)
-include_graphics(c("figures-to-import/p.3Dcues.1.png", "figures-to-import/p.3Dcues.2.png"))
+include_and_generate_graphics(c("figures-to-import/p.3Dcues.1.png", "figures-to-import/p.3Dcues.2.png"))
 ```
 
 ## Auxiliary analysis of participant responses in Experiments 1a and 1b {#sec:SI-aux-entropy}
@@ -382,7 +390,7 @@ In addition to F1-F3, we automatically extracted vowel duration and the fundamen
 
 (ref:SI-eng-vowels-all-cues) The pairwise distributions of F0, F1, F2, F3, and duration for all `r d.XieJaeger %>% group_by(Talker, category) %>% distinct(Token) %>% nrow()` recordings of eight monophthong *hVd* words in @xie-jaeger2020. Note that axis directions are not reversed. **Panels on diagonal:** marginal cue densities of all five cues. **Lower off-diagonal panels:** each point corresponds to a recording, averaged across the three measurement points within each vowel segment. Vowel labels indicate category means across talkers. Male talkers' vowels are boldfaced. **Upper off-diagonal panels:** Same data as in the lower off-diagonal panels but showing bivariate Gaussian 95% probability mass ellipses around category means.
 
-```{r SI-eng-vowels-all-cues, fig.width=base.width*4.5, fig.height=base.height*4.5+.5, out.width = '100%', fig.cap="(ref:SI-eng-vowels-all-cues)", fig.pos="!ht", message=FALSE}
+```{r SI-eng-vowels-all-cues, fig.width=base.width*4.5, fig.height=base.height*4.5+.5, out.width = '100%', fig.cap="(ref:SI-eng-vowels-all-cues)", message=FALSE}
 d.XieJaeger.long %>%
   filter(IO.NormalizationType == "no normalization (Hz)") %>%
   ungroup() %>%
@@ -439,7 +447,7 @@ Figure \@ref(fig:SI-eng-vowels-normalized), adapted from @persson-jaeger2023, sh
 
 (ref:SI-eng-vowels-normalized) Eight monophthong vowels of US English from the @xie-jaeger2020 database when F1 and F2 are transformed into a perceptual scale (**grey**), intrinsically normalized (**yellow**), or extrinsically normalized through centering (**blue**) or standardizing (**purple**). Each point corresponds to one recording, averaged across the three measurement points within each vowel segment. Shape indicates gender (female talkers represented by points, male talkers by triangles).
 
-```{r SI-eng-vowels-normalized, fig.width=base.width * 3.5, fig.height=base.height * 4.5, out.width='90%', fig.align='center', fig.cap="(ref:SI-eng-vowels-normalized)"}
+```{r SI-eng-vowels-normalized, fig.width=base.width * 3.5, fig.height=base.height * 4.5, out.width='90%', fig.cap="(ref:SI-eng-vowels-normalized)"}
 p <-
   d.XieJaeger.long %>%
   ggplot(
@@ -502,7 +510,7 @@ Figure \@ref(fig:SI-norm-params) further indicates that the reliability by which
 
 (ref:SI-norm-params) Comparing normalization parameters $\theta$ across the phonetic database used to estimate listeners' prior experience [@xie-jaeger2020] and the stimuli from Experiments 1a and 1b. Only accounts that assume talker-specific normalization parameters are shown. To put all parameters on a similar scale, we divided each parameter by its average value for the five folds of the phonetic database, multiplied by 100, and subtracted 100. The resulting $\delta_\theta$ indicates the difference in percent between the $\theta$ estimated for the experiment relative to the $\theta$ for the phonetic database. The horizontal dotted line ($\delta_\theta = 1$) indicates perfect alignment between $\theta$ value in database and experiment stimuli.
 
-```{r SI-norm-params, fig.width=base.width*3, fig.height=base.height*3.5, out.width='80%', fig.cap="(ref:SI-norm-params)", fig.pos="!ht", warning=FALSE}
+```{r SI-norm-params, fig.width=base.width*3, fig.height=base.height*3.5, out.width='80%', fig.cap="(ref:SI-norm-params)", warning=FALSE}
 # Check the variability in the params across experiments and folds
 d.io.normParams <-
   d.XieJaeger.wNorm.params %>%
@@ -772,7 +780,7 @@ The mean $\lambda$ was overall similar across experiments (for Experiment 1a, ov
 
 (ref:SI-plot-io-params) Best-fitting estimates obtained for $\lambda$ and $\tau^{-1}$. Numeric label is placed at the mean across the five training sets, line ranges represent the 95% CIs.
 
-```{r SI-plot-io-params, fig.width=base.width*4, fig.height=base.height*3, fig.align='center', out.width='90%', fig.cap="(ref:SI-plot-io-params)", message=FALSE, warning=FALSE}
+```{r SI-plot-io-params, fig.width=base.width*4, fig.height=base.height*3, out.width='90%', fig.cap="(ref:SI-plot-io-params)", message=FALSE, warning=FALSE}
 # Plot lapse and noise rates
 d.params <-
   d.io.bestFit.params %>%
@@ -1091,7 +1099,7 @@ d.io.by_Item.Johnson_noNorm <- d.io.by_Item.model.diff %>%
 
 (ref:SI-model-ceiling) By-item model improvement from no normalization, relative to the maximum possible performance (predicting human responses from human responses). Maximum log likelihood across items indicated by ticks on axis. Arrows indicate change from no normalization to Nearey's uniform scaling (**panel A**), Johnson (**panel B**), and Lobanov (**panel C**), for items with a change of more than 35%. Points represent items for which change is less than 35%. Color and arrow head indicate decrease or increase in log likelihood.
 
-```{r SI-model-ceiling, fig.cap="(ref:SI-model-ceiling)", fig.width=base.width*3, fig.height=base.height*4.5, fig.align='center', out.widht='90%', warning=FALSE, message=FALSE}
+```{r SI-model-ceiling, fig.cap="(ref:SI-model-ceiling)", fig.width=base.width*3, fig.height=base.height*4.5, out.widht='90%', warning=FALSE, message=FALSE}
 # p.by.item.Near_J <-
 #   make_by_item_plot(
 #     d.io.by_Item.Near_J,
@@ -1151,7 +1159,7 @@ To explore whether differences in model performance are related to where in the 
 
 (ref:SI-model-ceiling-acoustic-space) In which part of the acoustic-phonetic space does normalization fail to improve fit against human responses? For each test location, the vowel label indicates the most frequent response provided by participants. Size of vowel label relates model performance to maximum performance (predicting human responses from human responses). **Panel A** shows the likelihood of the unnormalized model in predicting human responses to both experiments. **Panels B-D** shows difference in likelihood between models, Nearey's uniform scaling vs. no normalization (**panel B**), Johnson vs. no normalization (**panel C**), Nearey's uniform scaling vs. Johnson (**panel D**).
 
-```{r SI-model-ceiling-acoustic-space, fig.width=base.width*4.5, fig.height=base.height*4.5, out.width='100%', fig.align='center', fig.cap="(ref:SI-model-ceiling-acoustic-space)", message=FALSE}
+```{r SI-model-ceiling-acoustic-space, fig.width=base.width*4.5, fig.height=base.height*4.5, out.width='100%', fig.cap="(ref:SI-model-ceiling-acoustic-space)", message=FALSE}
 p.ceiling.acoustic <-
   d.io.by_Item.diff %>%
   filter(IO.NormalizationType == "no normalization (Hz)") %>%
@@ -1274,7 +1282,7 @@ p.diff.Lob_noNorm <-
 
 Figure \@ref(fig:SI-model-ceiling-acoustic-space) suggests that normalization does not improve the likelihood fit universally across the acoustic-phonetic space. Mirroring Figure \@ref(fig:SI-model-ceiling), models achieve better fits in parts of the acoustic space where humans can more easily predict human behavior (Figure \@ref(fig:SI-model-ceiling-acoustic-space), *Panel A*). To the extent that this is not the case, it seems that normalization in general can adjust for this, improving model performance on many tokens where the maximum performance is high but the unnormalized model's predictions are low, e.g., in the left bottom and center part of the acoustic space (*Panels B-C*).
 
-In Experiment 1a, both Nearey's uniform scaling and Johnson clearly perform worse relative to the unnormalized model in the upper right part of the space, more specifically for the `r linguisticsdown::cond_cmpl("[u]")` category, which could indicate that models are overly categorical in a part of the space where humans are less categorical (*Panels B-C*; left). Possible reasons could be 1) the stimuli sounding more like a neighbouring category to many listeners, or 2) potential effects of orthography, making humans less inclined to select the `r linguisticsdown::cond_cmpl("[u]")` category. The potential effect of the infrequent non-word response option *who'd* could have been evaluated against the synthesized stimuli in Experiment 1b. If there was indeed an effect of orthography, we should have observed a better model fit and larger between-account differences in predictions in this part of the acoustic space. Unfortunately, we under-sampled that part, which is an important caveat for Experiment 1b. For the items closest to the area in question, participants, however, often responded *hood*, which might indicate that items in this part of the space for this talker overall sounded more like *hood* and not *who'd* for many listeners (c.f., discussion on listeners' dialect templates in Section \@ref(sec:experiment-results)).
+In Experiment 1a, both Nearey's uniform scaling and Johnson clearly perform worse relative to the unnormalized model in the upper right part of the space, more specifically for the [\textipa{u}] category, which could indicate that models are overly categorical in a part of the space where humans are less categorical (*Panels B-C*; left). Possible reasons could be 1) the stimuli sounding more like a neighbouring category to many listeners, or 2) potential effects of orthography, making humans less inclined to select the [\textipa{u}] category. The potential effect of the infrequent non-word response option *who'd* could have been evaluated against the synthesized stimuli in Experiment 1b. If there was indeed an effect of orthography, we should have observed a better model fit and larger between-account differences in predictions in this part of the acoustic space. Unfortunately, we under-sampled that part, which is an important caveat for Experiment 1b. For the items closest to the area in question, participants, however, often responded *hood*, which might indicate that items in this part of the space for this talker overall sounded more like *hood* and not *who'd* for many listeners (c.f., discussion on listeners' dialect templates in Section \@ref(sec:experiment-results)).
 
 Comparing the two best-performing models across experiments (*Panel D*), no evident pattern of improvement in one model relative to the other seems to emerge. In Experiment 1a, Johnson provided the best fit to listeners' responses and appears to improve the fit relative to Nearey's uniform scaling across almost the entire space. For Experiment 1b, Nearey's uniform scaling overall improves the fit relative to Johnson, with the exception of some locations in the mid part of the phonetic space (including high, center and low vowels).
 
@@ -1540,7 +1548,7 @@ This subset analysis overall replicates the results from the main analysis: unif
 
 (ref:SI-plot-io-optimal-subset) Results of model fit to subset data. Point ranges indicate mean and 95% bootstrapped CIs of the per-token log-likelihood summarized over the five training sets (higher is better). Accounts that fit listeners' responses to an extent that is statistically indistinguishable from the best-fitting account are marked by (\*).
 
-```{r SI-plot-io-optimal-subset, fig.width=base.width*3.5, fig.height=base.height*3.5, fig.align='center', fig.pos="!ht", out.width='90%', fig.cap="(ref:SI-plot-io-optimal-subset)", message=FALSE}
+```{r SI-plot-io-optimal-subset, fig.width=base.width*3.5, fig.height=base.height*3.5, out.width='90%', fig.cap="(ref:SI-plot-io-optimal-subset)", message=FALSE}
 p.result_overall %+%
   (io.subset %>%
      filter(IO.cues == "F1-F2") %>%
@@ -1736,7 +1744,7 @@ Finally, as expected, all models overall provide higher likelihood fits against 
 
 (ref:SI-plot-io-optimal-dialect-subset) Results of model fit to data excluding listeners that do not seem to share dialect template. Point ranges indicate mean and 95% bootstrapped CIs of the per-token log-likelihood summarized over the five training sets (higher is better). Accounts that fit listeners' responses to an extent that is statistically indistinguishable from the best-fitting account are marked by (\*).
 
-```{r SI-plot-io-optimal-dialect-subset, fig.width=base.width*3.5, fig.height=base.height*3.5, fig.align='center', fig.pos="!ht", out.width='90%', fig.cap="(ref:SI-plot-io-optimal-dialect-subset)", message=FALSE}
+```{r SI-plot-io-optimal-dialect-subset, fig.width=base.width*3.5, fig.height=base.height*3.5, out.width='90%', fig.cap="(ref:SI-plot-io-optimal-dialect-subset)", message=FALSE}
 p.result_overall %+%
   (io.dialect.subset %>%
   filter(IO.cues == "F1-F2") %>%
@@ -1836,7 +1844,7 @@ ttests.F1F3 <- rbind(
   rename(IO.NormalizationType = y)
 ```
 
-```{r SI-plot-io-optimal-f1f3, fig.width=base.width*3.5, fig.height=base.height*3.5+.5, out.width='90%', fig.align='center', fig.pos="!ht", fig.cap="(ref:SI-plot-io-optimal-f1f3)", message=FALSE, warning=FALSE}
+```{r SI-plot-io-optimal-f1f3, fig.width=base.width*3.5, fig.height=base.height*3.5+.5, out.width='90%', , fig.cap="(ref:SI-plot-io-optimal-f1f3)", message=FALSE, warning=FALSE}
 ttests.SI <- ttests %>%
   mutate(IO.cues = "F1-F2") %>%
   rbind(ttests.F1F3 %>%

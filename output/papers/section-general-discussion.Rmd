@@ -44,7 +44,7 @@ Figure \@ref(fig:trial-accuracies)B shows how the fit of the best-fitting normal
 
 (ref:trial-accuracies) **Panel A**: Changes across trials in listeners' average accuracy in recognizing the vowel intended by the talker in Experiment 1a, averaged across items and participants (black line). Blue line shows a generalized additive mixed-effects model predicting accuracy from log-transformed trial order, with 95% CIs. **Panel B**: Log-likelihood of listeners' responses under the best-fitting normalization account at each trial, averaged across items and participants (Johnson's uniform scaling for Experiment 1a and Nearey's uniform scaling for Experiment 1b). Blue lines show generalized additive mixed-effects models predicting log-likelihood from log-transformed trial order, with 95% CIs.
 
-```{r gamm-fits, include=FALSE}
+```{r gamm-fits, fig.show='hide', fig.keep='none', include=FALSE}
 # Fit GAMMs to listeners' accuracy and extract predictions and CIs
 m <- 
   bam(
@@ -134,7 +134,7 @@ d.smooth <-
   rename(Trial = logTrial)
 ```
 
-```{r trial-accuracies, fig.width=base.width*4, fig.height=base.height*3, out.width='90%', fig.cap="(ref:trial-accuracies)", fig.pos="!ht", message=FALSE, warning=FALSE}
+```{r trial-accuracies, fig.width=base.width*4, fig.height=base.height*3, out.width='90%', fig.cap="(ref:trial-accuracies)"}
 # Calculate average accuracy by trials across participants
 p.trial.accuracy <- 
   d.test %>%
