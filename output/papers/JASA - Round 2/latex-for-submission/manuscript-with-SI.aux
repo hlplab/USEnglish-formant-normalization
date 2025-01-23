@@ -2,10 +2,13 @@
 \providecommand\hyper@newdestlabel[2]{}
 \providecommand\HyperFirstAtBeginDocument{\AtBeginDocument}
 \HyperFirstAtBeginDocument{\ifx\hyper@anchor\@undefined
+\global\let\oldcontentsline\contentsline
+\gdef\contentsline#1#2#3#4{\oldcontentsline{#1}{#2}{#3}}
 \global\let\oldnewlabel\newlabel
 \gdef\newlabel#1#2{\newlabelxx{#1}#2}
 \gdef\newlabelxx#1#2#3#4#5#6{\oldnewlabel{#1}{{#2}{#3}}}
 \AtEndDocument{\ifx\hyper@anchor\@undefined
+\let\contentsline\oldcontentsline
 \let\newlabel\oldnewlabel
 \fi}
 \fi}
@@ -115,7 +118,7 @@
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {2}Materials}{13}{section*.8}\protected@file@percent }
 \newlabel{sec:stimuli}{{II\,A\,2}{13}{}{section*.8}{}}
 \citation{nearey1978}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces \textbf  {Top:} Spectrograms of four natural recordings from Experiment 1a. \textbf  {Bottom:} Same for four synthesized tokens with similar formant values from Experiment 1b. Additional spectrograms are provided in the SI \ref {sec:SI-spectrograms}.}}{16}{figure.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces \textbf  {Top:} Spectrograms of four natural recordings from Experiment 1a. \textbf  {Bottom:} Same for four synthesized tokens with similar formant values from Experiment 1b. Additional spectrograms are provided in the SI \ref  {sec:SI-spectrograms}.}}{16}{figure.3}\protected@file@percent }
 \newlabel{fig:spectrograms}{{3}{16}{\textbf {Top:} Spectrograms of four natural recordings from Experiment 1a. \textbf {Bottom:} Same for four synthesized tokens with similar formant values from Experiment 1b. Additional spectrograms are provided in the SI \ref {sec:SI-spectrograms}}{figure.3}{}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {3}Procedure}{16}{section*.9}\protected@file@percent }
 \newlabel{sec:procedure}{{II\,A\,3}{16}{}{section*.9}{}}
@@ -431,7 +434,7 @@
 \citation{nearey1989}
 \@writefile{toc}{\contentsline {subsection}{\numberline {F}Grid search over parameter space for F1-F2 and F1-F3}{34}{section*.58}\protected@file@percent }
 \newlabel{sec:SI-study1-grid-search}{{\S  3\,F}{34}{}{section*.58}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {S16}{\ignorespaces Results of ideal observer models trained on F1, F2 and F3 as cues to vowel identity. As in Figure \ref {fig:plot-io-optimal} in the main text, pointranges indicate mean and 95\% bootstrapped CIs of the log-likelihood summarized over the five training sets, and normalized by the number of responses in each experiment (higher is better). For comparison, results from the F1-F2 models are included (more transparent circles). Note that the Syrdal \& Gopal accounts are not included in the F1-F3 evaluation as they do not provide normalization for F3.}}{35}{figure.S16}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {S16}{\ignorespaces Results of ideal observer models trained on F1, F2 and F3 as cues to vowel identity. As in Figure \ref  {fig:plot-io-optimal} in the main text, pointranges indicate mean and 95\% bootstrapped CIs of the log-likelihood summarized over the five training sets, and normalized by the number of responses in each experiment (higher is better). For comparison, results from the F1-F2 models are included (more transparent circles). Note that the Syrdal \& Gopal accounts are not included in the F1-F3 evaluation as they do not provide normalization for F3.}}{35}{figure.S16}\protected@file@percent }
 \newlabel{fig:SI-plot-io-optimal-f1f3}{{S16}{35}{Results of ideal observer models trained on F1, F2 and F3 as cues to vowel identity. As in Figure \ref {fig:plot-io-optimal} in the main text, pointranges indicate mean and 95\% bootstrapped CIs of the log-likelihood summarized over the five training sets, and normalized by the number of responses in each experiment (higher is better). For comparison, results from the F1-F2 models are included (more transparent circles). Note that the Syrdal \& Gopal accounts are not included in the F1-F3 evaluation as they do not provide normalization for F3}{figure.S16}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {S17}{\ignorespaces Predicted likelihoods of ideal observers trained on F1-F2 for human vowel responses in Experiment 1a, under different normalization accounts, different \(\lambda \)s and different \(\tau ^{-1}\)s. Likelihood is aggregated across vowels. Crosses are placed at the combination of parameters for which the maximum likelihood for an account was found. The red cross indicates the maximum likelihood achieved for a single training set and account across the entire grid search.}}{36}{figure.S17}\protected@file@percent }
 \newlabel{fig:SI-io-grid-plot-likelihoods-1a}{{S17}{36}{Predicted likelihoods of ideal observers trained on F1-F2 for human vowel responses in Experiment 1a, under different normalization accounts, different \(\lambda \)s and different \(\tau ^{-1}\)s. Likelihood is aggregated across vowels. Crosses are placed at the combination of parameters for which the maximum likelihood for an account was found. The red cross indicates the maximum likelihood achieved for a single training set and account across the entire grid search}{figure.S17}{}}

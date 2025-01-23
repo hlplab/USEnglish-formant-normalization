@@ -72,7 +72,7 @@ source("preamble.R")
 # %    you're knitting: \externaldocument{manuscript-with-SI}
 # % c) options(tinytex.clean = FALSE) needs to be specified in the R code, so 
 # %    that the aux and bibliography files are kept after knitting.
-INCLUDE_SI = F          # switch on/off to get SI.
+INCLUDE_SI = T          # switch on/off to get SI.
 INCLUDE_TODO = F        # switch on/off to get to do list.
 RESET_MODELS = F        # switch on/off whether model optimization etc. is re-run
 ```
