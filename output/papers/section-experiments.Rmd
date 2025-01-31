@@ -99,6 +99,14 @@ d.test %<>%
   reduce(bind_rows) %>%
   ungroup()
 
+# # Make experiment data file after exclusions with normalized cues - code kept for reproducibility
+# write_csv(
+#   d.test %>%
+#     select(-starts_with("overall"), -starts_with("formants")) %>%
+#     relocate(c(Item.F1, Item.F2), .after = Item.CorrectResponse.Vowel) %>%
+#     relocate(c(Duration, Duration.Assignment, Response.Vowel, Response, platform, fold_type, Talker), .before = Item.F1),
+#   file =  "../../data/experiment-data/Experiment-1a-1b-after-exclusions-with-normalization.csv")
+
 d.test.1a <- d.test %>% filter(Experiment == "Experiment 1a (natural)")
 d.test.1b <- d.test %>% filter(Experiment == "Experiment 1b (synthesized)")
 
