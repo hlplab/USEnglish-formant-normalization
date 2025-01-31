@@ -18,14 +18,6 @@ In summary, hypotheses about the computations implied by formant normalization d
 ```{r two-talkers, fig.cap="(ref:two-talkers)", fig.height=base.height*2, fig.width=base.width*3, out.width='95%', message=FALSE}
 d.XieJaeger.forplot <-
   read_csv('../../data/phonetic vowel statistics/Xie_Jaeger_2020_L1_vowels_statistics_allTimepoints.csv') %>%
-  select(-SR) %>%
-  mutate(
-    Vowel = factor(
-      plyr::mapvalues(
-        Vowel,
-        levels.vowel.Arpabet,
-        levels.vowel.IPA),
-      levels = levels.vowel.IPA)) %>%
   rename(category = Vowel) %>%
   group_by(Talker, category) %>%
   # Since the normalization and transformation functions does not take NAs,

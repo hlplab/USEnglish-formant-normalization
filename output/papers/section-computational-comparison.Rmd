@@ -84,14 +84,6 @@ d.XieJaeger <-
   # Remove talker that is in the experiment from the model
   # (including it would not be wrong but it would make the results less surprising)
   filter(Talker != "E2") %>%
-  select(-SR) %>%
-  mutate(
-    Vowel = factor(
-      plyr::mapvalues(
-        Vowel,
-        levels.vowel.Arpabet,
-        levels.vowel.IPA),
-      levels = levels.vowel.IPA)) %>%
   rename(category = Vowel) %>%
   group_by(Talker, category) %>%
   # Since the normalization and transformation functions does not take NAs,

@@ -1,1 +1,1 @@
-- Xie_Jaeger_2020_L1_vowels_statistics_allTimepoints.csv: formant statistics from all talkers in the Xie & Jaeger database, used to train the ideal observers.
+- Xie_Jaeger_2020_L1_vowels_statistics_allTimepoints.csv: formant statistics from all talkers in the Xie & Jaeger database, used to train the ideal observers. The data has been manually corrected for measurement errors.

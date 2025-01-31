@@ -18,7 +18,7 @@ The use of synthesized stimuli does, however, also come with potential disadvant
 ```{r load-validate-perception-data, message=FALSE}
 # Read in the natural and synthesized stimuli from experiment 1a and 1b.
 d.test <-
-  read_csv("../../data/Experiment-NORM-AB-before-processing.csv") %>%
+  read_csv("../../data/experiment-data/Experiment-1a-1b-before-processing.csv") %>%
   mutate(    
     Experiment = factor(
       Experiment,
@@ -79,7 +79,16 @@ d.Participant <-
 d.test %<>%
   # Exclude participants based on exclusion criteria, and trials based on RTs
   excludeData() %>%
-  select(-starts_with("Exclude")) %>%
+  select(-starts_with("Exclude"))
+
+# # Make experiment data file after exclusions - code kept for reproducibility
+# write_csv(
+#   d.test %>%
+#     relocate(c(F0, F1, F2, F3, Duration), .after = Item.F2),
+#   file =  "../../data/experiment-data/Experiment-1a-1b-after-exclusions.csv")
+
+# Normalize the perception data
+d.test %<>%
   group_by(Experiment) %>%
   # Get transformations, apply normalizations (both classic formants one and C-CuRE)
   group_map(
