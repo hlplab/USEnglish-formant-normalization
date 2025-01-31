@@ -47,7 +47,7 @@ A project template, including R markdown files that result in APA-formatted PDFs
 ```{r message=FALSE}
 # Re-read in the natural and synthesized stimuli from experiment 1a and 1b.
 d.test.raw <-
-  read_csv("../../data/Experiment-NORM-AB-before-processing.csv") %>%
+  read_csv("../../data/experiment-data/Experiment-1a-1b-before-processing.csv") %>%
   mutate(    
     Experiment = factor(
       Experiment,

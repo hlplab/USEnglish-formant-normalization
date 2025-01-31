@@ -119,12 +119,12 @@ We therefore corrected all of these height and backness values while keeping the
 ```{r }
 # Read in the manually corrected list of height backness values for stimuli in experiment 1a; replace the original data frame *d.test.tokens.1a* with this one, since this has the variable Talker.Token - a manually added identifier for each token. This identifier is used further down in order to overwrite the height backness values from filenames.
 d.test.tokens.1a <-
-  read_csv("../repair-information-from-phonetic-databases/NORM-A-natural-E2-test-forward-hb-repaired.csv") %>%
+  read_csv("../../data/formant-correction-for-experiments/repair-information-from-phonetic-databases/experiment-1a-stimuli-formant-data-repaired.csv") %>%
   mutate(
     target_word = factor(
           plyr::mapvalues(target_word, levels.response.natural, levels.response.vowel), levels = levels.response.vowel)) %>%
   left_join(
-    read_csv("../../data/phonetic vowel statistics/English/Li_Xie_2020_L1_vowels_statistics_general.csv") %>%
+    read_csv("../../data/formant-correction-for-experiments/Xie_Jaeger_2020_L1_vowels_statistics_general.csv") %>%
       rename(
         "Talker.Token" = "Token") %>%
       mutate(
@@ -146,7 +146,7 @@ d.test.tokens.1a <-
 #write.csv(
 #  d.test.tokens.1a %>%
 #    select(Item.Filename, F3),
-#  file = "../../scripts/repair-information-from-phonetic-databases/NORM-1A-F3values_to_check.csv",
+#  file = "../../scripts/repair-information-from-phonetic-databases/experiment-1a-F3values_to_check.csv",
 #   row.names = FALSE, quote = FALSE)
 
 ```
@@ -161,7 +161,7 @@ We ran linear regressions with F3 and log(F3) as dependent variable and height, 
 ```{r}
 # First generate the manual test samples with averaged F3 values
 # Female native talker E2
-d.E2 <- read_csv("../../data/phonetic vowel statistics/English/Li_Xie_2020_L1_vowels_statistics_general.csv") %>%
+d.E2 <- read_csv("../../data/formant-correction-for-experiments/Xie_Jaeger_2020_L1_vowels_statistics_general.csv") %>%
   filter(Talker == "E2") %>%
   group_by(Talker, Vowel) %>%
   summarise(
@@ -181,7 +181,7 @@ d.E2$Vowel <- gsub("[0-9]+", "", d.E2$Vowel)
 
 # Read in the manually created grid for talker E2; join the two data frames
 vowel.grid.E2 <-
-  read_csv('../../data/phonetic vowel statistics/English/Li_Xie_2020_femaleL1_manual_testgrid_E2.csv') 
+  read_csv('../../data/formant-correction-for-experiments/experiment-1b-manual-testgrid.csv') 
 vowel.grid.E2$Vowel <- gsub("[0-9]+", "", vowel.grid.E2$Vowel)
 
 vowel.grid.E2 %<>%
@@ -349,11 +349,11 @@ d.test.tokens.1a %<>%
 # Write csv-files with the repaired vowel data, to be read in by experiment-report rmd.
 write_csv(
   d.test.tokens.1b, 
-  file =  "../../data/phonetic vowel statistics/English/vowel-formants-Experiment-1b.csv")
+  file =  "../../data/formant-correction-for-experiments/vowel-formants-Experiment-1b.csv")
 
 write_csv(
   d.test.tokens.1a, 
-  file =  "../../data/phonetic vowel statistics/English/vowel-formants-Experiment-1a.csv")
+  file =  "../../data/formant-correction-for-experiments/vowel-formants-Experiment-1a.csv")
 
 ###Old code said this file was read in. the F3 values differs slightly. Can however not find any documentation indicating where this was generated and in any other way than the above procedure.
 # d.test.tokens.1a %>%
@@ -440,11 +440,11 @@ We are transforming the test tokens' cue values into other normalization spaces.
 # Write csv-files with the repaired vowel data, to be read in by experiment-report rmd.
 # write_csv(
 #   d.test.tokens.1a, 
-#   file =  "../../data/phonetic vowel statistics/English/vowel-formants-Experiment-1a.csv")
+#   file =  "../../data/formant-correction-for-experiments/vowel-formants-Experiment-1a.csv")
 # 
 # write_csv(
 #   d.test.tokens.1b, 
-#   file =  "../../data/phonetic vowel statistics/English/vowel-formants-Experiment-1b.csv")
+#   file =  "../../data/formant-correction-for-experiments/vowel-formants-Experiment-1b.csv")
 
 ```
 

@@ -17,7 +17,7 @@ In summary, hypotheses about the computations implied by formant normalization d
 
 ```{r two-talkers, fig.cap="(ref:two-talkers)", fig.height=base.height*2, fig.width=base.width*3, out.width='95%', message=FALSE}
 d.XieJaeger.forplot <-
-  read_csv('../../data/phonetic vowel statistics/English/Xie_Jaeger_2020_L1_vowels_statistics_allTimepoints.csv') %>%
+  read_csv('../../data/phonetic vowel statistics/Xie_Jaeger_2020_L1_vowels_statistics_allTimepoints.csv') %>%
   select(-SR) %>%
   mutate(
     Vowel = factor(
