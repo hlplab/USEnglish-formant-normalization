@@ -1,0 +1,7 @@
+- experiment-1a-F3values_to_check.csv: for manual check of automatically extracted F3-values for stimuli used in Experiment 1a.
+- experiment-1a-F3values_checked.csv: manually corrected F3 values for stimuli used in Experiment 1a.
+- experiment-1a-stimuli-formant-data-repaired.csv: corrected formant statistics for stimuli used in Experiment 1a (repair done in scripts/repair-information-from-phonetic-databases/Xie-Jaeger-2020-repair.Rmd).
+- experiment-1b-manual-testgrid.csv: formant statistics for the synthesized stimuli used in Experiment 1b (F1-F2 values in Miller's normalization space).
+- vowel-formants-Experiment-1a.csv: repaired formant statistics for the stimuli used in Experiment 1a.
+- vowel-formants-Experiment-1b.csv: repaired formant statistics for the stimuli used in Experiment 1b. This file is used by the vowel_synthesizer_nosampling.praat script to generate the synthesized stimuli used in Experiment 1b (Praat script located in scripts/Praat/).
+- Xie_Jaeger_2020_L1_vowels_statistics_general.csv: formant statistics used to repair a mislabeling of sound files for the natural stimuli used in Experiment 1a (the repair is done in scripts/repair-information-from-phonetic-databases/Xie-Jaeger-2020-repair.Rmd).
