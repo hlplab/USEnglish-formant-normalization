@@ -15,7 +15,7 @@ author:
   - name: Santiago Barreda
     affiliation: Linguistics, University of California, Davis
   - name: T. Florian Jaeger
-    affiliation: Brain and Cognitive Sciences, Data Science, University of Rochester
+    affiliation: Brain and Cognitive Sciences, Goergen Institute for Data Science and Artificial Intelligence, University of Rochester
 
 # The following prints the current date (optional, set to false to remove).
 date: true
@@ -127,7 +127,6 @@ This study was reviewed and approved Research Subjects Review Board (RSRB) of th
 
 \nocite{balzano1982}
 \nocite{barreda-nearey2018}
-\nocite{goldinger1996}
 \nocite{hay2017}
 \nocite{hay2019}
 \nocite{johnson1999}
@@ -136,7 +135,6 @@ This study was reviewed and approved Research Subjects Review Board (RSRB) of th
 \nocite{shankweiler1978}
 \nocite{shannon1948}
 \nocite{strange-jenkins2012}
-\nocite{sumner2011}
 \nocite{walker-hay2011}
 \nocite{zwicker1957}
 \nocite{zwicker-terhardt1980}
