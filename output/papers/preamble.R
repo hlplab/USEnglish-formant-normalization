@@ -18,6 +18,7 @@ list.of.packages <-
     "ggtext",           # vertical labels via geom_richtext
     "ggh4x",            # constant panel sizes across plots
     "patchwork",        # plotting multiple plots together
+    "shadowtext",       # for plotting shadowed text in confusion matrix
     "cowplot",
     "plotly",           # plotting 3D plots (in SI)
     "ellipse",          # covariance ellipses

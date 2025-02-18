@@ -163,7 +163,7 @@ include_and_generate_graphics(
   ncol = 4)
 ```
 
-We generated `r d.test.1b %>% distinct(ItemID) %>% nrow()` synthesized *hVd* recordings that spanned the F1 and F2 space. The specific F1-F2 locations chosen were determined by a mix of modeling (using ideal observers described in Section \@ref(sec:methods) to predict listeners' categorization responses) and intuition. Specifically, we selected 64 recordings that we expected to fall within the bivariate 95% confidence intervals (CIs) of the eight US English monophthongs, and 82 recordings that we expected to fall between those CIs. Figure \@ref(fig:human-performance) under *Results* shows the distribution of stimuli for both experiments. Of note, our procedure also generated formant combinations that are physiologically unlikely to have all been produced by the same talker during 'normal' vowel production [also known as "off-template" instances, @nearey1978].
+We generated `r d.test.1b %>% distinct(ItemID) %>% nrow()` synthesized *hVd* recordings that spanned the F1 and F2 space. The specific F1-F2 locations chosen were determined by a mix of modeling (using ideal observers described in Section \@ref(sec:methods-study1) to predict listeners' categorization responses) and intuition. Specifically, we selected 64 recordings that we expected to fall within the bivariate 95% confidence intervals (CIs) of the eight US English monophthongs, and 82 recordings that we expected to fall between those CIs. Figure \@ref(fig:human-performance) under *Results* shows the distribution of stimuli for both experiments. Of note, our procedure also generated formant combinations that are physiologically unlikely to have all been produced by the same talker during 'normal' vowel production [also known as "off-template" instances, @nearey1978].
 
 ### Procedure {#sec:procedure}
 The procedure for both experiments was identical. Live instances of each experiment can be found at <https://www.hlp.rochester.edu/experiments/DLPL2S/experiment-A/experiments.html>. At the start of the experiment, participants acknowledged that they met all requirements and provided consent, as per the Research Subjects Review Board of the University of Rochester. Before starting the experiment, participants performed a sound check. Participants were then instructed to listen to a female talker saying words, and click on the word on screen to report what word they heard. On each trial, all eight *hVd*-words were displayed on screen. Half of the participants in each experiment saw the response options organized as in Figure \@ref(fig:exp-procedure) (resembling the International Phonetic Alphabet representation of a vowel space), half saw the response options in the opposite order (flipping top and bottom and left and right in Figure \@ref(fig:exp-procedure)). Each trial started with the response grid on screen, together with a light green dot centered on screen. After 1000 ms, an *hVd* recording played, and participants indicated their response by a mouse-click. After a 1000 ms intertrial interval, the screen reset, and the next trial started.
@@ -281,9 +281,9 @@ p.confusion <-
       y = factor(Response.Vowel, levels = c("[i]", "[ɪ]", "[ɛ]", "[æ]", "[ʌ]", "[ɑ]", "[ʊ]", "[u]")),
       fill = Response.Proportion)) +
   geom_raster() +
-  geom_text(
+  geom_shadowtext(
     aes(label = round(Response.Proportion, digits = 1)),
-    color = "white") +
+    color = "white", bg.color = "black", bg.r = 0.15) +
   scale_x_discrete("Most frequently responded vowel", expand = c(0,0)) +
   scale_y_discrete("Response vowel", expand = c(0,0)) +
   scale_fill_viridis_b(option = "D", limits = c(0,100), breaks = seq(0, 100, 10)) +

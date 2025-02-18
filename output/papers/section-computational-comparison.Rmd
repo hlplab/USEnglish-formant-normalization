@@ -5,7 +5,7 @@ Here we pursued an alternative approach by committing to a core assumption commo
 
 Training ideal observers on a database of vowel productions has the advantage that it reduces the degrees of freedom (DFs) used to predict listeners' responses. For example, using ordinary multinomial logistic regression trained on our perceptual data to predict eight-way vowel categorization as a function of F1, F2 and their interaction would require up to 28 DFs. This problem increases with the number of cues considered. By instead training ideal observers on phonetic data that are independent of listeners' responses, the ASP-based approach we employ uses only two DFs to mediate the mapping from stimuli properties to listeners' responses, regardless of the number of cues considered. Over the next few sections, we describe how this parsimony is made possible through a commitment to strong linking hypotheses motivated by theories of speech perception.
 
-## Methods {#sec:methods}
+## Methods {#sec:methods-study1}
 
 ### A general-purpose categorization model for $J$-alternative forced-choice categorization tasks {#sec:predict-perception}
 

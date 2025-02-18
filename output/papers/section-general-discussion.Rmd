@@ -134,7 +134,7 @@ d.smooth <-
   rename(Trial = logTrial)
 ```
 
-```{r trial-accuracies, fig.width=base.width*4, fig.height=base.height*3, out.width='90%', fig.cap="(ref:trial-accuracies)"}
+```{r trial-accuracies, fig.width=base.width*4, fig.height=base.height*3, out.width='90%', fig.cap="(ref:trial-accuracies)", message=FALSE}
 # Calculate average accuracy by trials across participants
 p.trial.accuracy <- 
   d.test %>%
